@@ -5,7 +5,7 @@ Searching through the diffs of each commit
 import os
 import re
 from chardet.universaldetector import UniversalDetector
-import pd.dict_repo_list
+import dt.dict_repo_list
 from datetime import datetime
 from graph_creation import create_graph
 
@@ -109,8 +109,8 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str)
         search_type: Searching through the current state of the repository.
     """
     data_graph = {}
-    pd.dict_repo_list.build_repo_dict()
-    repo_dictionary = pd.dict_repo_list.projects
+    dt.dict_repo_list.build_repo_dict()
+    repo_dictionary = dt.dict_repo_list.projects
     for key_repo_name in repo_dictionary.keys():
         counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary)
         print(f"{key_repo_name}: {counted}")

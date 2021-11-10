@@ -4,7 +4,7 @@ Searching trough the diffs of each commit
 """
 import re
 from pydriller import RepositoryMining
-import pd.dict_repo_list
+import dt.dict_repo_list
 from graph_creation import create_graph
 from utils import build_results_path
 from utils import list_file_content
@@ -98,8 +98,8 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str)
 
     """
     data_graph = {}
-    pd.dict_repo_list.build_repo_dict()
-    repo_dictionary = pd.dict_repo_list.projects
+    dt.dict_repo_list.build_repo_dict()
+    repo_dictionary = dt.dict_repo_list.projects
     for key_repo_name in repo_dictionary.keys():
         counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary)
         if counted is not None:
