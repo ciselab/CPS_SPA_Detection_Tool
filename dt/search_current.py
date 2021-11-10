@@ -61,37 +61,51 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
                         content_file.close()
                     except UnicodeDecodeError:
                         """
-                        When the Windows-1252 encoding is not correct, chardet is being used.
-                        This tool tries to detect which encoding is used.
+                        When the Windows-1252 encoding is not correct, utf-8 is tried.
+                        This seems to be the most common encoding to occur after Windows-1252.
                         """
                         try:
-                            rd_file = open(file, "rb")
-                            raw_data = rd_file.readlines()
-                            detector = UniversalDetector()
-                            for rd_line in raw_data:
-                                detector.feed(rd_line)
-                                if detector.done:
-                                    break
-                            detector.close()
-                            rd_file.close()
-                            if detector.result:
-                                enc = detector.result["encoding"]
-                                if enc:
-                                    print(f"encoding: {enc}")
-                                    content_file = open(file, 'r', encoding=enc)
-                                    for line in content_file:
-                                        check = re.findall(p, line)
-                                        count += len(check)
-                                    content_file.close()
-                                else:
-                                    print("No encoding result.")
-                            else:
-                                print("No Result from detector.")
+                            enc = 'utf-8'
+                            content_file = open(file, 'r', encoding=enc)
+                            for line in content_file:
+                                check = re.findall(p, line)
+                                count += len(check)
+                            content_file.close()
                         except UnicodeDecodeError:
                             """
-                            In case chardet is not able to detect which encoding was used.
+                            When the Windows-1252 and utf-8 encoding is not correct, chardet is being used.
+                            This tool tries to detect which encoding is used.
                             """
-                            print(f"UnicodeDecodeError: {file}")
+                            try:
+                                rd_file = open(file, "rb")
+                                raw_data = rd_file.readlines()
+                                detector = UniversalDetector()
+                                for rd_line in raw_data:
+                                    detector.feed(rd_line)
+                                    if detector.done:
+                                        break
+                                detector.close()
+                                rd_file.close()
+                                if detector.result:
+                                    enc = detector.result["encoding"]
+                                    if enc:
+                                        print(f"encoding: {enc}")
+                                        content_file = open(file, 'r', encoding=enc)
+                                        for line in content_file:
+                                            check = re.findall(p, line)
+                                            count += len(check)
+                                        content_file.close()
+                                    else:
+                                        print("No encoding result.")
+                                else:
+                                    print("No Result from detector.")
+                            except UnicodeDecodeError:
+                                """
+                                In case chardet is not able to detect which encoding was used.
+                                """
+                                print(f"UnicodeDecodeError: {file}")
+                            except Exception as e:
+                                print(f"Different error encountered: {file}, error: {e}")
                         except Exception as e:
                             print(f"Different error encountered: {file}, error: {e}")
                 except Exception as e:
