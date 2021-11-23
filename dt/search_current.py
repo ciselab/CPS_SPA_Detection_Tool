@@ -10,6 +10,73 @@ from datetime import datetime
 from graph_creation import create_graph
 
 
+def no_encoding_found(file: os.path) -> str:
+    """
+    When the default, Windows-1252 and utf-8 encoding is not correct, chardet is being used.
+    This tool tries to detect which encoding is used.
+    """
+    try:
+        with open(file, "rb") as rd_file:
+            raw_data = rd_file.readlines()
+            detector = UniversalDetector()
+            for rd_line in raw_data:
+                detector.feed(rd_line)
+                if detector.done:
+                    break
+            detector.close()
+        if detector.result:
+            enc = detector.result["encoding"]
+            if enc:
+                print(f"encoding: {enc}")
+                return enc
+            else:
+                print("No encoding result.")
+        else:
+            print("No Result from detector.")
+    except UnicodeDecodeError:
+        """
+        In case chardet is not able to detect which encoding was used.
+        """
+        print(f"UnicodeDecodeError: {file}")
+
+
+def read_file_encoding(file: os.path, p, enc=None) -> int:
+    count = 0
+    encodings_options = ['Windows-1252', 'utf-8']
+    enc_select = None
+    if isinstance(enc, int):
+        if enc >= len(encodings_options):
+            """
+            Tried encodings still not correct, continue to use chardet.
+            """
+            enc_select = no_encoding_found(file)
+        elif enc < len(encodings_options):
+            enc_select = encodings_options[enc]
+    try:
+        with open(file, 'r', encoding=enc_select) as content_file:
+            for line in content_file:
+                check = re.findall(p, line)
+                count += len(check)
+    except UnicodeDecodeError:
+        """
+        Some files are using an encoding that cannot be immediately read.
+        Most of these files, seem to be using Windows-1252 followed by utf-8 encoding.
+        To keep the duration of this script as short as possible, this encoding will be tried first.
+        """
+        if not isinstance(enc, int):
+            enc = 0
+        elif not enc >= len(encodings_options):
+            enc = encodings_options.index(enc_select) + 1
+        if not enc >= len(encodings_options):
+            result = read_file_encoding(file, p, enc)
+            if isinstance(result, int):
+                count += result
+    except Exception as e:
+        print(f"Different error encountered: {file}, error: {e}")
+    else:
+        return count
+
+
 def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict) -> int:
     """
     Starts the mining process on the repository indicated by the given URL
@@ -40,76 +107,9 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
                              '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
 
             if file_extension.lower() in search_in_ext:
-                try:
-                    content_file = open(file, 'r')
-                    for line in content_file:
-                        check = re.findall(p, line)
-                        count += len(check)
-                    content_file.close()
-                except UnicodeDecodeError:
-                    """
-                    Some files are using an encoding that cannot be immediately read.
-                    Most of these files, seem to be using Windows-1252 encoding.
-                    To keep the duration of this script as short as possible, this encoding will be tried first.
-                    """
-                    try:
-                        enc = 'Windows-1252'
-                        content_file = open(file, 'r', encoding=enc)
-                        for line in content_file:
-                            check = re.findall(p, line)
-                            count += len(check)
-                        content_file.close()
-                    except UnicodeDecodeError:
-                        """
-                        When the Windows-1252 encoding is not correct, utf-8 is tried.
-                        This seems to be the most common encoding to occur after Windows-1252.
-                        """
-                        try:
-                            enc = 'utf-8'
-                            content_file = open(file, 'r', encoding=enc)
-                            for line in content_file:
-                                check = re.findall(p, line)
-                                count += len(check)
-                            content_file.close()
-                        except UnicodeDecodeError:
-                            """
-                            When the Windows-1252 and utf-8 encoding is not correct, chardet is being used.
-                            This tool tries to detect which encoding is used.
-                            """
-                            try:
-                                rd_file = open(file, "rb")
-                                raw_data = rd_file.readlines()
-                                detector = UniversalDetector()
-                                for rd_line in raw_data:
-                                    detector.feed(rd_line)
-                                    if detector.done:
-                                        break
-                                detector.close()
-                                rd_file.close()
-                                if detector.result:
-                                    enc = detector.result["encoding"]
-                                    if enc:
-                                        print(f"encoding: {enc}")
-                                        content_file = open(file, 'r', encoding=enc)
-                                        for line in content_file:
-                                            check = re.findall(p, line)
-                                            count += len(check)
-                                        content_file.close()
-                                    else:
-                                        print("No encoding result.")
-                                else:
-                                    print("No Result from detector.")
-                            except UnicodeDecodeError:
-                                """
-                                In case chardet is not able to detect which encoding was used.
-                                """
-                                print(f"UnicodeDecodeError: {file}")
-                            except Exception as e:
-                                print(f"Different error encountered: {file}, error: {e}")
-                        except Exception as e:
-                            print(f"Different error encountered: {file}, error: {e}")
-                except Exception as e:
-                    print(f"Different error encountered: {file}, error: {e}")
+                result = read_file_encoding(file, p)
+                if isinstance(result, int):
+                    count += result
     return count
 
 
@@ -145,6 +145,7 @@ def main():
         "sleep_for": r'^(.*)(sleep_for)',
         "setTimeout": r'^(.*)(setTimeout)',
         "sleep space": r'^(.*)(sleep" ")',
+        "var with number": r'(?=_[a-z_0-9]|[a-z])[a-z_0-9]+(?=\s*=\s*[0-9])',
     }
     for name in dict_search_patterns:
         print(f"Searching: {name}")
