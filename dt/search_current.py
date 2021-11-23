@@ -5,8 +5,8 @@ Searching through the diffs of each commit
 import os
 import re
 from chardet.universaldetector import UniversalDetector
-import dt.dict_repo_list
 from datetime import datetime
+import dt.dict_repo_list
 from graph_creation import create_graph
 
 
@@ -14,6 +14,12 @@ def no_encoding_found(file: os.path) -> str:
     """
     When the default, Windows-1252 and utf-8 encoding is not correct, chardet is being used.
     This tool tries to detect which encoding is used.
+
+    Args:
+        file: Location of the file to find type of encoding used.
+
+    Returns:
+        Encoding used in the file, detected by chardet.
     """
     try:
         with open(file, "rb") as rd_file:
@@ -41,6 +47,17 @@ def no_encoding_found(file: os.path) -> str:
 
 
 def read_file_encoding(file: os.path, p, enc=None) -> int:
+    """
+    Read a file and apply the correct encoding to read the file. Then finding the
+
+    Args:
+        file: Path to the file to be read.
+        p: Pre-compiled regex pattern to search for in the file (Regular Expression Objects).
+        enc: If encoding provided, this will be used.
+
+    Returns:
+        The amount matching the pattern giving in this file.
+    """
     count = 0
     encodings_options = ['Windows-1252', 'utf-8']
     enc_select = None
