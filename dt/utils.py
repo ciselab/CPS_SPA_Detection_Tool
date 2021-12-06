@@ -2,11 +2,13 @@
 """
 Common for utils.
 """
+import os
 from os import path
 from typing import Optional
 import pathlib
 
 location = path.join(pathlib.Path.home(), "CPS_SPA_Detection_Tool", "results", "repo")
+dir_location_report = os.path.join("..", "results")
 
 
 def build_results_path(project: str) -> [str, Optional]:
@@ -46,3 +48,33 @@ def list_file_content(file_location: str) -> list:
         list_content_file.append(line)
     content_file.close()
     return list_content_file
+
+
+def get_csv_file(addition_name: str):
+    results_file_name = addition_name + "_results.csv"
+    if not os.path.exists(os.path.abspath(dir_location_report)):
+        os.makedirs(dir_location_report)
+    full_path_results_file = os.path.join(dir_location_report, results_file_name)
+    return open(full_path_results_file, "a")
+
+
+def write_row(csv_writer, file: str, results: str, encoding: str):
+    csv_line = [file, results, encoding]
+    csv_writer.writerow(csv_line)
+
+
+def write_row_commits(csv_writer_commits, file: str, commits: str):
+    csv_line_commits = [file, commits]
+    csv_writer_commits.writerow(csv_line_commits)
+
+
+def write_row_line(csv_writer_commits, input_line: str):
+    csv_line_commits = [input_line]
+    csv_writer_commits.writerow(csv_line_commits)
+
+
+def write_row_line_v2(csv_writer_commits,
+                      pattern: str, found_pattern: str, commit_hash: str, file: str,
+                      line_number_org: str, line_number_new: str):
+    csv_line_commits = [pattern, found_pattern, commit_hash, file, line_number_org, line_number_new]
+    csv_writer_commits.writerow(csv_line_commits)

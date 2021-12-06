@@ -4,10 +4,17 @@ Searching through the diffs of each commit
 """
 import os
 import re
+import csv
 from chardet.universaldetector import UniversalDetector
 from datetime import datetime
 import dt.dict_repo_list
 from graph_creation import create_graph
+from utils import get_csv_file, write_row
+
+
+results_long_list = []
+save_results_at = "results_git_blame_4.txt"
+dir_location_report = os.path.join("..", "results")
 
 
 def no_encoding_found(file: os.path) -> str:
@@ -46,13 +53,15 @@ def no_encoding_found(file: os.path) -> str:
         print(f"UnicodeDecodeError: {file}")
 
 
-def read_file_encoding(file: os.path, p, enc=None) -> int:
+def read_file_encoding(file: os.path, p, url: str, csv_writer, enc=None) -> int:
     """
     Read a file and apply the correct encoding to read the file. Then finding the
 
     Args:
         file: Path to the file to be read.
         p: Pre-compiled regex pattern to search for in the file (Regular Expression Objects).
+        url: Url to the project
+        csv_writer: CSV Writers object
         enc: If encoding provided, this will be used.
 
     Returns:
@@ -70,10 +79,15 @@ def read_file_encoding(file: os.path, p, enc=None) -> int:
         elif enc < len(encodings_options):
             enc_select = encodings_options[enc]
     try:
+        results_long_list.clear()
         with open(file, 'r', encoding=enc_select) as content_file:
-            for line in content_file:
+            for line_number, line in enumerate(content_file):
                 check = re.findall(p, line)
-                count += len(check)
+                if check:
+                    for each_find in check:
+                        results_long_list.append((each_find, line_number))
+        if results_long_list:
+            write_row(csv_writer, file, str(results_long_list), str(enc_select))
     except UnicodeDecodeError:
         """
         Some files are using an encoding that cannot be immediately read.
@@ -85,7 +99,7 @@ def read_file_encoding(file: os.path, p, enc=None) -> int:
         elif not enc >= len(encodings_options):
             enc = encodings_options.index(enc_select) + 1
         if not enc >= len(encodings_options):
-            result = read_file_encoding(file, p, enc)
+            result = read_file_encoding(file, p, url, csv_writer, enc)
             if isinstance(result, int):
                 count += result
     except Exception as e:
@@ -94,7 +108,7 @@ def read_file_encoding(file: os.path, p, enc=None) -> int:
         return count
 
 
-def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict) -> int:
+def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict, csv_writer) -> int:
     """
     Starts the mining process on the repository indicated by the given URL
     Through the current state of the repository. Only looking at files with specified extensions.
@@ -103,6 +117,7 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
         key_project: Project name from the dictionary.
         search_for_pattern: Pattern to find in the code to occur.
         repo_dictionary: Dictionary of with the project name and local location.
+        csv_writer: CSV Writers object
 
     Returns:
         count: How often the keyword occurs in the code of specified project.
@@ -124,26 +139,27 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
                              '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
 
             if file_extension.lower() in search_in_ext:
-                result = read_file_encoding(file, p)
+                result = read_file_encoding(file, p, url, csv_writer)
                 if isinstance(result, int):
                     count += result
     return count
 
 
-def start_searching(search_for_pattern: str, title_graph: str, search_type: str):
+def start_searching(search_for_pattern: str, title_graph: str, search_type: str, csv_writer):
     """
     Start the search with received pattern.
 
     Args:
-        search_for_pattern: Pattern to search with in this current round.
+        search_for_pattern: Pattern to search with in ths current round.
         title_graph: Title connected to the search pattern.
         search_type: Searching through the current state of the repository.
+        csv_writer: CSV Writers object
     """
     data_graph = {}
     dt.dict_repo_list.build_repo_dict()
     repo_dictionary = dt.dict_repo_list.projects
     for key_repo_name in repo_dictionary.keys():
-        counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary)
+        counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary, csv_writer)
         print(f"{key_repo_name}: {counted}")
         if counted > 0:
             data_graph[key_repo_name] = counted
@@ -156,18 +172,30 @@ def main():
     current_time = now.strftime("%H:%M:%S")
     print(f"Start time: {current_time}")
 
+    if os.path.exists(save_results_at):
+        print("File exists, removing file.")
+        os.remove(save_results_at)
+
+    """ Pattern name needs to be without spaces """
     dict_search_patterns = {
-        "sleep function": r'^(.*)(sleep\()',
-        "Sleep function": r'^(.*)(Sleep\()',
-        "sleep_for": r'^(.*)(sleep_for)',
-        "setTimeout": r'^(.*)(setTimeout)',
-        "sleep space": r'^(.*)(sleep" ")',
-        "var with number": r'(?=_[a-z_0-9]|[a-z])[a-z_0-9]+(?=\s*=\s*[0-9])',
+        # "sleep function": r'^(.*)(sleep\()',
+        # "Sleep function": r'^(.*)(Sleep\()',
+        # "sleep_for": r'^(.*)(sleep_for)',
+        # "setTimeout": r'^(.*)(setTimeout)',
+        # "sleep space": r'^(.*)(sleep" ")',
+        "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([0-9]+)',
     }
     for name in dict_search_patterns:
-        print(f"Searching: {name}")
-        start_searching(dict_search_patterns[name], name, "current")
+        file_commits_results = os.path.join(dir_location_report, name+"_results.csv")
+        if os.path.exists(file_commits_results):
+            print(f"File {file_commits_results} exists, removing file.")
+            os.remove(file_commits_results)
+        print(f"Searching: {name}\n")
+        csv_file = get_csv_file(name)
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+        start_searching(dict_search_patterns[name], name, "current", csv_writer)
 
+    print(f"Started at: {current_time}")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print(f"End time: {current_time}")
