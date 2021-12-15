@@ -5,79 +5,85 @@ Searching through the diffs of each commit
 import os
 import csv
 import re
-
 from git import Repo
 from utils import get_csv_file
 from pathlib import PurePosixPath
 import dt.dict_repo_list
 import dt.search_current
-from utils import write_row_commits, write_row_line_v2
-from git.exc import GitCommandError
+from utils import write_row_commits
+from datetime import datetime
+import pydriller
 
 
 results_long_list = []
 save_results_at = "results_git_blame_4.txt"
 dir_location_report = os.path.join("..", "results")
-var_name = "var_with_number"
+var_name = "numeric_function_within"
+var_results_file_name = var_name + "_results.csv"
 results_commits_name = "commits_PX4_Autopilot"
-commits_list = []
-count_errors_git = 0
+list_results = []
+count_files = 0
 
 
 def string_to_list(results):
     cleaned_up_results = []
-    list_results = results.split("(")
-    for each in list_results:
+    list_results_split = results.split("(")
+    for each in list_results_split:
         if len(each) > 1:
             cleanup_1 = each.replace(")", "")
             cleanup_2 = cleanup_1.replace("]", "")
             cleanup_3 = cleanup_2.replace("'", "")
             cleanup_4 = cleanup_3.replace(" ", "")
-            list_new = cleanup_4.split(",")
-            list_two = list_new[:3]
-            cleaned_up_results.append(list_two)
+            cleanup_5 = cleanup_4.replace("{", "")
+            cleanup_6 = cleanup_5.replace("}", "")
+            list_new = cleanup_6.split(",")
+            cleaned_up_results.append(list_new)
     return cleaned_up_results
 
 
-def use_git_blame_better(file: str, url: str, results):
+def cleanup_results_to_list(start):
+    cleaned_up_results = []
+    start_split = start.split("), ((")
+    for each in start_split:
+        if len(each) > 1:
+            cleanup_1 = each.replace("\'", "")
+            cleanup_2 = cleanup_1.replace("[", "")
+            cleanup_3 = cleanup_2.replace("]", "")
+            cleanup_4 = cleanup_3.replace(" ", "")
+            cleanup_5 = cleanup_4.replace("((", "")
+            cleanup_6 = cleanup_5.replace(")", "")
+            list_new = cleanup_6.split(",")
+            cleaned_up_results.append(list_new)
+    return cleaned_up_results
+
+
+def use_git_blame_better(file: str, url: str, results, encoding):
     """
     Args:
         file: full file path needed for git blame
         url: Path to the project repository (root of project)
         results: matching var name + var number
+        encoding: encoding of file
     Returns:
     """
     csv_file_commits = get_csv_file(results_commits_name)
     csv_wr_comm = csv.writer(
         csv_file_commits, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
-    csv_file_line = get_csv_file("long_results")
-    csv_wr_line = csv.writer(
-        csv_file_line, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
-
     repo = Repo(url)
-    commits_list.clear()
+    commits_set = set()
     for commit, lines in repo.blame(None, file):
-        results_list = string_to_list(results)
-
-        for each_results in results_list:
-            regex_pattern = r"(\s+" + re.escape(each_results[0]) + "\s*=\s*([0-9]+))"
-            for line_number, each_line in enumerate(lines):
-                matching_patterns = re.findall(regex_pattern, each_line)
-                if matching_patterns:
-                    if matching_patterns[0][1] != each_results[1]:
-                        print(f"match. pattern: {matching_patterns[0]}")
-                        write_row_line_v2(csv_wr_line,
-                                          matching_patterns[0][0], each_results,
-                                          commit, file,  each_results[2], str(line_number))
-        commits_list.append(commit)
-    write_row_commits(csv_wr_comm, file, str(commits_list))
+        commits_set.add(commit.hexsha)
+    cleaned_results_list = cleanup_results_to_list(results)
+    write_row_commits(csv_wr_comm, file, str(commits_set), results, encoding)
+    list_results.append([file, commits_set, cleaned_results_list, encoding])
 
 
 def csv_read():
     result_files = [f for f in os.listdir(os.path.join("..", "results"))]
+    counter_files = 0
     for each_file in result_files:
-        if os.path.basename(each_file) == "var_with_number_results.csv":
+        if os.path.basename(each_file) == var_results_file_name:
             each_file_full_path = os.path.join("..", "results", each_file)
             if PurePosixPath(each_file_full_path).suffix != '.swp':
                 with open(each_file_full_path) as results_csv_file:
@@ -86,24 +92,158 @@ def csv_read():
                     for line_number, row in enumerate(csv_reader):
                         dt.dict_repo_list.build_repo_dict()
                         url = dt.dict_repo_list.projects["PX4-Autopilot"]["local"]
-                        try:
-                            use_git_blame_better(row['file_name'], url, row['results'])
-                        except GitCommandError:
-                            # print(f"ERROR: GitCommandError...")
-                            global count_errors_git
-                            count_errors_git += 1
-                            pass
+                        file_path = row['file_name']
+                        project_path_extra = url + "\\"
+                        file_short = file_path.replace(project_path_extra, '')
+                        check_follow(file_short, counter_files, file_path, row['results'], row['encoding'])
+                        counter_files = counter_files + 1
+
+
+def clean_git_log(log_results_path: str):
+    dict_changed_files = {}
+    last_name_change = None
+    with open(log_results_path, 'r') as analyse_log_results:
+        for each_line in analyse_log_results:
+            pattern_commit = r"(commit)\s([0-9a-zA-Z]+)"
+            # changed_file_pattern = r"^(:[0-9a-zA-Z]+\s[0-9a-zA-Z]+\s[0-9a-zA-Z]+" \
+            #                        r"\s[0-9a-zA-Z]+\s[0-9a-zA-Z]+\s)([a-zA-Z0-9\/.-]+)\s([a-zA-Z0-9\/.-]+)\n"
+            changed_file_pattern = r"^(:[0-9]+\s[0-9]+\s[0-9a-fA-F]+\s[0-9a-fA-F]+" \
+                                   r"\s[0-9a-zA-Z]+\s)([a-zA-Z0-9\/.-_]*)\s([a-zA-Z0-9\/.-_]*)\n"
+
+            matching_patterns_commit = re.match(pattern_commit, each_line)
+            if matching_patterns_commit:
+                current_hash = matching_patterns_commit.groups()[1]
+                if last_name_change:
+                    dict_changed_files[current_hash] = last_name_change
+                else:
+                    dict_changed_files[current_hash] = None
+
+            matching_patterns_changed_file = re.match(changed_file_pattern, each_line)
+            if matching_patterns_changed_file:
+                dict_changed_files[current_hash] = (matching_patterns_changed_file.groups()[1],
+                                                    matching_patterns_changed_file.groups()[2])
+                last_name_change = (matching_patterns_changed_file.groups()[1],
+                                    matching_patterns_changed_file.groups()[2])
+
+    return dict_changed_files
+
+
+def check_follow(path_short, counter_files, path_long, results, encoding):
+    current_wd = os.getcwd()
+    dir_path = os.path.join("..", "..", "PX4-Autopilot")
+    os.chdir(f'{dir_path}')
+    write_to_file = os.path.join(current_wd, "..", "results", "log_results_"+str(counter_files))
+    os.system(f"git log --raw --follow {path_short} > {write_to_file}")
+
+    dict_results = clean_git_log(write_to_file)
+    analyse_file_checkout("PX4-Autopilot", dict_results, path_long, results, encoding)
+
+    os.chdir(f'{current_wd}')
+
+
+def print_information(project_name, file_name_full_path, commit_hash, search_var_name, var_value, var_value_found):
+    print("Found variable changes:")
+    print(f"Project: {project_name}")
+    print(f"File: {file_name_full_path}")
+    print(f"Commit hash: {commit_hash}")
+    print(f"{search_var_name} : {var_value} -> {var_value_found}")
+    print("\n---\n")
+
+
+def analyse_file_checkout(project, dict_results, path_long, results, encoding):
+    project_hash = dt.dict_repo_list.projects[project]["sha"]
+    local_project = dt.dict_repo_list.projects[project]["local"]
+    repo_check = pydriller.GitRepository(local_project)
+    encoding_file = str(encoding)
+    if encoding_file == "None":
+        encoding_file = None
+
+    results_list = cleanup_results_to_list(results)
+
+    for each_hash in dict_results.keys():
+        repo_check.checkout(each_hash)
+
+        if dict_results[each_hash]:
+            path_long = dict_results[each_hash][0]
+
+        results_file = []
+        for each_result_var in results_list:
+            var_name_each = each_result_var[0]
+            var_value_each = each_result_var[1]
+            # regex_pattern = r"\s+(" + re.escape(var_name_each) + r")\s*=\s*([0-9]+)"
+            regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name_each) + r",\s([-0-9.]+)"
+            try:
+                with open(path_long, 'r', encoding=encoding_file) as analyse_file:
+                    for each_line in analyse_file:
+                        matching_patterns = re.findall(regex_pattern, each_line)
+                        results_pattern_with_var_name = (var_name_each, matching_patterns)
+                        if matching_patterns:
+                            results_file.append(results_pattern_with_var_name)
+                            if matching_patterns[0] != var_value_each:
+                                print_information(local_project, path_long, each_hash,
+                                                  var_name_each, var_value_each, matching_patterns[0])
+            except FileNotFoundError as e:
+                print(f"File not found: {e}")
+                pass
+    repo_check = pydriller.GitRepository(local_project)
+    repo_check.checkout(project_hash)
+    print(f"done returning to: {project_hash}")
+
+
+def csv_git_blame_read():
+    result_files = [f for f in os.listdir(os.path.join("..", "results"))]
+    for each_file in result_files:
+        if os.path.basename(each_file) == "commits_PX4_Autopilot_results.csv":
+            each_file_full_path = os.path.join("..", "results", each_file)
+            if PurePosixPath(each_file_full_path).suffix != '.swp':
+                with open(each_file_full_path) as results_csv_file:
+                    fieldnames = ['file_name', 'commits', 'results', 'encoding']
+                    csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames)
+                    for line_number, row in enumerate(csv_reader):
+                        dt.dict_repo_list.build_repo_dict()
+                        print(f"file name of commit found: {row['file_name']}")
+                        print(f"sha of commit found: {row['commits']}")
+                        for each in string_to_list(row['commits']):
+                            for each_one in each:
+                                print(each_one)
+                        print(f"results of commit found: {row['results']}")
+                        print(f"encoding of file from commit found: {row['encoding']}")
+                        print("\n")
+
+
+def hash_projects_to_file():
+    print(dt.dict_repo_list.projects["PX4-Autopilot"])
+    with open('hash_projects.txt', 'w') as writer:
+        for project in dt.dict_repo_list.projects:
+            writer.write(dt.dict_repo_list.projects[project]["local"])
+            writer.write(" , ")
+            writer.write(dt.dict_repo_list.projects[project]["sha"])
+            writer.write("\n")
 
 
 def main():
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print(f"Start time: {current_time}")
+
     print("Starting")
+    dt.dict_repo_list.build_repo_dict()
+    dt.dict_repo_list.build_repo_dict_sha()
+    hash_projects_to_file()     # backup
+
     file_commits_results = os.path.join("..", "results", results_commits_name+"_results.csv")
     if os.path.exists(file_commits_results):
         print(f"File {file_commits_results} exists, removing file.")
         os.remove(file_commits_results)
     print("Start reading")
     csv_read()
-    print(f"Amount of GitCommandErrors: {count_errors_git}")
+    # csv_git_blame_read()
+    print("Done")
+
+    print(f"Started at: {current_time}")
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print(f"End time: {current_time}")
 
 
 if __name__ == "__main__":

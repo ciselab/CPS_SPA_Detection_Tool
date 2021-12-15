@@ -183,7 +183,8 @@ def main():
         # "sleep_for": r'^(.*)(sleep_for)',
         # "setTimeout": r'^(.*)(setTimeout)',
         # "sleep space": r'^(.*)(sleep" ")',
-        "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([0-9]+)',
+        # "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([0-9]+)',
+        "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
     }
     for name in dict_search_patterns:
         file_commits_results = os.path.join(dir_location_report, name+"_results.csv")

@@ -63,8 +63,8 @@ def write_row(csv_writer, file: str, results: str, encoding: str):
     csv_writer.writerow(csv_line)
 
 
-def write_row_commits(csv_writer_commits, file: str, commits: str):
-    csv_line_commits = [file, commits]
+def write_row_commits(csv_writer_commits, file: str, commits: str, results, encoding: str):
+    csv_line_commits = [file, commits, results, encoding]
     csv_writer_commits.writerow(csv_line_commits)
 
 
