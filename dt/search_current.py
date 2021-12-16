@@ -13,7 +13,6 @@ from utils import get_csv_file, write_row
 
 
 results_long_list = []
-save_results_at = "results_git_blame_4.txt"
 dir_location_report = os.path.join("..", "results")
 
 
@@ -172,19 +171,13 @@ def main():
     current_time = now.strftime("%H:%M:%S")
     print(f"Start time: {current_time}")
 
-    if os.path.exists(save_results_at):
-        print("File exists, removing file.")
-        os.remove(save_results_at)
-
     """ Pattern name needs to be without spaces """
+    # noinspection SpellCheckingInspection
     dict_search_patterns = {
-        # "sleep function": r'^(.*)(sleep\()',
-        # "Sleep function": r'^(.*)(Sleep\()',
-        # "sleep_for": r'^(.*)(sleep_for)',
         # "setTimeout": r'^(.*)(setTimeout)',
-        # "sleep space": r'^(.*)(sleep" ")',
         # "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([0-9]+)',
-        "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
+        # "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
+        "sleeps": r"^.*?(u*[sS]leep[_for]*)\s*\(*([0-9]+)",
     }
     for name in dict_search_patterns:
         file_commits_results = os.path.join(dir_location_report, name+"_results.csv")

@@ -15,14 +15,11 @@ from datetime import datetime
 import pydriller
 
 
-results_long_list = []
-save_results_at = "results_git_blame_4.txt"
-dir_location_report = os.path.join("..", "results")
-var_name = "numeric_function_within"
+# var_name = "numeric_function_within"
+var_name = "sleeps"
 var_results_file_name = var_name + "_results.csv"
 results_commits_name = "commits_PX4_Autopilot"
 list_results = []
-count_files = 0
 
 
 def string_to_list(results):
@@ -170,8 +167,12 @@ def analyse_file_checkout(project, dict_results, path_long, results, encoding):
         for each_result_var in results_list:
             var_name_each = each_result_var[0]
             var_value_each = each_result_var[1]
+            """var_with_number"""
             # regex_pattern = r"\s+(" + re.escape(var_name_each) + r")\s*=\s*([0-9]+)"
-            regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name_each) + r",\s([-0-9.]+)"
+            """numeric_function_within"""
+            # regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name_each) + r",\s([-0-9.]+)"
+            """sleeps"""
+            regex_pattern = r"^.*?" + re.escape(var_name_each) + r"\s*\(*([0-9]+)"
             try:
                 with open(path_long, 'r', encoding=encoding_file) as analyse_file:
                     for each_line in analyse_file:
@@ -188,27 +189,6 @@ def analyse_file_checkout(project, dict_results, path_long, results, encoding):
     repo_check = pydriller.GitRepository(local_project)
     repo_check.checkout(project_hash)
     print(f"done returning to: {project_hash}")
-
-
-def csv_git_blame_read():
-    result_files = [f for f in os.listdir(os.path.join("..", "results"))]
-    for each_file in result_files:
-        if os.path.basename(each_file) == "commits_PX4_Autopilot_results.csv":
-            each_file_full_path = os.path.join("..", "results", each_file)
-            if PurePosixPath(each_file_full_path).suffix != '.swp':
-                with open(each_file_full_path) as results_csv_file:
-                    fieldnames = ['file_name', 'commits', 'results', 'encoding']
-                    csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames)
-                    for line_number, row in enumerate(csv_reader):
-                        dt.dict_repo_list.build_repo_dict()
-                        print(f"file name of commit found: {row['file_name']}")
-                        print(f"sha of commit found: {row['commits']}")
-                        for each in string_to_list(row['commits']):
-                            for each_one in each:
-                                print(each_one)
-                        print(f"results of commit found: {row['results']}")
-                        print(f"encoding of file from commit found: {row['encoding']}")
-                        print("\n")
 
 
 def hash_projects_to_file():
@@ -237,7 +217,6 @@ def main():
         os.remove(file_commits_results)
     print("Start reading")
     csv_read()
-    # csv_git_blame_read()
     print("Done")
 
     print(f"Started at: {current_time}")
