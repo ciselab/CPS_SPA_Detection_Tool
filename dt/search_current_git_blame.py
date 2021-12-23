@@ -31,17 +31,17 @@ def cleanup_results_to_list(start):
             data = each.replace("\'", "")
             data = data.replace("[", "")
             data = data.replace(", \u25A0)]", "")
-            data = data.replace(" ", "")        # Needs to be replaced by something else
             data = data.replace("((", "")
-            data = data.replace(",\u25A0]", "")
+            data = data.replace(", \u25A0]", "")
             data = data.replace(")", "")
-            data_split = data.split(u",\u25A0,")
+            data_split = data.split(u", \u25A0,")
             results_line = data_split[1:]
             for items in results_line:
                 results_line_full = results_line_full + items
             data_results = results_line_full.replace("\\t", "\t")
             data_results = data_results.replace("\\n", "\n")
             first_set = data_split[0]
+            first_set = first_set.replace(" ", "")
             data_input_final = first_set.split(",")
             results_com = (data_input_final[0], data_input_final[1], data_input_final[2], data_results)
             cleaned_up_results.append(results_com)
