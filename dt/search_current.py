@@ -14,6 +14,7 @@ from utils import get_csv_file, write_row
 
 results_long_list = []
 dir_location_report = os.path.join("..", "results")
+delim_stand = u"\u25A0"
 
 
 def no_encoding_found(file: os.path) -> str:
@@ -52,7 +53,7 @@ def no_encoding_found(file: os.path) -> str:
         print(f"UnicodeDecodeError: {file}")
 
 
-def read_file_encoding(file: os.path, p, url: str, csv_writer, enc=None) -> int:
+def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=None) -> int:
     """
     Read a file and apply the correct encoding to read the file. Then finding the
 
@@ -61,6 +62,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, enc=None) -> int:
         p: Pre-compiled regex pattern to search for in the file (Regular Expression Objects).
         url: Url to the project
         csv_writer: CSV Writers object
+        key_project: project name
         enc: If encoding provided, this will be used.
 
     Returns:
@@ -69,6 +71,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, enc=None) -> int:
     count = 0
     encodings_options = ['Windows-1252', 'utf-8']
     enc_select = None
+    remember_prev_line = ""
     if isinstance(enc, int):
         if enc >= len(encodings_options):
             """
@@ -84,7 +87,8 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, enc=None) -> int:
                 check = re.findall(p, line)
                 if check:
                     for each_find in check:
-                        results_long_list.append((each_find, line_number))
+                        results_long_list.append((each_find, line_number, delim_stand, remember_prev_line, delim_stand))
+                remember_prev_line = line
         if results_long_list:
             write_row(csv_writer, file, str(results_long_list), str(enc_select))
     except UnicodeDecodeError:
@@ -98,7 +102,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, enc=None) -> int:
         elif not enc >= len(encodings_options):
             enc = encodings_options.index(enc_select) + 1
         if not enc >= len(encodings_options):
-            result = read_file_encoding(file, p, url, csv_writer, enc)
+            result = read_file_encoding(file, p, url, csv_writer, key_project, enc)
             if isinstance(result, int):
                 count += result
     except Exception as e:
@@ -138,7 +142,7 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
                              '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
 
             if file_extension.lower() in search_in_ext:
-                result = read_file_encoding(file, p, url, csv_writer)
+                result = read_file_encoding(file, p, url, csv_writer, key_project)
                 if isinstance(result, int):
                     count += result
     return count
@@ -186,7 +190,8 @@ def main():
             os.remove(file_commits_results)
         print(f"Searching: {name}\n")
         csv_file = get_csv_file(name)
-        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+        csv_writer = csv.writer(csv_file, delimiter=u"\u25A0", quotechar='"',
+                                quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
         start_searching(dict_search_patterns[name], name, "current", csv_writer)
 
     print(f"Started at: {current_time}")
