@@ -1,0 +1,5 @@
+[('sleep', '30', 151, '■', '   # Wait a bit longer after bootup, before copying binaries to the target.\n', '■')]
+[('sleep', '5', 186, '■', '   ${minidmPath}/mini-dm > minidm.log &\n', '■')]
+[('sleep', '20', 205, '■', '   fi\n', '■')]
+[('sleep', '5', 215, '■', '   adb shell "ps -eaf | grep px4 | grep -v grep | awk \'{print $2}\' | tr -s \' \' | cut -d\' \' -f2 | xargs kill"\n', '■')]
+[('sleep', '30', 151, '■', '   # Wait a bit longer after bootup, before copying binaries to the target.\n', '■'), ('sleep', '5', 186, '■', '   ${minidmPath}/mini-dm > minidm.log &\n', '■'), ('sleep', '20', 205, '■', '   fi\n', '■'), ('sleep', '5', 215, '■', '   adb shell "ps -eaf | grep px4 | grep -v grep | awk \'{print $2}\' | tr -s \' \' | cut -d\' \' -f2 | xargs kill"\n', '■')]

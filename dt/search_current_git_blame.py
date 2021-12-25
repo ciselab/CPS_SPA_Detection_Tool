@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-Searching through the diffs of each commit
+Searching through previous versions of each file.
 """
 import os
 import csv
 import re
-from utils import get_csv_file
+from dt.utils import get_csv_file
 from pathlib import PurePosixPath
 import dt.dict_repo_list
 import dt.search_current
-from utils import write_row_results
+from dt.utils import write_row_results
 from datetime import datetime
 import pydriller
 
@@ -22,28 +22,32 @@ list_results = []
 delim_stand = u"\u25A0"
 
 
-def cleanup_results_to_list(start):
+def cleanup_results_to_list_v2(start: str):
     cleaned_up_results = []
-    start_split = start.split(u"\u25A0'), ((")
-    for each in start_split:
+    split = start.split("), (")
+    for each in split:
         results_line_full = ""
         if len(each) > 1:
-            data = each.replace("\'", "")
-            data = data.replace("[", "")
-            data = data.replace(", \u25A0)]", "")
-            data = data.replace("((", "")
-            data = data.replace(", \u25A0]", "")
-            data = data.replace(")", "")
-            data_split = data.split(u", \u25A0,")
+            data = each
+            data = data.replace("[(", "")
+            data = data.replace("', '\u25A0')]", "")
+            data = data.replace("\\'", "\'")  # 4
+            data_split = data.split(u", '\u25A0', '")
+
             results_line = data_split[1:]
             for items in results_line:
                 results_line_full = results_line_full + items
-            data_results = results_line_full.replace("\\t", "\t")
+            data_results = results_line_full
+            data_results = data_results.replace("', '\u25A0'", "")  # multiple
+            data_results = data_results.replace("\\t", "\t")
             data_results = data_results.replace("\\n", "\n")
+
             first_set = data_split[0]
+            first_set = first_set.replace("'", "")
             first_set = first_set.replace(" ", "")
             data_input_final = first_set.split(",")
-            results_com = (data_input_final[0], data_input_final[1], data_input_final[2], data_results)
+
+            results_com = (data_input_final[0], data_input_final[1], data_input_final[2], data_results.strip())
             cleaned_up_results.append(results_com)
     return cleaned_up_results
 
@@ -55,7 +59,7 @@ def csv_read(csv_wr_res):
         if os.path.basename(each_file) == var_results_file_name:
             each_file_full_path = os.path.join("..", "results", each_file)
             if PurePosixPath(each_file_full_path).suffix != '.swp':
-                with open(each_file_full_path, encoding='utf-8') as results_csv_file:
+                with open(each_file_full_path, 'r', encoding='utf-8') as results_csv_file:
                     fieldnames = ['file_name', 'results', 'encoding']
                     csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames, delimiter=u"\u25A0")
                     for row in csv_reader:
@@ -112,18 +116,6 @@ def check_follow(csv_wr_res, path_short, counter_files, path_long, results, enco
     os.chdir(f'{current_wd}')
 
 
-def print_information(csv_wr_res, project_name, file_name_full_path,
-                      commit_hash, search_var_name, var_value, var_value_found):
-    # print("Found variable changes:")
-    # print(f"Project: {project_name}")
-    # print(f"File: {file_name_full_path}")
-    # print(f"Commit hash: {commit_hash}")
-    # print(f"{search_var_name} : {var_value} -> {var_value_found}")
-    # print("\n---\n")
-    write_row_results(csv_wr_res, project_name, file_name_full_path,
-                      commit_hash, search_var_name, var_value, var_value_found)
-
-
 def analyse_file_checkout(project, dict_results, path_long, results, encoding, csv_wr_res):
     project_hash = dt.dict_repo_list.projects[project]["sha"]
     local_project = dt.dict_repo_list.projects[project]["local"]
@@ -132,7 +124,7 @@ def analyse_file_checkout(project, dict_results, path_long, results, encoding, c
     if encoding_file == "None":
         encoding_file = None
 
-    results_list = cleanup_results_to_list(results)
+    results_list = cleanup_results_to_list_v2(results)
     first_check = True
     same_var_name_comp = None
 
@@ -166,10 +158,8 @@ def analyse_file_checkout(project, dict_results, path_long, results, encoding, c
                         if matching_patterns:
                             results_file.append(results_pattern_with_var_name)
                             if matching_patterns[0] != var_value_each:
-                                # print(f"comparison: {current_prev_line} VS {result_prev_line}")
-                                # print(f"hash: {each_hash}, path: {path_long}")
-                                if current_prev_line == result_prev_line:
-                                    print_information(csv_wr_res, local_project, path_long, each_hash,
+                                if current_prev_line.strip() == result_prev_line.strip():
+                                    write_row_results(csv_wr_res, local_project, path_long, each_hash,
                                                       var_name_each, var_value_each, matching_patterns[0])
                                     var_value_each = matching_patterns[0]       # New comparison value
                                     same_var_name_comp = var_name_each

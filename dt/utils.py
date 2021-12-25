@@ -55,7 +55,7 @@ def get_csv_file(addition_name: str):
     if not os.path.exists(os.path.abspath(dir_location_report)):
         os.makedirs(dir_location_report)
     full_path_results_file = os.path.join(dir_location_report, results_file_name)
-    return open(full_path_results_file, "a", encoding='utf-8')
+    return open(full_path_results_file, "a", encoding='utf-8', newline='\n')
 
 
 def write_row(csv_writer, file: str, results: str, encoding: str):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Searching through the diffs of each commit
+Searching through the current state of the repository.
 """
 import os
 import re
@@ -8,8 +8,8 @@ import csv
 from chardet.universaldetector import UniversalDetector
 from datetime import datetime
 import dt.dict_repo_list
-from graph_creation import create_graph
-from utils import get_csv_file, write_row
+from dt.graph_creation import create_graph
+from dt.utils import get_csv_file, write_row
 
 
 results_long_list = []
@@ -87,7 +87,8 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
                 check = re.findall(p, line)
                 if check:
                     for each_find in check:
-                        results_long_list.append((each_find, line_number, delim_stand, remember_prev_line, delim_stand))
+                        results_long_list.append((each_find[0], each_find[1], line_number,
+                                                  delim_stand, remember_prev_line, delim_stand))
                 remember_prev_line = line
         if results_long_list:
             write_row(csv_writer, file, str(results_long_list), str(enc_select))
