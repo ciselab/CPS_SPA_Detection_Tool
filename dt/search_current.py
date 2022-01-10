@@ -87,7 +87,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
                 check = re.findall(p, line)
                 if check:
                     for each_find in check:
-                        results_long_list.append((each_find[0], each_find[1], line_number,
+                        results_long_list.append((each_find[0], each_find[1], line_number+1,
                                                   delim_stand, remember_prev_line, delim_stand))
                 remember_prev_line = line
         if results_long_list:
@@ -149,7 +149,7 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
     return count
 
 
-def start_searching(search_for_pattern: str, title_graph: str, search_type: str, csv_writer):
+def start_searching(search_for_pattern: str, title_graph: str, search_type: str, name: str):
     """
     Start the search with received pattern.
 
@@ -157,12 +157,19 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
         search_for_pattern: Pattern to search with in ths current round.
         title_graph: Title connected to the search pattern.
         search_type: Searching through the current state of the repository.
-        csv_writer: CSV Writers object
+        # csv_writer: CSV Writers object
+        name: Name of the pattern
     """
     data_graph = {}
     dt.dict_repo_list.build_repo_dict()
     repo_dictionary = dt.dict_repo_list.projects
     for key_repo_name in repo_dictionary.keys():
+
+        pattern_project = f"{name}_{key_repo_name}"
+        csv_file = get_csv_file(pattern_project)
+        csv_writer = csv.writer(csv_file, delimiter=u"\u25A0", quotechar='"',
+                                quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+
         counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary, csv_writer)
         print(f"{key_repo_name}: {counted}")
         if counted > 0:
@@ -190,10 +197,7 @@ def main():
             print(f"File {file_commits_results} exists, removing file.")
             os.remove(file_commits_results)
         print(f"Searching: {name}\n")
-        csv_file = get_csv_file(name)
-        csv_writer = csv.writer(csv_file, delimiter=u"\u25A0", quotechar='"',
-                                quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
-        start_searching(dict_search_patterns[name], name, "current", csv_writer)
+        start_searching(dict_search_patterns[name], name, "current", name)
 
     print(f"Started at: {current_time}")
     now = datetime.now()
