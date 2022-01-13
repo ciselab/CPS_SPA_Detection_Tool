@@ -55,7 +55,7 @@ def get_csv_file(addition_name: str):
     if not os.path.exists(os.path.abspath(dir_location_report)):
         os.makedirs(dir_location_report)
     full_path_results_file = os.path.join(dir_location_report, results_file_name)
-    return open(full_path_results_file, "a")
+    return open(full_path_results_file, "a", encoding='utf-8', newline='\n')
 
 
 def write_row(csv_writer, file: str, results: str, encoding: str):
@@ -63,8 +63,8 @@ def write_row(csv_writer, file: str, results: str, encoding: str):
     csv_writer.writerow(csv_line)
 
 
-def write_row_commits(csv_writer_commits, file: str, commits: str):
-    csv_line_commits = [file, commits]
+def write_row_commits(csv_writer_commits, file: str, commits: str, results, encoding: str):
+    csv_line_commits = [file, commits, results, encoding]
     csv_writer_commits.writerow(csv_line_commits)
 
 
@@ -77,4 +77,19 @@ def write_row_line_v2(csv_writer_commits,
                       pattern: str, found_pattern: str, commit_hash: str, file: str,
                       line_number_org: str, line_number_new: str):
     csv_line_commits = [pattern, found_pattern, commit_hash, file, line_number_org, line_number_new]
+    csv_writer_commits.writerow(csv_line_commits)
+
+
+def write_row_results(csv_writer_commits,
+                      project_name: str, file_name_full_path: str, commit_hash: str,
+                      search_var_name: str, var_value: str, var_value_found: str):
+    csv_line_commits = [project_name, file_name_full_path, commit_hash, search_var_name, var_value, var_value_found]
+    csv_writer_commits.writerow(csv_line_commits)
+
+
+def write_row_results_more(csv_writer_commits,
+                           project_name: str, file_name_full_path: str, comparative_hash: str,
+                           commit_hash: str, search_var_name: str, var_value: str, var_value_found: str):
+    csv_line_commits = [project_name, file_name_full_path, comparative_hash, commit_hash,
+                        search_var_name, var_value, var_value_found]
     csv_writer_commits.writerow(csv_line_commits)
