@@ -87,7 +87,9 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
                 check = re.findall(p, line)
                 if check:
                     for each_find in check:
-                        results_long_list.append((each_find[0], each_find[1], line_number+1,
+                        count += 1
+                        line_number_fix = line_number + 1
+                        results_long_list.append((each_find[0], each_find[1], line_number_fix,
                                                   delim_stand, remember_prev_line, delim_stand))
                 remember_prev_line = line
         if results_long_list:
@@ -108,8 +110,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
                 count += result
     except Exception as e:
         print(f"Different error encountered: {file}, error: {e}")
-    else:
-        return count
+    return count
 
 
 def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict, csv_writer) -> int:
@@ -166,6 +167,12 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
     for key_repo_name in repo_dictionary.keys():
 
         pattern_project = f"{name}_{key_repo_name}"
+
+        file_commits_results = os.path.join(dir_location_report, pattern_project + "_results.csv")
+        if os.path.exists(file_commits_results):
+            print(f"File {file_commits_results} exists, removing file.")
+            os.remove(file_commits_results)
+
         csv_file = get_csv_file(pattern_project)
         csv_writer = csv.writer(csv_file, delimiter=u"\u25A0", quotechar='"',
                                 quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
@@ -189,13 +196,10 @@ def main():
         # "setTimeout": r'^(.*)(setTimeout)',
         # "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([0-9]+)',
         # "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
-        "sleeps": r"^.*?(u*[sS]leep[_for]*)\s*\(*([0-9]+)",
+        "sleeps": r"^.*?(u*[sS]leep[_for]*)\s*\(*([0-9.]+)",
+        # "sleeps_var_name": r"^.*?(u*[sS]leep[_for]*)\s*\(*([a-zA-Z]+)",
     }
     for name in dict_search_patterns:
-        file_commits_results = os.path.join(dir_location_report, name+"_results.csv")
-        if os.path.exists(file_commits_results):
-            print(f"File {file_commits_results} exists, removing file.")
-            os.remove(file_commits_results)
         print(f"Searching: {name}\n")
         start_searching(dict_search_patterns[name], name, "current", name)
 

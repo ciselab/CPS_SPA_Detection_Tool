@@ -9,7 +9,7 @@ from dt.utils import get_csv_file
 from pathlib import PurePosixPath
 import dt.dict_repo_list
 import dt.search_current
-from dt.utils import write_row_results
+from dt.utils import write_row_results_more
 from datetime import datetime
 import pydriller
 import glob
@@ -19,8 +19,10 @@ from dataclasses import dataclass
 # var_name = "numeric_function_within"
 var_name = "sleeps"
 
-list_results = []
 delim_stand = u"\u25A0"
+
+hc_counter = 0
+hc_counter_res = 0
 
 
 @dataclass
@@ -171,13 +173,14 @@ def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str
     os.chdir(f'{current_wd}')
 
 
-def print_found_results(path_long: str, each_hash: str, var_name_each: str, var_value_each, matching_patterns,
-                        current_prev_line: str, result_prev_line: str, each_line: str):
+def print_found_results(path_long: str, compared_hash: str, each_hash: str, var_name_each: str, var_value_each,
+                        matching_patterns, current_prev_line: str, result_prev_line: str, each_line: str):
     """
     Printing results in the console, same as is written to a file.
     Mainly used in development stage.
     Args:
         path_long: Location of the file (full path).
+        compared_hash: Hash from which the var is compared to.
         each_hash: Current hash of the commit.
         var_name_each: Name current variable.
         var_value_each: Value of the variable to be compared with.
@@ -188,6 +191,7 @@ def print_found_results(path_long: str, each_hash: str, var_name_each: str, var_
     """
     print(f"project name: {current_project.name}")
     print(f"file name: {path_long}")
+    print(f"compared hash: {compared_hash}")
     print(f"hash: {each_hash}")
     print(f"var name: {var_name_each}")
     print(f"var value 1: {var_value_each}")
@@ -217,52 +221,70 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
 
     results_list = cleanup_results_to_list_v2(results)
     var_value_each = {}
+    var_value_each_hash = {}
+
+    global hc_counter
+    hc_counter = hc_counter+1
 
     for each_hash in dict_results.keys():
         repo_check.checkout(each_hash)
 
-        if dict_results[each_hash]:
+        if dict_results[each_hash]:         # Used if filename has been changed.
             path_long = dict_results[each_hash][0]
 
-        for number_result, each_result_var in enumerate(results_list):
+        global hc_counter_res
+        hc_counter_res = 0
+
+        for each_result_var in results_list:
+            hc_counter_res = hc_counter_res + 1
+            number_result = f"{hc_counter}_{hc_counter_res}"
+
             var_name_each = each_result_var[0]
             result_prev_line = each_result_var[3]
             current_prev_line = ""
 
-            if number_result not in var_value_each:
-                var_value_each = {number_result: each_result_var[1]}
-            """var_with_number"""
-            # regex_pattern = r"\s+(" + re.escape(var_name_each) + r")\s*=\s*([0-9]+)"
-            """numeric_function_within"""
-            # regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name_each) + r",\s([-0-9.]+)"
-            """sleeps"""
-            regex_pattern = r"^.*?" + re.escape(var_name_each) + r"\s*\(*([0-9]+)"
-            try:
-                with open(path_long, 'r', encoding=encoding_file) as analyse_file:
-                    for line_number, each_line in enumerate(analyse_file):
-                        matching_patterns = re.findall(regex_pattern, each_line)
-                        if matching_patterns:
-                            if matching_patterns[0] != var_value_each[number_result]:
-                                if current_prev_line.strip() == result_prev_line.strip():
-                                    write_row_results(csv_wr_res, current_project.name, path_long, each_hash,
-                                                      var_name_each, each_result_var[1], matching_patterns[0])
-                                    # print_found_results(path_long, each_hash, var_name_each, each_result_var[1],
-                                    #                     matching_patterns[0], current_prev_line, result_prev_line,
-                                    #                     each_line)
-                                    var_value_each = {number_result: matching_patterns[0]}  # New comparison value
-                        current_prev_line = each_line
-            except FileNotFoundError as e:
-                with open("error_file_not_found.log", 'a') as ef_file:
-                    now = datetime.now()
-                    current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-                    ef_file.write(f"[{current_date_time}] {e}")
-                pass
-            except UnicodeDecodeError as e:
-                with open("encoding_error.log", 'a') as ee_file:
-                    now = datetime.now()
-                    current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-                    ee_file.write(f"[{current_date_time}] {e}")
-                pass
+            if result_prev_line:    # Temp. to ignore possibly false-positives (needs other fix).
+                if number_result not in var_value_each:
+                    var_value_each = {number_result: each_result_var[1]}
+                if number_result not in var_value_each_hash:
+                    var_value_each_hash = {number_result: current_project.sha_project}
+
+                """var_with_number"""
+                # regex_pattern = r"\s+(" + re.escape(var_name_each) + r")\s*=\s*([0-9]+)"
+                """numeric_function_within"""
+                # regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name_each) + r",\s([-0-9.]+)"
+                """sleeps"""
+                regex_pattern = r"^.*?" + re.escape(var_name_each) + r"\s*\(*([0-9.]+)"
+                try:
+                    with open(path_long, 'r', encoding=encoding_file) as analyse_file:
+                        for line_number, each_line in enumerate(analyse_file):
+                            matching_patterns = re.findall(regex_pattern, each_line)
+                            if matching_patterns:
+                                if matching_patterns[0] != var_value_each[number_result]:
+                                    if current_prev_line.strip() == result_prev_line.strip():
+                                        write_row_results_more(csv_wr_res, current_project.name, path_long,
+                                                               var_value_each_hash[number_result], each_hash,
+                                                               var_name_each, var_value_each[number_result],
+                                                               matching_patterns[0])
+                                        print_found_results(path_long, var_value_each_hash[number_result], each_hash,
+                                                            var_name_each, var_value_each[number_result],
+                                                            matching_patterns[0], current_prev_line, result_prev_line,
+                                                            each_line)
+                                        var_value_each = {number_result: matching_patterns[0]}  # New comparison value
+                                        var_value_each_hash = {number_result: each_hash}
+                            current_prev_line = each_line
+                except FileNotFoundError as e:
+                    with open("error_file_not_found.log", 'a') as ef_file:
+                        now = datetime.now()
+                        current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                        ef_file.write(f"[{current_date_time}] {e}")
+                    pass
+                except UnicodeDecodeError as e:
+                    with open("encoding_error.log", 'a') as ee_file:
+                        now = datetime.now()
+                        current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                        ee_file.write(f"[{current_date_time}] {e}")
+                    pass
     repo_check = pydriller.GitRepository(local_project)
     repo_check.checkout(project_hash)
 

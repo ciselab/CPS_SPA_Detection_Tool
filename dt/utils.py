@@ -85,3 +85,11 @@ def write_row_results(csv_writer_commits,
                       search_var_name: str, var_value: str, var_value_found: str):
     csv_line_commits = [project_name, file_name_full_path, commit_hash, search_var_name, var_value, var_value_found]
     csv_writer_commits.writerow(csv_line_commits)
+
+
+def write_row_results_more(csv_writer_commits,
+                           project_name: str, file_name_full_path: str, comparative_hash: str,
+                           commit_hash: str, search_var_name: str, var_value: str, var_value_found: str):
+    csv_line_commits = [project_name, file_name_full_path, comparative_hash, commit_hash,
+                        search_var_name, var_value, var_value_found]
+    csv_writer_commits.writerow(csv_line_commits)
