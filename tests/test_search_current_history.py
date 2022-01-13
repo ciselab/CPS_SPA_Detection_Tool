@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import pytest
-from dt.search_current_git_blame import cleanup_results_to_list_v2 as rtl
+from dt.search_current_history import cleanup_results_to_list as rtl
 
 # noinspection SpellCheckingInspection
 
 
-@pytest.mark.parametrize("input_line_nr, result", [
+@pytest.mark.parametrize("line_nr_test_text, result", [
     pytest.param(0,
                  [('sleep', '30', '151', '# Wait a bit longer after bootup, before copying binaries to the target.')],
                  id="Short input test 1."),
@@ -38,10 +38,10 @@ from dt.search_current_git_blame import cleanup_results_to_list_v2 as rtl
                  [('sleep_for', '0.5', '92', '//Get into position')],
                  id="Short sleep_for test with 0.5 var.")
 ])
-def test_string_results_to_list(input_line_nr: int, result: list):
+def test_string_results_to_list(line_nr_test_text: int, result: list):
     with open("data_strings.txt", 'r', encoding='utf-8') as input_file:
-        for line_number, each in enumerate(input_file):
-            if line_number == input_line_nr:
-                result_func = rtl(each)
+        for line_number, each_test_text in enumerate(input_file):
+            if line_number == line_nr_test_text:
+                result_func = rtl(each_test_text)
                 assert result_func == result
                 break

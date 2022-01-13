@@ -5,24 +5,23 @@ Searching through previous versions of each file.
 import os
 import csv
 import re
-from dt.utils import get_csv_file
+import pydriller
+import glob
 from pathlib import PurePosixPath
+from datetime import datetime
+from dt.utils import get_csv_file
+from dataclasses import dataclass
 import dt.dict_repo_list
 import dt.search_current
 from dt.utils import write_row_results_more
-from datetime import datetime
-import pydriller
-import glob
-from dataclasses import dataclass
 
 
-# var_name = "numeric_function_within"
-var_name = "sleeps"
+# pattern_name = "numeric_function_within"
+pattern_name = "sleeps"
 
 delim_stand = u"\u25A0"
 
 hc_counter = 0
-hc_counter_res = 0
 
 
 @dataclass
@@ -36,7 +35,7 @@ class Project:
 current_project = Project()
 
 
-def cleanup_results_to_list_v2(start: str) -> list:
+def cleanup_results_to_list(start: str) -> list:
     """
     Change string input to list. String read from the .csv file containing results to be build back to a list.
 
@@ -84,21 +83,20 @@ def csv_read(csv_wr_res):
         csv_wr_res: csv.writer object, specifies .csv file.
     """
     result_files = [f for f in os.listdir(os.path.join("..", "results"))]
-    counter_files = 0
-    for each_file in result_files:
-        if os.path.basename(each_file) == f"{var_name}_{current_project.name}_results.csv":
+    for counter_files, each_file in enumerate(result_files):
+        if os.path.basename(each_file) == f"{pattern_name}_{current_project.name}_results.csv":
             each_file_full_path = os.path.join("..", "results", each_file)
             if PurePosixPath(each_file_full_path).suffix != '.swp':
                 with open(each_file_full_path, 'r', encoding='utf-8') as results_csv_file:
                     fieldnames = ['file_name', 'results', 'encoding']
-                    csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames, delimiter=u"\u25A0")
+                    csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames, delimiter=delim_stand)
                     for row in csv_reader:
                         dt.dict_repo_list.build_repo_dict()
                         file_path = row['file_name']
-                        project_path_extra = current_project.url_project + "\\"
-                        file_short = file_path.replace(project_path_extra, '')
-                        check_follow(csv_wr_res, file_short, counter_files, file_path, row['results'], row['encoding'])
-                        counter_files = counter_files + 1
+                        project_path_with_slashes = current_project.url_project + "\\"
+                        file_path_from_project = file_path.replace(project_path_with_slashes, '')
+                        check_follow(csv_wr_res, file_path_from_project, counter_files, file_path,
+                                     row['results'], row['encoding'])
 
 
 def clean_git_log(log_results_path: str, encoding: str) -> dict:
@@ -219,9 +217,9 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
     if encoding_file == "None":
         encoding_file = None
 
-    results_list = cleanup_results_to_list_v2(results)
-    var_value_each = {}
-    var_value_each_hash = {}
+    results_list = cleanup_results_to_list(results)
+    var_value_dict = {}
+    var_hash_dict = {}
 
     global hc_counter
     hc_counter = hc_counter+1
@@ -232,46 +230,39 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
         if dict_results[each_hash]:         # Used if filename has been changed.
             path_long = dict_results[each_hash][0]
 
-        global hc_counter_res
-        hc_counter_res = 0
-
-        for each_result_var in results_list:
-            hc_counter_res = hc_counter_res + 1
-            number_result = f"{hc_counter}_{hc_counter_res}"
-
-            var_name_each = each_result_var[0]
-            result_prev_line = each_result_var[3]
+        for hc_counter_res, (var_name, var_value, stored_line_number, stored_prev_line) in enumerate(results_list):
+            result_key = f"{hc_counter}_{hc_counter_res}"
             current_prev_line = ""
 
-            if result_prev_line:    # Temp. to ignore possibly false-positives (needs other fix).
-                if number_result not in var_value_each:
-                    var_value_each = {number_result: each_result_var[1]}
-                if number_result not in var_value_each_hash:
-                    var_value_each_hash = {number_result: current_project.sha_project}
+            if stored_prev_line:    # Temp. to ignore possibly false-positives (needs other fix).
+                if result_key not in var_value_dict:
+                    var_value_dict = {result_key: var_value}
+                if result_key not in var_hash_dict:
+                    var_hash_dict = {result_key: current_project.sha_project}
 
                 """var_with_number"""
-                # regex_pattern = r"\s+(" + re.escape(var_name_each) + r")\s*=\s*([0-9]+)"
+                # regex_pattern = r"\s+(" + re.escape(var_name) + r")\s*=\s*([0-9]+)"
                 """numeric_function_within"""
-                # regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name_each) + r",\s([-0-9.]+)"
+                # regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name) + r",\s([-0-9.]+)"
                 """sleeps"""
-                regex_pattern = r"^.*?" + re.escape(var_name_each) + r"\s*\(*([0-9.]+)"
+                regex_pattern = r"^.*?" + re.escape(var_name) + r"\s*\(*([0-9.]+)"
                 try:
                     with open(path_long, 'r', encoding=encoding_file) as analyse_file:
                         for line_number, each_line in enumerate(analyse_file):
                             matching_patterns = re.findall(regex_pattern, each_line)
                             if matching_patterns:
-                                if matching_patterns[0] != var_value_each[number_result]:
-                                    if current_prev_line.strip() == result_prev_line.strip():
+                                if matching_patterns[0] != var_value_dict[result_key]:
+                                    if current_prev_line.strip() == stored_prev_line.strip():
                                         write_row_results_more(csv_wr_res, current_project.name, path_long,
-                                                               var_value_each_hash[number_result], each_hash,
-                                                               var_name_each, var_value_each[number_result],
+                                                               var_hash_dict[result_key], each_hash,
+                                                               var_name, var_value_dict[result_key],
                                                                matching_patterns[0])
-                                        print_found_results(path_long, var_value_each_hash[number_result], each_hash,
-                                                            var_name_each, var_value_each[number_result],
-                                                            matching_patterns[0], current_prev_line, result_prev_line,
+                                        print_found_results(path_long, var_hash_dict[result_key], each_hash,
+                                                            var_name, var_value_dict[result_key],
+                                                            matching_patterns[0], current_prev_line, stored_prev_line,
                                                             each_line)
-                                        var_value_each = {number_result: matching_patterns[0]}  # New comparison value
-                                        var_value_each_hash = {number_result: each_hash}
+                                        var_value_dict = {result_key: matching_patterns[0]}  # New comparison value
+                                        var_hash_dict = {result_key: each_hash}
                             current_prev_line = each_line
                 except FileNotFoundError as e:
                     with open("error_file_not_found.log", 'a') as ef_file:
@@ -330,7 +321,7 @@ def main():
         global current_project
         current_project = Project(name=name, url_project=dt.dict_repo_list.projects[name]["local"],
                                   sha_project=dt.dict_repo_list.projects[name]["sha"],
-                                  final_results=f"{name}_{var_name}_final")
+                                  final_results=f"{name}_{pattern_name}_final")
 
         """ REMOVING FILES """
         print(f"[{current_project.name}] Checking to remove files.")
@@ -350,7 +341,7 @@ def main():
         print(f"[{current_project.name}] Start reading")
         csv_file_results = get_csv_file(current_project.final_results)
         csv_wr_res = csv.writer(
-            csv_file_results, delimiter=u"\u25A0", quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+            csv_file_results, delimiter=delim_stand, quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
         csv_read(csv_wr_res)
         print(f"[{current_project.name}] Done")
