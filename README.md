@@ -19,3 +19,7 @@ However, to perform the mining process for local repositories, we should pass th
 `. docker_scripts/run-cps-spa-detection-tool-container.sh [local_repositories]`
 
 __! Note:__ This input argument should be an absolute path.
+
+## Run
+In order to run both scripts in order, run `main.py` (make sure the working directory in the IDE is set to `CPS_SPA_Detection_Tool/dt`).
+Running the script with a selection of project can be done by removing/commenting the projects from the dictionary in `dict_repo_list.py` called `projects`.
