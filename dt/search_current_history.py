@@ -236,9 +236,9 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
 
             if stored_prev_line:    # Temp. to ignore possibly false-positives (needs other fix).
                 if result_key not in var_value_dict:
-                    var_value_dict = {result_key: var_value}
+                    var_value_dict[result_key] = var_value
                 if result_key not in var_hash_dict:
-                    var_hash_dict = {result_key: current_project.sha_project}
+                    var_hash_dict[result_key] = current_project.sha_project
 
                 """var_with_number"""
                 # regex_pattern = r"\s+(" + re.escape(var_name) + r")\s*=\s*([0-9]+)"
@@ -261,8 +261,8 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
                                                             var_name, var_value_dict[result_key],
                                                             matching_patterns[0], current_prev_line, stored_prev_line,
                                                             each_line)
-                                        var_value_dict = {result_key: matching_patterns[0]}  # New comparison value
-                                        var_hash_dict = {result_key: each_hash}
+                                        var_value_dict[result_key] = matching_patterns[0]  # New comparison value
+                                        var_hash_dict[result_key] = each_hash
                             current_prev_line = each_line
                 except FileNotFoundError as e:
                     with open("error_file_not_found.log", 'a') as ef_file:
