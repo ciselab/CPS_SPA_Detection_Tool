@@ -10,6 +10,7 @@ from datetime import datetime
 import dt.dict_repo_list
 from dt.graph_creation import create_graph
 from dt.utils import get_csv_file, write_row
+from dt.search_setup import use_search_pattern
 
 
 results_long_list = []
@@ -55,7 +56,7 @@ def no_encoding_found(file: os.path) -> str:
 
 def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=None) -> int:
     """
-    Read a file and apply the correct encoding to read the file. Then finding the
+    Read a file and apply the correct encoding to read the file. Then finding the matching pattern in each line.
 
     Args:
         file: Path to the file to be read.
@@ -113,6 +114,43 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
     return count
 
 
+def walk_dirs(key_project: str) -> set:
+    """
+    Goes through the dirs, noted in dt.dict_repo_list.projects_modules, and returns the files.
+
+    Args:
+        key_project: Name (key) of the project.
+
+    Returns:
+        Set of the files (full path).
+    """
+    full_files = set()
+    # noinspection SpellCheckingInspection
+    search_in_ext = ['.c', '.cpp', '.h', '.hpp', '.cxx', '.hxx', '.cc', '.hh', '.h++',
+                     '.ipp', '.inl', '.txx', '.tpp', '.tpl',
+                     '.c++m', '.cppm', '.cxxm', '.kt',
+                     '.java', '.go', '.py', '.rb', '.rs',
+                     '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
+    start_input = dt.dict_repo_list.projects[key_project]["local"]
+    for each_dir, _, _ in os.walk(start_input):
+        for number, _ in enumerate(dt.dict_repo_list.projects_modules[key_project]):
+            full_path_list = os.path.join(start_input,
+                                          dt.dict_repo_list.projects_modules[key_project][number].top_level)
+            if each_dir == full_path_list:
+                start_full_path = os.path.join(start_input, each_dir)
+                for root, dirs, files in os.walk(start_full_path, topdown=True):
+                    if not dt.dict_repo_list.projects_modules[key_project][number].recursive:
+                        """If not True (True means going recursively through the dirs), 
+                        the dirs are cleared so only the current level is checked."""
+                        dirs.clear()
+                    for name in files:
+                        file = os.path.join(root, name)
+                        file_name, file_extension = os.path.splitext(file)
+                        if file_extension.lower() in search_in_ext:
+                            full_files.add(file)
+    return full_files
+
+
 def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict, csv_writer) -> int:
     """
     Starts the mining process on the repository indicated by the given URL
@@ -129,28 +167,17 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
     """
     url = repo_dictionary[key_project]["local"]
     count = 0
-
     p = re.compile(search_for_pattern, re.M)
-    for root, directories, files in os.walk(url):
-        for name in files:
-            file = os.path.join(root, name)
+    result_walk = walk_dirs(key_project)
 
-            file_name, file_extension = os.path.splitext(file)
-            # noinspection SpellCheckingInspection
-            search_in_ext = ['.c', '.cpp', '.h', '.hpp', '.cxx', '.hxx', '.cc', '.hh', '.h++',
-                             '.ipp', '.inl', '.txx', '.tpp', '.tpl',
-                             '.c++m', '.cppm', '.cxxm', '.kt',
-                             '.java', '.go', '.py', '.rb', '.rs',
-                             '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
-
-            if file_extension.lower() in search_in_ext:
-                result = read_file_encoding(file, p, url, csv_writer, key_project)
-                if isinstance(result, int):
-                    count += result
+    for file in result_walk:
+        result = read_file_encoding(file, p, url, csv_writer, key_project)
+        if isinstance(result, int):
+            count += result
     return count
 
 
-def start_searching(search_for_pattern: str, title_graph: str, search_type: str, name: str):
+def start_searching(search_for_pattern: str, title_graph: str, search_type: str, name: str) -> None:
     """
     Start the search with received pattern.
 
@@ -166,15 +193,15 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
     repo_dictionary = dt.dict_repo_list.projects
     for key_repo_name in repo_dictionary.keys():
 
-        pattern_project = f"{name}_{key_repo_name}"
+        pattern_project_filename = f"{name}_{key_repo_name}"
 
-        file_commits_results = os.path.join(dir_location_report, pattern_project + "_results.csv")
+        file_commits_results = os.path.join(dir_location_report, pattern_project_filename + "_results.csv")
         if os.path.exists(file_commits_results):
             print(f"File {file_commits_results} exists, removing file.")
             os.remove(file_commits_results)
 
-        csv_file = get_csv_file(pattern_project)
-        csv_writer = csv.writer(csv_file, delimiter=u"\u25A0", quotechar='"',
+        csv_file = get_csv_file(pattern_project_filename)
+        csv_writer = csv.writer(csv_file, delimiter=delim_stand, quotechar='"',
                                 quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
         counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary, csv_writer)
@@ -185,24 +212,11 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
         create_graph(data_graph, title_graph, search_type)
 
 
-def main():
+def main(pattern_name: str = "sleeps") -> None:
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print(f"Start time: {current_time}")
-
-    """ Pattern name needs to be without spaces """
-    # noinspection SpellCheckingInspection
-    dict_search_patterns = {
-        # "setTimeout": r'^(.*)(setTimeout)',
-        # "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([0-9]+)',
-        # "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
-        "sleeps": r"^.*?(u*[sS]leep[_for]*)\s*\(*([0-9.]+)",
-        # "sleeps_var_name": r"^.*?(u*[sS]leep[_for]*)\s*\(*([a-zA-Z]+)",
-    }
-    for name in dict_search_patterns:
-        print(f"Searching: {name}\n")
-        start_searching(dict_search_patterns[name], name, "current", name)
-
+    start_searching(use_search_pattern(pattern_name), pattern_name, "current", pattern_name)
     print(f"Started at: {current_time}")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

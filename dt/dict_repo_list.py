@@ -5,6 +5,7 @@ Data for the test_repository_commits_mining script.
 import os
 import pathlib
 from git import Repo
+from collections import namedtuple
 
 """ If the location of the local repositories are on a different location, change this here. """
 location_github = os.path.join(pathlib.Path.home(), "Documents", "GitHub")
@@ -70,7 +71,7 @@ projects = {
 }
 
 
-def build_repo_dict():
+def build_repo_dict() -> None:
 	"""
 	If the local repository dictionary key has no value, the value is build-up.
 	Assumed is the location of the GitHub path, set previously with variable location_github.
@@ -81,7 +82,7 @@ def build_repo_dict():
 			projects[project].update({"local": updated_local})
 
 
-def build_repo_dict_sha():
+def build_repo_dict_sha() -> None:
 	"""
 	If the sha repository dictionary key has no value, the value is build-up.
 	The local path to the repository is needed to be available.
@@ -92,3 +93,175 @@ def build_repo_dict_sha():
 				repo = Repo(projects[project]["local"])
 				sha = repo.head.object.hexsha
 				projects[project].update({"sha": sha})
+
+
+Path_Entry = namedtuple('Path_Entry', 'top_level recursive')
+"""
+Setting recursive to True means it is allowed to go through all the directories underneath.
+Setting recursive to False means it is only allowed to check the files in this directory, but not underneath.
+"""
+# noinspection SpellCheckingInspection
+projects_modules = {
+	"AirSim": [
+		Path_Entry("AirLibUnitTests", True), Path_Entry("SGM", True), Path_Entry("GazeboDrone", True),
+		Path_Entry("DroneShell", True), Path_Entry("HelloDrone", True), Path_Entry("PX4Scripts", True),
+		Path_Entry("PythonClient", True), Path_Entry("AirLib", True), Path_Entry("HelloCar", True),
+		Path_Entry("DroneServer", True), Path_Entry("ros", True), Path_Entry("MavLinkCom", True),
+		Path_Entry("LogViewer", True), Path_Entry("Unreal", True), Path_Entry("HelloSpawnedDrones", True),
+		Path_Entry("tools", True), Path_Entry("cmake", True), Path_Entry("pipelines", True), Path_Entry("Unity", True)
+	],
+	"android_app_manager": [
+		Path_Entry("libs", True), Path_Entry("src", True), Path_Entry("res", True)
+	],
+	"android_camera_driver": [
+		Path_Entry("res", True), Path_Entry("src", True),
+	],
+	"android_sensors_driver": [
+		Path_Entry("res", True), Path_Entry("src", True),
+	],
+	"apollo": [
+		Path_Entry("cyber", True), Path_Entry("third_party", True), Path_Entry("scripts", True),
+		Path_Entry("modules", True), Path_Entry(".teamcity", True), Path_Entry("tools", True)
+	],
+	"Arduino": [
+		Path_Entry("package", True), Path_Entry("cores", True), Path_Entry("libraries", True),
+		Path_Entry("variants", True), Path_Entry("bootloaders", True), Path_Entry("tools", True)
+	],
+	"arduino-esp32": [
+		Path_Entry("package", True), Path_Entry("cores", True), Path_Entry("libraries", True),
+		Path_Entry("variants", True), Path_Entry("tools", True)
+	],
+	"Arduino-IRremote": [
+		Path_Entry("src", True), Path_Entry("pictures", True)
+	],
+	"ArduinoJson": [
+		Path_Entry(".vscode", True), Path_Entry("extras", True), Path_Entry("src", True),
+	],
+	"ardumower": [
+		Path_Entry("Dokumentation", True), Path_Entry("cad", True), Path_Entry("code", True),
+		Path_Entry("pcb", True), Path_Entry("tools", True)
+	],
+	"ardupilot": [
+		Path_Entry("mk", True), Path_Entry("AntennaTracker", True), Path_Entry("benchmarks", True),
+		Path_Entry("ArduPlane", True), Path_Entry("Blimp", True), Path_Entry(".semaphore", True),
+		Path_Entry("libraries", True), Path_Entry("modules", True), Path_Entry("Tools", True),
+		Path_Entry("ArduSub", True), Path_Entry("ArduCopter", True), Path_Entry("Rover", True)
+	],
+	"BeamNGpy": [
+		Path_Entry("media", True), Path_Entry("env", True), Path_Entry("src", True), Path_Entry(".idea", True)
+	],
+	"carla": [
+		Path_Entry("PythonAPI", True), Path_Entry("LibCarla", True), Path_Entry("Import", True),
+		Path_Entry("Co-Simulation", True), Path_Entry("Unreal", True), Path_Entry("Util", True),
+	],
+	"CoppeliaSimLib": [
+		Path_Entry("sourceCode", True), Path_Entry("iconFiles", True), Path_Entry("variousImageFiles", True),
+		Path_Entry("qdarkstyle", True), Path_Entry("imageFiles", True), Path_Entry("ui", True),
+		Path_Entry("toolbarFiles", True), Path_Entry("targaFiles", True)
+	],
+	"cylon": [
+		Path_Entry("lib", True), Path_Entry("spec", True),
+	],
+	"dronekit-android": [
+		Path_Entry("ClientLib", True), Path_Entry(".utility", True), Path_Entry("samples", True),
+		Path_Entry("dependencyLibs", True)
+	],
+	"dronekit-python": [
+		Path_Entry(".circleci", True), Path_Entry("windows", True), Path_Entry("scripts", True),
+		Path_Entry("dronekit", True),
+	],
+	"DronePilot": [
+		Path_Entry("modules", True), Path_Entry("logs", True),
+	],
+	"DroneSym": [
+		Path_Entry("dronedb", True), Path_Entry(".dependabot", True), Path_Entry("initScripts", True),
+		Path_Entry("dronesym-python", True), Path_Entry("dronesym-frontend", True), Path_Entry("dronesym-node", True)
+	],
+	"dustcloud": [
+		Path_Entry("presentations", True), Path_Entry("dummycloud", True), Path_Entry("devices", True),
+		Path_Entry("dustcloud", True),
+	],
+	"GAAS": [
+		Path_Entry("software", True), Path_Entry("demo", True), Path_Entry("hardware", True),
+		Path_Entry("simulator", True), Path_Entry("algorithms", True)
+	],
+	"gobot": [
+		Path_Entry("sysfs", True), Path_Entry("platforms", True), Path_Entry(".circleci", True),
+		Path_Entry("api", True), Path_Entry("gobottest", True), Path_Entry("drivers", True), Path_Entry("cli", True)
+	],
+	"grbl": [
+		Path_Entry("build", True), Path_Entry("grbl", True),
+	],
+	"johnny-five": [
+		Path_Entry("assets", True), Path_Entry("eg", True), Path_Entry("firmwares", True), Path_Entry("util", True),
+		Path_Entry("tpl", True), Path_Entry("lib", True)
+	],
+	"librervac-cordlib": [
+		Path_Entry("t", True),
+	],
+	"mavlink": [
+		Path_Entry("pymavlink", True), Path_Entry("cmake", True), Path_Entry("scripts", True),
+		Path_Entry("component_information", True), Path_Entry("message_definitions", True), Path_Entry("external", True)
+	],
+	"node-ar-drone": [
+		Path_Entry("lib", True)
+	],
+	"openpilot": [
+		Path_Entry("rednose_repo", True), Path_Entry("site_scons", True), Path_Entry("installer", True),
+		Path_Entry("panda", True), Path_Entry("opendbc", True), Path_Entry("release", True), Path_Entry("selfdrive", True),
+		Path_Entry("cereal", True), Path_Entry("phonelibs", True), Path_Entry("pyextra", True), Path_Entry("scripts", True),
+		Path_Entry("models", True), Path_Entry("common", True), Path_Entry("external", True), Path_Entry("laika_repo", True),
+		Path_Entry("tools", True)
+	],
+	"PiMower": [
+		Path_Entry("Solution", True), Path_Entry("CLI", True), Path_Entry("RobotDaemon", True), Path_Entry("RobotLib", True),
+		Path_Entry("RobotController", True), Path_Entry("TestSuite", True), Path_Entry("Arduino", True),
+		Path_Entry("3rdParty", True), Path_Entry("TestLibrary", True), Path_Entry("Windows", True)
+	],
+	"PX4-Autopilot": [
+		Path_Entry("boards", True), Path_Entry(".vscode", True), Path_Entry("src", True), Path_Entry("validation", True),
+		Path_Entry("ROMFS", True), Path_Entry(".devcontainer", True), Path_Entry("msg", True), Path_Entry("cmake", True),
+		Path_Entry("Tools", True), Path_Entry("mavlink", True), Path_Entry("Documentation", True),
+		Path_Entry("posix-configs", True), Path_Entry(".ci", True), Path_Entry("platforms", True),
+	],
+	"pypilot": [
+		Path_Entry("pypilot", True), Path_Entry("hat", True), Path_Entry("scripts", True), Path_Entry("arduino", True),
+		Path_Entry("ui", True)
+	],
+	"qgroundcontrol": [
+		Path_Entry("custom-example", True), Path_Entry("android", True), Path_Entry("snap", True), Path_Entry("libs", True),
+		Path_Entry("translations", True), Path_Entry("VideoReceiverApp", True), Path_Entry("cmake", True),
+		Path_Entry("deploy", True), Path_Entry("ios", True), Path_Entry("windows", True), Path_Entry("debian", True),
+		Path_Entry("src", True), Path_Entry("resources", True), Path_Entry("tools", True)
+	],
+	"rfid": [
+		Path_Entry("src", True),
+	],
+	"robonomics": [
+		Path_Entry("protocol", True), Path_Entry("primitives", True), Path_Entry("substrate-ros", True),
+		Path_Entry("scripts", True), Path_Entry("frame", True), Path_Entry("io", True), Path_Entry("bin", True),
+		Path_Entry("cli", True), Path_Entry("runtime", True)
+	],
+	"robonomics-js": [
+		Path_Entry("src", True),
+	],
+	"robonomics_contracts": [
+		Path_Entry("build", True), Path_Entry("migrations", True), Path_Entry("contracts", True),
+	],
+	"stofzuigerrobot": [
+		Path_Entry("library", True), Path_Entry("arduino", True), Path_Entry("app", True)
+	],
+	"turtlebot": [
+		Path_Entry("turtlebot_description", True), Path_Entry("turtlebot_bringup", True), Path_Entry("turtlebot", True),
+		Path_Entry("turtlebot_capabilities", True), Path_Entry("turtlebot_teleop", True)
+	],
+	"turtlebot3": [
+		Path_Entry("turtlebot3_description", True), Path_Entry("turtlebot3_navigation", True),
+		Path_Entry("turtlebot3_teleop", True), Path_Entry("turtlebot3_bringup", True), Path_Entry("turtlebot3_slam", True),
+		Path_Entry("turtlebot3", True), Path_Entry("turtlebot3_example", True)
+	],
+	"Valetudo": [
+		Path_Entry("assets", True), Path_Entry("backend", True), Path_Entry("util", True), Path_Entry("frontend", True),
+		Path_Entry("build_dependencies", True), Path_Entry("deployment", True)
+	],
+}

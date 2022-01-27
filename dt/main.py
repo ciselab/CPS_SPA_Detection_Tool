@@ -8,10 +8,12 @@ from dt import search_current_history
 from dt import graph_results
 
 
-def main():
-    search_current.main()
-    search_current_history.main()
-    graph_results.main()
+def main() -> None:
+    print("[SLEEPS] START")
+    search_current.main("sleeps")
+    search_current_history.main("sleeps")
+    graph_results.main("sleeps")
+    print("[SLEEPS] DONE")
 
 
 if __name__ == '__main__':

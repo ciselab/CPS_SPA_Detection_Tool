@@ -13,14 +13,11 @@ from dt.utils import get_csv_file
 from dataclasses import dataclass
 import dt.dict_repo_list
 import dt.search_current
+from dt.search_setup import use_regex_pattern
 from dt.utils import write_row_results_more
 
 
-# pattern_name = "numeric_function_within"
-pattern_name = "sleeps"
-
 delim_stand = u"\u25A0"
-
 hc_counter = 0
 
 
@@ -74,13 +71,14 @@ def cleanup_results_to_list(start: str) -> list:
     return cleaned_up_results
 
 
-def csv_read(csv_wr_res):
+def csv_read(csv_wr_res, pattern_name: str) -> None:
     """
     Read .csv file, apply expected field names.
     Starts the git log follow function for each result from the .csv file.
 
     Args:
         csv_wr_res: csv.writer object, specifies .csv file.
+        pattern_name: Used pattern name.
     """
     result_files = [f for f in os.listdir(os.path.join("..", "results"))]
     for counter_files, each_file in enumerate(result_files):
@@ -96,7 +94,7 @@ def csv_read(csv_wr_res):
                         project_path_with_slashes = current_project.url_project + "\\"
                         file_path_from_project = file_path.replace(project_path_with_slashes, '')
                         check_follow(csv_wr_res, file_path_from_project, counter_files, file_path,
-                                     row['results'], row['encoding'])
+                                     row['results'], row['encoding'], pattern_name)
 
 
 def clean_git_log(log_results_path: str, encoding: str) -> dict:
@@ -147,7 +145,8 @@ def clean_git_log(log_results_path: str, encoding: str) -> dict:
     return dict_changed_files
 
 
-def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str, results: str, encoding: str):
+def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str, results: str, encoding: str,
+                 pattern_name: str) -> None:
     """
     Using git log to follow when the file has been changed.
 
@@ -158,6 +157,7 @@ def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str
         path_long: Full path to the file.
         results: Results contain var name and value and previous line.
         encoding: Encoding of the file.
+        pattern_name: Pattern name of pattern used.
     """
     current_wd = os.getcwd()
     dir_path = os.path.join("..", "..", current_project.name)
@@ -166,13 +166,13 @@ def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str
     os.system(f"git log --raw --follow {path_short} > {write_to_file}")
 
     dict_results = clean_git_log(write_to_file, encoding)
-    analyse_file_checkout(dict_results, path_long, results, encoding, csv_wr_res)
+    analyse_file_checkout(dict_results, path_long, results, encoding, csv_wr_res, pattern_name)
 
     os.chdir(f'{current_wd}')
 
 
 def print_found_results(path_long: str, compared_hash: str, each_hash: str, var_name_each: str, var_value_each,
-                        matching_patterns, current_prev_line: str, result_prev_line: str, each_line: str):
+                        matching_patterns, current_prev_line: str, result_prev_line: str, each_line: str) -> None:
     """
     Printing results in the console, same as is written to a file.
     Mainly used in development stage.
@@ -199,7 +199,8 @@ def print_found_results(path_long: str, compared_hash: str, each_hash: str, var_
     print(f"current line: {each_line}")
 
 
-def analyse_file_checkout(dict_results: dict, path_long: str, results: str, encoding: str, csv_wr_res):
+def analyse_file_checkout(dict_results: dict, path_long: str, results: str, encoding: str, csv_wr_res,
+                          pattern_name: str) -> None:
     """
     Analysing the current file for the same pattern, var name with a changed var value.
 
@@ -209,6 +210,7 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
         results: Results contain var name and value and previous line.
         encoding: File encoding.
         csv_wr_res: .csv writing object.
+        pattern_name: Pattern name of pattern used.
     """
     project_hash = current_project.sha_project
     local_project = current_project.url_project
@@ -240,12 +242,7 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
                 if result_key not in var_hash_dict:
                     var_hash_dict[result_key] = current_project.sha_project
 
-                """var_with_number"""
-                # regex_pattern = r"\s+(" + re.escape(var_name) + r")\s*=\s*([0-9]+)"
-                """numeric_function_within"""
-                # regex_pattern = r"\s*\s*[a-zA-Z_]+\(" + re.escape(var_name) + r",\s([-0-9.]+)"
-                """sleeps"""
-                regex_pattern = r"^.*?" + re.escape(var_name) + r"\s*\(*([0-9.]+)"
+                regex_pattern = use_regex_pattern(pattern_name, var_name)
                 try:
                     with open(path_long, 'r', encoding=encoding_file) as analyse_file:
                         for line_number, each_line in enumerate(analyse_file):
@@ -280,7 +277,7 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
     repo_check.checkout(project_hash)
 
 
-def remove_log_files():
+def remove_log_files() -> None:
     """
     Remove all the log files.
     """
@@ -293,7 +290,7 @@ def remove_log_files():
         os.remove(file)
 
 
-def hash_projects_to_file():
+def hash_projects_to_file() -> None:
     """
     Writes projects current hash to file for backup purposes.
     """
@@ -305,7 +302,7 @@ def hash_projects_to_file():
             writer.write("\n")
 
 
-def main():
+def main(pattern_name: str = "sleeps") -> None:
     """ BUILDING UP """
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -343,7 +340,7 @@ def main():
         csv_wr_res = csv.writer(
             csv_file_results, delimiter=delim_stand, quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
-        csv_read(csv_wr_res)
+        csv_read(csv_wr_res, pattern_name)
         print(f"[{current_project.name}] Done")
 
     """ DONE """
