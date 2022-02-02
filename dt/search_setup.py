@@ -4,6 +4,8 @@ Patterns used.
 """
 import re
 
+var_name_pattern = r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=*\s*(?:[a-zA-Z_][a-zA-Z_0-9]*\s)?([-0-9][0-9.]*)'
+
 
 def use_search_pattern(pattern: str) -> str:
     """
@@ -21,7 +23,7 @@ def use_search_pattern(pattern: str) -> str:
         "var_with_number": r'([a-z_A-Z][a-z_0-9A-Z.]*)\s*=\s*([-0-9.]+)',
         "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
         "sleeps": r"^.*?(u*[sS]leep[_for]*)\s*\(*([0-9.]+)",
-        "sleeps_var_name": r"^.*?(u*[sS]leep[_for]*)\s*\(*([a-zA-Z]+)",
+        "sleeps_var_name": r"^.*?(u*[sS]leep[_for]*)(?:\s*=\s*|\s+)(?:[a-zA-Z_][a-zA-Z_0-9]*\s)?([a-zA-Z_][a-zA-Z0-9_]*)",
     }
     return dict_search_patterns[pattern]
 
@@ -47,6 +49,9 @@ def use_regex_pattern(pattern_name: str, var_name: str) -> str:
     elif pattern_name == "sleeps":
         """sleeps"""
         regex_pattern = r"^.*?" + re.escape(var_name) + r"\s*\(*([0-9.]+)"
+    elif pattern_name == "sleeps_var_name":
+        """sleeps_var_name"""
+        regex_pattern = r"^.*?" + re.escape(var_name) + r"(?:\s*=\s*|\s+)(?:[a-zA-Z_][a-zA-Z_0-9]*\s)?([a-zA-Z_][a-zA-Z0-9_]*)"
     else:
         print(f"[ERROR] unknown pattern_name: {pattern_name}")
     return regex_pattern

@@ -14,6 +14,7 @@ from dataclasses import dataclass
 import dt.dict_repo_list
 import dt.search_current
 from dt.search_setup import use_regex_pattern
+from dt.search_setup import var_name_pattern
 from dt.utils import write_row_results_more
 
 
@@ -242,24 +243,47 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
                 if result_key not in var_hash_dict:
                     var_hash_dict[result_key] = current_project.sha_project
 
+                var_name_check = (pattern_name == "sleeps_var_name")
+                vars_names_list = []
+
                 regex_pattern = use_regex_pattern(pattern_name, var_name)
                 try:
                     with open(path_long, 'r', encoding=encoding_file) as analyse_file:
                         for line_number, each_line in enumerate(analyse_file):
                             matching_patterns = re.findall(regex_pattern, each_line)
+
+                            if var_name_check:
+                                vars_names = (re.findall(var_name_pattern, each_line))
+                                if vars_names:
+                                    vars_names_list.append(vars_names)
+
                             if matching_patterns:
-                                if matching_patterns[0] != var_value_dict[result_key]:
-                                    if current_prev_line.strip() == stored_prev_line.strip():
-                                        write_row_results_more(csv_wr_res, current_project.name, path_long,
-                                                               var_hash_dict[result_key], each_hash,
-                                                               var_name, var_value_dict[result_key],
-                                                               matching_patterns[0])
-                                        print_found_results(path_long, var_hash_dict[result_key], each_hash,
-                                                            var_name, var_value_dict[result_key],
-                                                            matching_patterns[0], current_prev_line, stored_prev_line,
-                                                            each_line)
-                                        var_value_dict[result_key] = matching_patterns[0]  # New comparison value
-                                        var_hash_dict[result_key] = each_hash
+                                for each_matching_pattern in matching_patterns:
+                                    # each_matching_pattern = list(each_matching_pattern)
+                                    check_before_found = False
+
+                                    if var_name_check:
+                                        for each in vars_names_list:
+                                            for e in each:
+                                                if re.match(r"-*[0-9.]+", e[1]):
+                                                    if each_matching_pattern == e[0]:
+                                                        check_before_found = True
+                                                        each_matching_pattern = e[1]
+                                        # if not check_before_found:
+                                        #     print(f"[WARNING] Not found with {each_check} in {file}")
+                                    if not var_name_check or (var_name_check and check_before_found):
+                                        if each_matching_pattern != var_value_dict[result_key]:
+                                            if current_prev_line.strip() == stored_prev_line.strip():
+                                                write_row_results_more(csv_wr_res, current_project.name, path_long,
+                                                                       var_hash_dict[result_key], each_hash,
+                                                                       var_name, var_value_dict[result_key],
+                                                                       each_matching_pattern)
+                                                print_found_results(path_long, var_hash_dict[result_key], each_hash,
+                                                                    var_name, var_value_dict[result_key],
+                                                                    each_matching_pattern, current_prev_line,
+                                                                    stored_prev_line, each_line)
+                                                var_value_dict[result_key] = each_matching_pattern  # New comparison val
+                                                var_hash_dict[result_key] = each_hash
                             current_prev_line = each_line
                 except FileNotFoundError as e:
                     with open("error_file_not_found.log", 'a') as ef_file:

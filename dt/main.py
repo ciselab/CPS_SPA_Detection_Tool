@@ -15,6 +15,18 @@ def main() -> None:
     graph_results.main("sleeps")
     print("[SLEEPS] DONE")
 
+    print("[SLEEPS VAR NAME] START")
+    search_current.main("sleeps_var_name")
+    search_current_history.main("sleeps_var_name")
+    graph_results.main("sleeps_var_name")
+    print("[SLEEPS VAR NAME] DONE")
+
+    print("[VAR NUMBER] START")
+    search_current.main("var_with_number")
+    search_current_history.main("var_with_number")
+    graph_results.main("var_with_number")
+    print("[VAR NUMBER] DONE")
+
 
 if __name__ == '__main__':
     main()

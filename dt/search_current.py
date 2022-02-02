@@ -11,6 +11,7 @@ import dt.dict_repo_list
 from dt.graph_creation import create_graph
 from dt.utils import get_csv_file, write_row
 from dt.search_setup import use_search_pattern
+from dt.search_setup import var_name_pattern
 
 
 results_long_list = []
@@ -54,7 +55,7 @@ def no_encoding_found(file: os.path) -> str:
         print(f"UnicodeDecodeError: {file}")
 
 
-def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=None) -> int:
+def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name_pattern: str, enc=None) -> int:
     """
     Read a file and apply the correct encoding to read the file. Then finding the matching pattern in each line.
 
@@ -64,6 +65,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
         url: Url to the project
         csv_writer: CSV Writers object
         key_project: project name
+        name_pattern: Name of the pattern used.
         enc: If encoding provided, this will be used.
 
     Returns:
@@ -73,6 +75,9 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
     encodings_options = ['Windows-1252', 'utf-8']
     enc_select = None
     remember_prev_line = ""
+    var_name_check = (name_pattern == "sleeps_var_name")
+    vars_names_list = []
+
     if isinstance(enc, int):
         if enc >= len(encodings_options):
             """
@@ -85,13 +90,29 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
         results_long_list.clear()
         with open(file, 'r', encoding=enc_select) as content_file:
             for line_number, line in enumerate(content_file):
-                check = re.findall(p, line)
+                check = list(re.findall(p, line))
+                if var_name_check:
+                    vars_names = (re.findall(var_name_pattern, line))
+                    if vars_names:
+                        vars_names_list.append(vars_names)
                 if check:
-                    for each_find in check:
-                        count += 1
-                        line_number_fix = line_number + 1
-                        results_long_list.append((each_find[0], each_find[1], line_number_fix,
-                                                  delim_stand, remember_prev_line, delim_stand))
+                    for each_check in check:
+                        each_check = list(each_check)
+                        check_before_found = False
+                        if var_name_check:
+                            for each in vars_names_list:
+                                for e in each:
+                                    if re.match(r"-*[0-9.]+", e[1]):
+                                        if each_check[1] == e[0]:
+                                            check_before_found = True
+                                            each_check[1] = e[1]
+                            # if not check_before_found:
+                            #     print(f"[WARNING] Not found with {each_check} in {file}")
+                        if not var_name_check or (var_name_check and check_before_found):
+                            count += 1
+                            line_number_fix = line_number + 1
+                            results_long_list.append((each_check[0], each_check[1], line_number_fix,
+                                                      delim_stand, remember_prev_line, delim_stand))
                 remember_prev_line = line
         if results_long_list:
             write_row(csv_writer, file, str(results_long_list), str(enc_select))
@@ -106,7 +127,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, enc=
         elif not enc >= len(encodings_options):
             enc = encodings_options.index(enc_select) + 1
         if not enc >= len(encodings_options):
-            result = read_file_encoding(file, p, url, csv_writer, key_project, enc)
+            result = read_file_encoding(file, p, url, csv_writer, key_project, name_pattern, enc)
             if isinstance(result, int):
                 count += result
     except Exception as e:
@@ -151,7 +172,7 @@ def walk_dirs(key_project: str) -> set:
     return full_files
 
 
-def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict, csv_writer) -> int:
+def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict, csv_writer, name: str) -> int:
     """
     Starts the mining process on the repository indicated by the given URL
     Through the current state of the repository. Only looking at files with specified extensions.
@@ -161,6 +182,7 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
         search_for_pattern: Pattern to find in the code to occur.
         repo_dictionary: Dictionary of with the project name and local location.
         csv_writer: CSV Writers object
+        name: Name of the pattern used.
 
     Returns:
         count: How often the keyword occurs in the code of specified project.
@@ -171,7 +193,7 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
     result_walk = walk_dirs(key_project)
 
     for file in result_walk:
-        result = read_file_encoding(file, p, url, csv_writer, key_project)
+        result = read_file_encoding(file, p, url, csv_writer, key_project, name)
         if isinstance(result, int):
             count += result
     return count
@@ -204,7 +226,7 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
         csv_writer = csv.writer(csv_file, delimiter=delim_stand, quotechar='"',
                                 quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
-        counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary, csv_writer)
+        counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary, csv_writer, name)
         print(f"{key_repo_name}: {counted}")
         if counted > 0:
             data_graph[key_repo_name] = counted
