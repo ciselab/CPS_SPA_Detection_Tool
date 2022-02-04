@@ -31,6 +31,7 @@ class Project:
 
 
 current_project = Project()
+location_log_files = os.path.join(dt.dict_repo_list.location_github, "CPS_SPA_Detection_Tool", "results")
 
 
 def cleanup_results_to_list(start: str) -> list:
@@ -137,7 +138,8 @@ def clean_git_log(log_results_path: str, encoding: str) -> dict:
                     last_name_change = (matching_patterns_changed_file.groups()[1],
                                         matching_patterns_changed_file.groups()[2])
     except UnicodeDecodeError as e:
-        with open("encoding_error.log", 'a') as ef_file:
+        error_enc = os.path.join(location_log_files, "encoding_error.log")
+        with open(error_enc, 'a') as ef_file:
             now = datetime.now()
             current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
             ef_file.write(f"[{current_date_time}] {e}")
@@ -286,13 +288,15 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
                                                 var_hash_dict[result_key] = each_hash
                             current_prev_line = each_line
                 except FileNotFoundError as e:
-                    with open("error_file_not_found.log", 'a') as ef_file:
+                    error_fnf = os.path.join(location_log_files, "error_file_not_found.log")
+                    with open(error_fnf, 'a') as ef_file:
                         now = datetime.now()
                         current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
                         ef_file.write(f"[{current_date_time}] {e}")
                     pass
                 except UnicodeDecodeError as e:
-                    with open("encoding_error.log", 'a') as ee_file:
+                    error_enc = os.path.join(location_log_files, "encoding_error.log")
+                    with open(error_enc, 'a') as ee_file:
                         now = datetime.now()
                         current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
                         ee_file.write(f"[{current_date_time}] {e}")
