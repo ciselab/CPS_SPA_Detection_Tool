@@ -15,6 +15,7 @@ import dt.dict_repo_list
 import dt.search_current
 from dt.search_setup import use_regex_pattern
 from dt.search_setup import var_name_pattern
+from dt.search_setup import var_number_pattern
 from dt.utils import write_row_results_more
 
 
@@ -267,7 +268,7 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
                                     if var_name_check:
                                         for each in vars_names_list:
                                             for e in each:
-                                                if re.match(r"-*[0-9.]+", e[1]):
+                                                if re.match(var_number_pattern, e[1]):
                                                     if each_matching_pattern == e[0]:
                                                         check_before_found = True
                                                         each_matching_pattern = e[1]

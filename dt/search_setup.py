@@ -5,6 +5,7 @@ Patterns used.
 import re
 
 var_name_pattern = r'^.*?([a-z_A-Z][a-z_0-9A-Z.]*)(?:\s*=\s*|\s)(?:[a-zA-Z_][a-zA-Z_0-9]*[\s|\(])?([-0-9][0-9.]*)'
+var_number_pattern = r'^-*[0-9]+[0-9.]*$'
 
 
 def use_search_pattern(pattern: str) -> str:

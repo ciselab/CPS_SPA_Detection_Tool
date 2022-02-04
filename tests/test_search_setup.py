@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import pytest
 import re
-from dt.search_setup import var_name_pattern, use_search_pattern, use_regex_pattern
+from dt.search_setup import var_name_pattern, use_search_pattern, use_regex_pattern, var_number_pattern
 
 
 @pytest.mark.parametrize("line, result", [
@@ -113,4 +113,35 @@ def test_use_regex_pattern(var_name: str, result: list):
 ])
 def test_var_name_pattern(line: str, result: list):
     check = list(re.findall(var_name_pattern, line))
+    assert check == result
+
+
+@pytest.mark.parametrize("line, result", [
+    pytest.param("4",
+                 ['4'],
+                 id="4"),
+    pytest.param("42",
+                 ['42'],
+                 id="42"),
+    pytest.param("0.2",
+                 ['0.2'],
+                 id="0.2"),
+    pytest.param("-8",
+                 ['-8'],
+                 id="-8"),
+    pytest.param("-8.3",
+                 ['-8.3'],
+                 id="-8.3"),
+    pytest.param("test",
+                 [],
+                 id="test"),
+    pytest.param("test42",
+                 [],
+                 id="test42"),
+    pytest.param("42test",
+                 [],
+                 id="42test"),
+])
+def test_var_number_pattern(line: str, result: list):
+    check = list(re.findall(var_number_pattern, line))
     assert check == result

@@ -12,6 +12,7 @@ from dt.graph_creation import create_graph
 from dt.utils import get_csv_file, write_row
 from dt.search_setup import use_search_pattern
 from dt.search_setup import var_name_pattern
+from dt.search_setup import var_number_pattern
 
 
 results_long_list = []
@@ -102,7 +103,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name
                         if var_name_check:
                             for each in vars_names_list:
                                 for e in each:
-                                    if re.match(r"-*[0-9.]+", e[1]):
+                                    if re.match(var_number_pattern, e[1]):
                                         if each_check[1] == e[0]:
                                             check_before_found = True
                                             each_check[1] = e[1]
