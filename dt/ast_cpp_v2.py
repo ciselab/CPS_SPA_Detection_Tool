@@ -17,13 +17,12 @@ function_declarations = []      # List of AST node objects that are function dec
 
 list_interest = ["usleep", "sleep"]
 dict_sleep = {}         # line number: usleep
-dict_sleep_dur = {}     # usleep: 4200
 
-file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "ast_test_file.cpp")
+file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "ast_test_file_2.cpp")
 
 
 # Traverse the AST tree
-def traverse(node):
+def traverse(node, list_sleep_dur):
     for child in node.get_children():
         if child.kind == clang.cindex.CursorKind.OVERLOADED_DECL_REF:
             print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
@@ -39,23 +38,29 @@ def traverse(node):
             print(f"\tdur: {token.spelling}")
 
             if child.location.line in dict_sleep.keys():
-                dict_sleep_dur[dict_sleep[child.location.line]] = token.spelling
+                list_sleep_dur.append((dict_sleep[child.location.line], token.spelling))
 
-        traverse(child)
+        traverse(child, list_sleep_dur)
 
 
-# Tell clang.cindex where libclang.dylib is
-clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
-index = clang.cindex.Index.create()
+def main():
+    # Tell clang.cindex where libclang.dylib is
+    clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
+    index = clang.cindex.Index.create()
 
-# Generate AST from filepath passed in the command line
-if not os.path.exists(file_name):
-    print(f"[ERROR] File {file_name} does not exist.")
-else:
-    tu = index.parse(file_name)
+    # Generate AST from filepath passed in the command line
+    if not os.path.exists(file_name):
+        print(f"[ERROR] File {file_name} does not exist.")
+    else:
+        tu = index.parse(file_name)
+        root = tu.cursor        # Get the root of the AST
 
-    root = tu.cursor        # Get the root of the AST
-    traverse(root)
+        list_sleep_dur = []
+        traverse(root, list_sleep_dur)
 
-    print("\n### Found matching results ###")
-    [print(key, ':', value) for key, value in dict_sleep_dur.items()]
+        print("\n### Found matching results ###")
+        [print(fun, ':', value) for fun, value in list_sleep_dur]
+
+
+if __name__ == "__main__":
+    main()
