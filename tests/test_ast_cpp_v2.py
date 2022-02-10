@@ -22,8 +22,10 @@ def setup_clang(file_name):
                  id="usleep(4200)"),
     pytest.param("ast_test_file_2.cpp", [('usleep', '50000'), ("usleep", "3")],
                  id="usleep 50000 and 3"),
-    # pytest.param("ast_test_file_3.cpp", [('usleep', '50000'), ("usleep", "4.2"), ("usleep", "0.3"), ("usleep", "3")],
-    #              id="Test 2"),
+    pytest.param("ast_test_file_3.cpp", [('usleep', '50000'), ("usleep", "4.2"), ("usleep", "0.3"), ("usleep", "3")],
+                 id="usleep float"),
+    # pytest.param("ast_test_file_4.cpp", [('usleep', '4.2'), ("usleep", "-0.3")],
+    #              id="usleep float"),
 ])
 def test_string_results_to_list(file_name: str, result: dict):
     file_name_path = os.path.join(pathlib.Path.home(),

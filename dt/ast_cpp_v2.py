@@ -18,7 +18,7 @@ function_declarations = []      # List of AST node objects that are function dec
 list_interest = ["usleep", "sleep"]
 dict_sleep = {}         # line number: usleep
 
-file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "ast_test_file_2.cpp")
+file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "ast_test_file_3.cpp")
 
 
 # Traverse the AST tree
@@ -29,7 +29,7 @@ def traverse(node, list_sleep_dur):
             print(f"\tchild {child.displayname} location line: {child.location.line}")
             if child.displayname in list_interest:
                 dict_sleep[child.location.line] = child.displayname
-        elif child.kind == clang.cindex.CursorKind.INTEGER_LITERAL:
+        elif ((child.kind == clang.cindex.CursorKind.INTEGER_LITERAL) or (child.kind == clang.cindex.CursorKind.FLOATING_LITERAL)):
             print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
             print(f"\tchild {child.displayname} location line: {child.location.line}")
 
