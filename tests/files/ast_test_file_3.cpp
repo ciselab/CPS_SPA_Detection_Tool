@@ -17,7 +17,7 @@ int main() {
 void something_else() {
     std::cout << "FOOBAR" << std::endl;
     usleep(50000);
-    usleep(4.2);
+    usleep( 4.2 );
 }
 
 void something_completely_different() {

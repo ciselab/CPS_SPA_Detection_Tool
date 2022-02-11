@@ -29,7 +29,7 @@ def setup_clang(file_name):
 ])
 def test_string_results_to_list(file_name: str, result: dict):
     file_name_path = os.path.join(pathlib.Path.home(),
-                                  "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", file_name)
+                                  "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "files", file_name)
     list_sleep_dur = []
     root = setup_clang(file_name_path)
     traverse(root, list_sleep_dur)

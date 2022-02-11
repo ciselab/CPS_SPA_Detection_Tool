@@ -18,7 +18,11 @@ function_declarations = []      # List of AST node objects that are function dec
 list_interest = ["usleep", "sleep"]
 dict_sleep = {}         # line number: usleep
 
-file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "ast_test_file_3.cpp")
+""" CHANGE THESE """
+# Tell clang.cindex where libclang.dylib is
+clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
+file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "files",
+                         "ast_test_file_3.cpp")
 
 
 # Traverse the AST tree
@@ -39,13 +43,10 @@ def traverse(node, list_sleep_dur):
 
             if child.location.line in dict_sleep.keys():
                 list_sleep_dur.append((dict_sleep[child.location.line], token.spelling))
-
         traverse(child, list_sleep_dur)
 
 
 def main():
-    # Tell clang.cindex where libclang.dylib is
-    clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
     index = clang.cindex.Index.create()
 
     # Generate AST from filepath passed in the command line
