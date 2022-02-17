@@ -8,6 +8,7 @@ import csv
 from chardet.universaldetector import UniversalDetector
 from datetime import datetime
 import dt.dict_repo_list
+import dt.ast_cpp_v2 as ast_cpp
 from dt.graph_creation import create_graph
 from dt.utils import get_csv_file, write_row
 from dt.search_setup import use_search_pattern
@@ -194,7 +195,10 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
     result_walk = walk_dirs(key_project)
 
     for file in result_walk:
-        result = read_file_encoding(file, p, url, csv_writer, key_project, name)
+        if name == "sleeps":
+            result = ast_cpp.main(csv_writer, file)
+        else:
+            result = read_file_encoding(file, p, url, csv_writer, key_project, name)
         if isinstance(result, int):
             count += result
     return count

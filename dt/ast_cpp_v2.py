@@ -11,35 +11,37 @@ Usage:
 import os
 import pathlib
 import clang.cindex
+from dt.utils import write_row
 
-function_calls = []             # List of AST node objects that are function calls
-function_declarations = []      # List of AST node objects that are function declarations
-
-list_interest = ["usleep", "sleep"]
+list_interest = ["usleep", "sleep", "MSleep", "sleep_for"]
+# note: MSleep is used in AirSim in gazebo::common::Time::MSleep
 dict_sleep = {}         # line number: usleep
 dict_una_op = {}        # line number: column
 
 """ CHANGE THESE """
 # Tell clang.cindex where libclang.dylib is
 clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
-file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "files",
+file_name_default = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "files",
                          "ast_test_file_4.cpp")
 
 
 # Traverse the AST tree
 def traverse(node, list_sleep_dur):
     for child in node.get_children():
+        # print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
         if child.kind == clang.cindex.CursorKind.UNARY_OPERATOR:
             dict_una_op[child.location.line] = child.location.column
         elif child.kind == clang.cindex.CursorKind.OVERLOADED_DECL_REF:
-            print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
-            print(f"\tchild {child.displayname} location line: {child.location.line}")
-            if child.displayname in list_interest:
+            # print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
+            # print(f"\tchild {child.displayname} location line: {child.location.line}")
+            # if child.displayname in list_interest:
+            #     dict_sleep[child.location.line] = child.displayname
+            if any(element in child.displayname for element in list_interest):
                 dict_sleep[child.location.line] = child.displayname
         elif ((child.kind == clang.cindex.CursorKind.INTEGER_LITERAL)
               or (child.kind == clang.cindex.CursorKind.FLOATING_LITERAL)):
-            print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
-            print(f"\tchild {child.displayname} location line: {child.location.line}")
+            # print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
+            # print(f"\tchild {child.displayname} location line: {child.location.line}")
 
             """ Get sleep duration """
             token = next(child.get_tokens())
@@ -50,28 +52,39 @@ def traverse(node, list_sleep_dur):
                 column = child.location.column
                 if dict_una_op[child.location.line] == column-1:
                     duration = "-" + duration
-            print(f"\tdur: {duration}")
 
             if child.location.line in dict_sleep.keys():
                 list_sleep_dur.append((dict_sleep[child.location.line], duration))
-        traverse(child, list_sleep_dur)
+        try:
+            traverse(child, list_sleep_dur)
+        except StopIteration:
+            # print("ERROR: StopIteration")
+            pass    # No other siblings
 
 
-def main():
-    index = clang.cindex.Index.create()
+def main(csv_writer=None, file_name: str = file_name_default) -> int:
+    dict_sleep.clear()
+    dict_una_op.clear()
 
-    # Generate AST from filepath passed in the command line
-    if not os.path.exists(file_name):
-        print(f"[ERROR] File {file_name} does not exist.")
-    else:
-        tu = index.parse(file_name)
-        root = tu.cursor        # Get the root of the AST
+    # temporarily: making sure only cpp files in projects are analysed by clang
+    if pathlib.Path(file_name).suffix == '.cpp':
+        index = clang.cindex.Index.create()
 
-        list_sleep_dur = []
-        traverse(root, list_sleep_dur)
+        # Generate AST from filepath passed in the command line
+        if not os.path.exists(file_name):
+            print(f"[ERROR] File {file_name} does not exist.")
+        else:
+            tu = index.parse(str(file_name))
+            root = tu.cursor        # Get the root of the AST
 
-        print("\n### Found matching results ###")
-        [print(fun, ':', value) for fun, value in list_sleep_dur]
+            list_sleep_dur = []
+            traverse(root, list_sleep_dur)
+
+            if list_sleep_dur:
+                print(f"\n### Found matching results [{file_name}] ###")
+                [print(fun, ':', value) for fun, value in list_sleep_dur]
+            write_row(csv_writer, file_name, str(list_sleep_dur), "None")
+            return len(list_sleep_dur)
 
 
 if __name__ == "__main__":
