@@ -17,32 +17,43 @@ function_declarations = []      # List of AST node objects that are function dec
 
 list_interest = ["usleep", "sleep"]
 dict_sleep = {}         # line number: usleep
+dict_una_op = {}        # line number: column
 
 """ CHANGE THESE """
 # Tell clang.cindex where libclang.dylib is
 clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
 file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "files",
-                         "ast_test_file_3.cpp")
+                         "ast_test_file_4.cpp")
 
 
 # Traverse the AST tree
 def traverse(node, list_sleep_dur):
     for child in node.get_children():
-        if child.kind == clang.cindex.CursorKind.OVERLOADED_DECL_REF:
+        if child.kind == clang.cindex.CursorKind.UNARY_OPERATOR:
+            dict_una_op[child.location.line] = child.location.column
+        elif child.kind == clang.cindex.CursorKind.OVERLOADED_DECL_REF:
             print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
             print(f"\tchild {child.displayname} location line: {child.location.line}")
             if child.displayname in list_interest:
                 dict_sleep[child.location.line] = child.displayname
-        elif ((child.kind == clang.cindex.CursorKind.INTEGER_LITERAL) or (child.kind == clang.cindex.CursorKind.FLOATING_LITERAL)):
+        elif ((child.kind == clang.cindex.CursorKind.INTEGER_LITERAL)
+              or (child.kind == clang.cindex.CursorKind.FLOATING_LITERAL)):
             print(f'FOUND {child.displayname} [line={child.location.line}, col={child.location.column}] type: {child.kind}')
             print(f"\tchild {child.displayname} location line: {child.location.line}")
 
             """ Get sleep duration """
             token = next(child.get_tokens())
-            print(f"\tdur: {token.spelling}")
+            duration = token.spelling
+
+            """ If there is a UNARY_OPERATOR before add - sign (+ sign not supported) """
+            if child.location.line in dict_una_op.keys():
+                column = child.location.column
+                if dict_una_op[child.location.line] == column-1:
+                    duration = "-" + duration
+            print(f"\tdur: {duration}")
 
             if child.location.line in dict_sleep.keys():
-                list_sleep_dur.append((dict_sleep[child.location.line], token.spelling))
+                list_sleep_dur.append((dict_sleep[child.location.line], duration))
         traverse(child, list_sleep_dur)
 
 
