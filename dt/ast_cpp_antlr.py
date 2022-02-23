@@ -91,6 +91,7 @@ def print_json_to_file(json_str: str) -> None:
 def main(csv_writer=None, location_file: str = location_file_default) -> int:
     current_statement.clear()
     current_number.clear()
+    dict_sleep.clear()
     source = FileStream(location_file)
     lexer = CPP14Lexer(source)
     stream = CommonTokenStream(lexer)
