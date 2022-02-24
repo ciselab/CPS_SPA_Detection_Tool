@@ -4,6 +4,7 @@ Using Antlr4.
 """
 # import json
 import os
+import pathlib
 from antlr4.tree.Tree import TerminalNodeImpl
 # from antlr4.tree.Trees import Trees
 from antlr4 import FileStream, CommonTokenStream
@@ -37,10 +38,11 @@ def _fill(obj: dict, node):
     arr = []
     obj[rule_name] = arr
 
-    for child_node in node.children:
-        child_obj = {}
-        arr.append(child_obj)
-        _fill(child_obj, child_node)
+    if node.children:
+        for child_node in node.children:
+            child_obj = {}
+            arr.append(child_obj)
+            _fill(child_obj, child_node)
 
 
 def traverse(nodes: dict):
@@ -89,40 +91,49 @@ def print_json_to_file(json_str: str) -> None:
 
 
 def main(csv_writer=None, location_file: str = location_file_default) -> int:
-    current_statement.clear()
-    current_number.clear()
-    dict_sleep.clear()
-    source = FileStream(location_file)
-    lexer = CPP14Lexer(source)
-    stream = CommonTokenStream(lexer)
-    parser = CPP14Parser(stream)
-    tree = parser.translationUnit()
+    if pathlib.Path(location_file).suffix == '.cpp':
+        print(f"file name: {location_file}")
+        current_statement.clear()
+        current_number.clear()
+        dict_sleep.clear()
 
-    # convert the parse tree to JSON file
-    tree_dict = to_dict(tree)
-    traverse(tree_dict)
+        try:
+            source = FileStream(location_file)
+            lexer = CPP14Lexer(source)
+            stream = CommonTokenStream(lexer)
+            parser = CPP14Parser(stream)
+            tree = parser.translationUnit()
 
-    """ Temporarily until #5 has been implemented. """
-    for each in dict_sleep:
-        if type(dict_sleep[each]) != tuple:
-            dict_sleep[each] = (dict_sleep[each], "UNKOWN")
-    """ End temp. """
+            # convert the parse tree to JSON file
+            tree_dict = to_dict(tree)
+            traverse(tree_dict)
 
-    # print results
-    # print(dict_sleep)
+            """ Temporarily until #5 has been implemented. """
+            for each in dict_sleep:
+                if type(dict_sleep[each]) != tuple:
+                    dict_sleep[each] = (dict_sleep[each], "UNKOWN")
+            """ End temp. """
 
-    if csv_writer:
-        write_row(csv_writer, location_file, str(dict_sleep), "None")
+            # print results
+            # print(dict_sleep)
 
-    # print the JSON output
-    # json_str = json.dumps(tree_dict, indent=1)
-    # print(json_str)
-    # print the JSON output to file
-    # print_json_to_file(json_str)
+            if csv_writer:
+                write_row(csv_writer, location_file, str(dict_sleep), "None")
+        except UnicodeDecodeError:
+            print(f"[ERROR] UnicodeDecodeError with {location_file}")
+            pass
 
-    # print the parse tree as lisp
-    # print(Trees.toStringTree(tree, parser.ruleNames, parser))
-    return len(dict_sleep)
+        # print the JSON output
+        # json_str = json.dumps(tree_dict, indent=1)
+        # print(json_str)
+        # print the JSON output to file
+        # print_json_to_file(json_str)
+
+        # print the parse tree as lisp
+        # print(Trees.toStringTree(tree, parser.ruleNames, parser))
+        return len(dict_sleep)
+    else:
+        return 0
 
 
 if __name__ == "__main__":
