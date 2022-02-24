@@ -5,13 +5,12 @@ Searching through the current state of the repository.
 import os
 import re
 import csv
-from chardet.universaldetector import UniversalDetector
 from datetime import datetime
 import dt.dict_repo_list
 # import dt.ast_cpp_v2 as ast_cpp
 import dt.ast_cpp_antlr as ast_cpp_antlr
 from dt.graph_creation import create_graph
-from dt.utils import get_csv_file, write_row
+from dt.utils import get_csv_file, write_row, no_encoding_found
 from dt.search_setup import use_search_pattern
 from dt.search_setup import var_name_pattern
 from dt.search_setup import var_number_pattern
@@ -20,42 +19,6 @@ from dt.search_setup import var_number_pattern
 results_long_list = []
 dir_location_report = os.path.join("..", "results")
 delim_stand = u"\u25A0"
-
-
-def no_encoding_found(file: os.path) -> str:
-    """
-    When the default, Windows-1252 and utf-8 encoding is not correct, chardet is being used.
-    This tool tries to detect which encoding is used.
-
-    Args:
-        file: Location of the file to find type of encoding used.
-
-    Returns:
-        Encoding used in the file, detected by chardet.
-    """
-    try:
-        with open(file, "rb") as rd_file:
-            raw_data = rd_file.readlines()
-            detector = UniversalDetector()
-            for rd_line in raw_data:
-                detector.feed(rd_line)
-                if detector.done:
-                    break
-            detector.close()
-        if detector.result:
-            enc = detector.result["encoding"]
-            if enc:
-                print(f"encoding: {enc}")
-                return enc
-            else:
-                print("No encoding result.")
-        else:
-            print("No Result from detector.")
-    except UnicodeDecodeError:
-        """
-        In case chardet is not able to detect which encoding was used.
-        """
-        print(f"UnicodeDecodeError: {file}")
 
 
 def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name_pattern: str, enc=None) -> int:
@@ -199,6 +162,7 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
         if name == "sleeps":
             # result = ast_cpp.main(csv_writer, file)
             result = ast_cpp_antlr.main(csv_writer, file)
+            # result = read_file_encoding(file, p, url, csv_writer, key_project, name)
         else:
             result = read_file_encoding(file, p, url, csv_writer, key_project, name)
         if isinstance(result, int):

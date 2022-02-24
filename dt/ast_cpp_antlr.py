@@ -11,6 +11,7 @@ from antlr4 import FileStream, CommonTokenStream
 from dt.antlr.CPP14Lexer import CPP14Lexer
 from dt.antlr.CPP14Parser import CPP14Parser
 from dt.utils import write_row
+from dt.utils import file_encoding
 
 list_interest = ["usleep", "sleep", "MSleep", "sleep_for", "qualifiedId"]
 dict_sleep = {}
@@ -96,9 +97,11 @@ def main(csv_writer=None, location_file: str = location_file_default) -> int:
         current_statement.clear()
         current_number.clear()
         dict_sleep.clear()
+        enc = ""
 
         try:
-            source = FileStream(location_file)
+            enc = file_encoding(location_file)
+            source = FileStream(location_file, encoding=enc)
             lexer = CPP14Lexer(source)
             stream = CommonTokenStream(lexer)
             parser = CPP14Parser(stream)
@@ -120,7 +123,7 @@ def main(csv_writer=None, location_file: str = location_file_default) -> int:
             if csv_writer:
                 write_row(csv_writer, location_file, str(dict_sleep), "None")
         except UnicodeDecodeError:
-            print(f"[ERROR] UnicodeDecodeError with {location_file}")
+            print(f"[ERROR] UnicodeDecodeError: {location_file} encoding={enc}")
             pass
 
         # print the JSON output
