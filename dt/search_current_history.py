@@ -9,7 +9,6 @@ import os
 import re
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import PurePosixPath
 from typing import List, Tuple
 
 import pydriller
@@ -18,7 +17,7 @@ from deepdiff import DeepDiff
 import dt.ast_cpp_antlr as ast_cpp_antlr
 import dt.dict_repo_list
 import dt.search_current
-from dt.utils.csv import write_row, CsvWriter
+from dt.utils.csv import write_row, CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists
 from dt.utils.paths import get_results_base_path, make_dir_if_not_exists
 
@@ -57,16 +56,14 @@ def csv_read(csv_wr_res, pattern_name: str) -> None:
         if not os.path.basename(current_file) == f"{pattern_name}_{current_project.name}_results.csv":
             continue
         full_file_path = os.path.join(get_results_base_path(), current_file)
-        # if PurePosixPath(full_file_path).suffix != '.swp':
-        with open(full_file_path, 'r', encoding='utf-8') as results_csv_file:
-            fieldnames = ['file_name', 'results', 'encoding']
-            csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames, delimiter=delim_stand_triangle)
-            for row in csv_reader:
-                # print(f"{row=}")
+        fieldnames = ['file_name', 'results', 'encoding']
+        with CsvReader(full_file_path, fieldnames=fieldnames) as reader:
+            for row in reader:
+                print(f"{row=}")
                 # dt.dict_repo_list.build_repo_dict()
                 absolute_file_path = row['file_name']
                 relative_file_path = os.path.relpath(absolute_file_path, current_project.url_project)
-                # print(f"{row['encoding']=}")
+                print(f"{row['encoding']=}")
                 check_follow(
                     csv_wr_res,
                     relative_file_path,
@@ -149,7 +146,7 @@ def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str
     dict_results = clean_git_log(write_to_file, encoding)
     analyse_file_checkout(dict_results, path_long, results, encoding, csv_wr_res, pattern_name)
 
-    os.chdir(f'{current_wd}')
+    os.chdir(current_wd)
 
 
 def print_found_results(path_long: str, compared_hash: str, each_hash: str, var_name_each: str, var_value_each,

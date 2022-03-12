@@ -39,5 +39,15 @@ def get_results_base_path() -> os.path:
     return os.path.join(get_package_base_path(), "..", "results")
 
 
+def get_intermediate_results_base_path() -> os.path:
+    return os.path.join(get_results_base_path(), "intermediate")
+
+
+def get_project_results_path(project_name: str) -> os.path:
+    project_results_path = os.path.join(get_results_base_path(), project_name)
+    make_dir_if_not_exists(project_results_path)
+    return project_results_path
+
+
 if __name__ == "__main__":
     print(f'{get_package_base_path()=}')

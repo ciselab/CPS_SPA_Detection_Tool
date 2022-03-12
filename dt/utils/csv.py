@@ -36,8 +36,22 @@ class CsvWriter(CsvUtil):
 
 
 class CsvReader(CsvUtil):
-    def __init__(self, filename: os.path, encoding: str = "utf-8"):
+    def __init__(self, filename: os.path, fieldnames: List[str], encoding: str = "utf-8"):
         super().__init__(filename, encoding)
+        self.__file_handle = open(self.filename, self.FILE_MODE, encoding=self.encoding, newline=self.LINE_TERMINATOR)
+        self.__csv_reader = csv.DictReader(self.__file_handle, fieldnames=fieldnames, delimiter=self.DELIMITER_SYMBOL)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.__file_handle.close()
+
+    def __iter__(self):
+        return self.__csv_reader.__iter__()
+
+    def __next__(self):
+        return self.__csv_reader.__next__()
 
 
 def write_row(csv_writer, file, results, encoding, previous_result, current_hash, previous_hash, caller='current'):
