@@ -1,37 +1,43 @@
 import os
 import csv
-from typing import TextIO
+from typing import TextIO, List
 
 from dt.utils import dir_location_report
 
-DELIMITER_SYMBOL = u"\u25B2"
 
+class CsvUtil:
+    """
+    A base class for CSV Utilities that provides some defaults for things like delimiters and newlines.
+    """
+    LINE_TERMINATOR = '\n'
+    DELIMITER_SYMBOL = u"\u25B2"
+    FILE_MODE = "r"
 
-class CsvWriter:
-    def __init__(self, filename: str):
+    def __init__(self, filename: os.path, encoding: str = "utf-8"):
         self.filename = filename
+        self.encoding = encoding
 
 
-class CsvReader:
-    pass
-
-
-def get_csv_file(addition_name: str) -> TextIO:
+class CsvWriter(CsvUtil):
     """
-    The final name of the file that is being returned opened is as follows {addition_name}_results.csv.
-    Checks if a results directory is available, otherwise will create one.
-    The file will be created at the results location with the name as previously described.
-
-    Args:
-        addition_name: Name for which the results file should be opened.
-    Returns:
-         Opened file.
+    A thin wrapper around csv.writer that deals with file handles internally and sets the appropriate options.
+    API methods adopted as necessary.
     """
-    results_file_name = addition_name + "_results.csv"
-    if not os.path.exists(os.path.abspath(dir_location_report)):
-        os.makedirs(dir_location_report)
-    full_path_results_file = os.path.join(dir_location_report, results_file_name)
-    return open(full_path_results_file, "a", encoding='utf-8', newline='\n')
+    FILE_MODE = "a"
+
+    def __init__(self, filename: os.path, encoding: str = "utf-8"):
+        super().__init__(filename, encoding=encoding)
+        self.__file_handle = open(self.filename, self.FILE_MODE, encoding=self.encoding, newline=self.LINE_TERMINATOR)
+        self.__csv_writer = csv.writer(self.__file_handle, delimiter=self.DELIMITER_SYMBOL,
+                                       quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator=self.LINE_TERMINATOR)
+
+    def writerow(self, csv_row: List):
+        self.__csv_writer.writerow(csv_row)
+
+
+class CsvReader(CsvUtil):
+    def __init__(self, filename: os.path, encoding: str = "utf-8"):
+        super().__init__(filename, encoding)
 
 
 def write_row(csv_writer, file, results, encoding, previous_result, current_hash, previous_hash, caller='current'):

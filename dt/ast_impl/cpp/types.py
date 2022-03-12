@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from typing import Optional, Dict
 
-delim_stand = u"\u25A0"
-
 
 class TranslationUnit:
     __slots__ = 'functions'
@@ -19,7 +17,7 @@ class TranslationUnit:
             func_body = func_def.func_body
             for identifier in func_body.find_identifier(id_name):
                 line, val_name, val = identifier.get_value()
-                results.append((val_name, str(val), str(line), delim_stand, func_name, delim_stand))
+                results.append((val_name, str(val), str(line), func_name))
         return results, len(results)
 
     # here
@@ -32,7 +30,7 @@ class TranslationUnit:
             for identifier in current_func_body.get_identifiers_with_numeric_values():
                 # print(f"{identifier=}")
                 line, val_name, val = identifier.get_value()
-                results.append((val_name, str(val), str(line), delim_stand, current_func_name, delim_stand))
+                results.append((val_name, str(val), str(line), current_func_name))
         return results, len(results)
 
     def get_function_body_for_name(self, func_name) -> Optional["FunctionBody"]:

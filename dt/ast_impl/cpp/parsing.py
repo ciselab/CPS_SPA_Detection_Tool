@@ -5,7 +5,7 @@ from antlr4.tree.Tree import TerminalNodeImpl
 
 from dt.antlr.CPP14ParserListener import CPP14ParserListener
 from dt.antlr.CPP14Parser import *
-from dt.ast.cpp.types import *
+from dt.ast_impl.cpp.types import *
 from typing import Union, List, Tuple, Any
 
 

@@ -4,23 +4,25 @@ Using Antlr4.
 """
 import os
 import pathlib
-from antlr4.ParserRuleContext import ParserRuleContext
-from antlr4.tree.Tree import TerminalNodeImpl
+from datetime import datetime
+
 # from antlr4.tree.Trees import Trees
 from antlr4 import FileStream, CommonTokenStream
-from dt.antlr.CPP14Lexer import CPP14Lexer
-from dt.antlr.CPP14Parser import CPP14Parser
-from dt.utils.csv import write_row
-from dt.utils.files import file_encoding
-import dt.antlr.CPP14ParserListener as CPP14ParserListener
 # try out
 # from dt.antlr.CPP14ParserVisitor import CPP14ParserVisitor
 # try out 2
 from antlr4 import ParseTreeWalker
-# Option 3 build out, so option 4
-from dt.ast.cpp.parsing import DtCppParserListener, TranslationUnit
-from datetime import datetime
+from antlr4.ParserRuleContext import ParserRuleContext
+from antlr4.tree.Tree import TerminalNodeImpl
+
+import dt.antlr.CPP14ParserListener as CPP14ParserListener
 import dt.dict_repo_list
+from dt.antlr.CPP14Lexer import CPP14Lexer
+from dt.antlr.CPP14Parser import CPP14Parser
+# Option 3 build out, so option 4
+from dt.ast_impl.cpp.parsing import DtCppParserListener, TranslationUnit
+from dt.utils.csv import write_row
+from dt.utils.files import get_file_encoding, remove_file_if_exists
 
 list_interest = ["usleep", "sleep", "Sleep", "MSleep", "sleep_for", "sleep_until", "thrd_sleep"]
 dict_sleep = {}
@@ -225,9 +227,7 @@ def print_json_to_file(json_str: str) -> None:
         json_str: JSON structure in string form.
     """
     file_name = "json_data_4.json"
-    if os.path.exists(file_name):
-        print(f"File {file_name} exists, removing file.")
-        os.remove(file_name)
+    remove_file_if_exists(file_name)
     with open(file_name, 'w') as outfile:
         print(f"Creating new {file_name}.")
         outfile.write(json_str)
@@ -240,14 +240,14 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
         current_statement.clear()
         current_number.clear()
         dict_sleep.clear()
-        enc = ""
+        encoding: str = ""
         # tree_dict = {}
-        total_results = 0
+        total_results: int = 0
         t_res = []
 
         try:
-            enc = file_encoding(location_file)
-            source = FileStream(location_file, encoding=enc)
+            encoding = get_file_encoding(location_file)
+            source = FileStream(location_file, encoding=encoding)
             lexer = CPP14Lexer(source)
             stream = CommonTokenStream(lexer)
             parser = CPP14Parser(stream)
@@ -321,16 +321,17 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
 
             print(f"{t_res=} {len(t_res)=}")
             if csv_writer and len(t_res) > 0:
-                # write_row(csv_writer, location_file, str(dict_sleep), "None")
-                # , previous_result, current_hash, previous_hash
-                # if current_hash and previous_hash:
-                #     write_row_final(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash, caller='history')
-                # else:
                 if not (current_hash and previous_hash):
-                    write_row(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash)
-                # write_row(csv_writer, location_file, str(t_res), enc)
+                    write_row(
+                        csv_writer,
+                        location_file,
+                        str(t_res),
+                        encoding,
+                        previous_result,
+                        current_hash,
+                        previous_hash)
         except UnicodeDecodeError:
-            print(f"[ERROR] UnicodeDecodeError: {location_file} encoding={enc}")
+            print(f"[ERROR] UnicodeDecodeError: {location_file} encoding={encoding}")
             pass
         except FileNotFoundError as e:
             error_fnf = os.path.join(location_log_files, "antlr_error_file_not_found.log")
