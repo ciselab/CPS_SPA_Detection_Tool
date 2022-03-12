@@ -25,6 +25,7 @@ def use_search_pattern(pattern: str) -> str:
         "numeric_function_within": r"\s*\s*[a-zA-Z_]+\(([a-zA-Z_]+),\s([-0-9.]+)",
         "sleeps": r"^.*?(u*[sS]leep[_for]*)\s*\(*([0-9.]+)",
         "sleeps_var_name": r"^.*?(u*[sS]leep[_for]*)(?:\s*[=|\(|]\s*|\s+)(?:[a-zA-Z_][a-zA-Z_0-9]*\s)?([a-zA-Z_][a-zA-Z0-9_]*)",
+        "hcft": ""
     }
     return dict_search_patterns[pattern]
 
@@ -53,6 +54,9 @@ def use_regex_pattern(pattern_name: str, var_name: str) -> str:
     elif pattern_name == "sleeps_var_name":
         """sleeps_var_name"""
         regex_pattern = r"^.*?" + re.escape(var_name) + r"(?:\s*[=|\(|]\s*|\s+)(?:[a-zA-Z_][a-zA-Z_0-9]*\s)?([a-zA-Z_][a-zA-Z0-9_]*)"
+    elif pattern_name == "sleeps_var_name":
+        """hcft"""
+        regex_pattern = r""
     else:
         print(f"[ERROR] unknown pattern_name: {pattern_name}")
     return regex_pattern

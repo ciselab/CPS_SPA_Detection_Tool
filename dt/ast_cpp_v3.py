@@ -53,7 +53,9 @@ clang.cindex.Config.set_library_path("C:\\Program Files\\LLVM\\bin")
 index = clang.cindex.Index.create()
 file_name = os.path.join(pathlib.Path.home(), "Documents", "GitHub", "CPS_SPA_Detection_Tool", "tests", "files",
                          "ast_test_file_4.cpp")
+# file_name = os.path.join(pathlib.Path.home(), "GitHub", "AirSim", "GazeboDrone", "src", "main.cpp")
 # tu = index.parse(file_name, options=1)
 tu = index.parse(file_name, args=['-x', 'c++'])
+# tu = index.parse(file_name)
 
 output_cursor_and_children(tu.cursor)

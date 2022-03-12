@@ -161,8 +161,10 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
     for file in result_walk:
         if name == "sleeps":
             # result = ast_cpp.main(csv_writer, file)
-            result = ast_cpp_antlr.main(csv_writer, file)
+            result = ast_cpp_antlr.main(csv_writer, file, name)
             # result = read_file_encoding(file, p, url, csv_writer, key_project, name)
+        elif name == "hcft":
+            result = ast_cpp_antlr.main(csv_writer, file, name)
         else:
             result = read_file_encoding(file, p, url, csv_writer, key_project, name)
         if isinstance(result, int):
@@ -175,7 +177,7 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
     Start the search with received pattern.
 
     Args:
-        search_for_pattern: Pattern to search with in ths current round.
+        search_for_pattern: Pattern to search within the current round.
         title_graph: Title connected to the search pattern.
         search_type: Searching through the current state of the repository.
         # csv_writer: CSV Writers object

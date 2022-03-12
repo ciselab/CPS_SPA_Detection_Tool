@@ -82,6 +82,11 @@ def write_row(csv_writer, file: str, results: str, encoding: str) -> None:
     csv_writer.writerow(csv_line)
 
 
+def write_row_final(csv_writer, file, results, encoding, previous_result, current_hash, previous_hash):
+    csv_line = [file, current_hash, results, previous_hash, previous_result, encoding]
+    csv_writer.writerow(csv_line)
+
+
 def write_row_results_more(csv_writer_commits,
                            project_name: str, file_name_full_path: str, comparative_hash: str,
                            commit_hash: str, search_var_name: str, var_value: str, var_value_found: str) -> None:
