@@ -82,8 +82,11 @@ def write_row(csv_writer, file: str, results: str, encoding: str) -> None:
     csv_writer.writerow(csv_line)
 
 
-def write_row_final(csv_writer, file, results, encoding, previous_result, current_hash, previous_hash):
-    csv_line = [file, current_hash, results, previous_hash, previous_result, encoding]
+def write_row_final(csv_writer, file, results, encoding, previous_result, current_hash, previous_hash, caller='current'):
+    if caller == 'current':
+        csv_line = [file, results, encoding]
+    else:
+        csv_line = [file, current_hash, results, previous_hash, previous_result, encoding]
     csv_writer.writerow(csv_line)
 
 

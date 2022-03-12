@@ -213,7 +213,7 @@ class ProjectParserListener(CPP14ParserListener):
 
                 # maybe different later?
                 txt_node = node.getText()
-                print(f"INT:{txt_node}")
+                # print(f"INT:{txt_node}")
                 # print(f"before:{txt_node=}")
 
                 txt_node = re.sub("[lLuUzZ]+$", "", txt_node)
@@ -234,7 +234,7 @@ class ProjectParserListener(CPP14ParserListener):
 
                 # maybe different later?
                 txt_node = node.getText()
-                print(f"FLOAT: {txt_node}")
+                # print(f"FLOAT: {txt_node}")
                 # print(f"before:{txt_node=}")
 
                 txt_node = re.sub("[lLfF]+$", "", txt_node)

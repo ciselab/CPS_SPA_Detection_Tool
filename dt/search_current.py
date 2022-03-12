@@ -18,7 +18,8 @@ from dt.search_setup import var_number_pattern
 
 results_long_list = []
 dir_location_report = os.path.join("..", "results")
-delim_stand = u"\u25A0"
+# delim_stand = u"\u25A0"
+delim_stand = u"\u25B2"     # changed to triangle
 
 
 def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name_pattern: str, enc=None) -> int:
@@ -161,14 +162,14 @@ def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dic
     for file in result_walk:
         if name == "sleeps":
             # result = ast_cpp.main(csv_writer, file)
-            result = ast_cpp_antlr.main(csv_writer, file, name)
+            number_results, results_list = ast_cpp_antlr.main(csv_writer, file, name)
             # result = read_file_encoding(file, p, url, csv_writer, key_project, name)
         elif name == "hcft":
-            result = ast_cpp_antlr.main(csv_writer, file, name)
+            number_results, results_list = ast_cpp_antlr.main(csv_writer, file, name)
         else:
-            result = read_file_encoding(file, p, url, csv_writer, key_project, name)
-        if isinstance(result, int):
-            count += result
+            number_results = read_file_encoding(file, p, url, csv_writer, key_project, name)
+        if isinstance(number_results, int):
+            count += number_results
     return count
 
 

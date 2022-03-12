@@ -9,7 +9,7 @@ import pydriller
 import glob
 from pathlib import PurePosixPath
 from datetime import datetime
-from dt.utils import get_csv_file
+from dt.utils import get_csv_file, write_row_final
 from dataclasses import dataclass
 import dt.dict_repo_list
 import dt.search_current
@@ -22,6 +22,7 @@ from deepdiff import DeepDiff
 
 
 delim_stand = u"\u25A0"
+delim_stand_triangle = u"\u25B2"
 hc_counter = 0
 
 
@@ -137,12 +138,14 @@ def csv_read(csv_wr_res, pattern_name: str) -> None:
             if PurePosixPath(each_file_full_path).suffix != '.swp':
                 with open(each_file_full_path, 'r', encoding='utf-8') as results_csv_file:
                     fieldnames = ['file_name', 'results', 'encoding']
-                    csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames, delimiter=delim_stand)
+                    csv_reader = csv.DictReader(results_csv_file, fieldnames=fieldnames, delimiter=delim_stand_triangle)
                     for row in csv_reader:
+                        print(f"{row=}")
                         dt.dict_repo_list.build_repo_dict()
                         file_path = row['file_name']
                         project_path_with_slashes = current_project.url_project + "\\"
                         file_path_from_project = file_path.replace(project_path_with_slashes, '')
+                        print(f"{row['encoding']=}")
                         check_follow(csv_wr_res, file_path_from_project, counter_files, file_path,
                                      row['results'], row['encoding'], pattern_name)
 
@@ -163,6 +166,7 @@ def clean_git_log(log_results_path: str, encoding: str) -> dict:
     dict_changed_files = {}
     last_name_change = None
     try:
+        print(f"{encoding=}")
         with open(log_results_path, 'r', encoding=encoding) as analyse_log_results:
             for each_line in analyse_log_results:
                 pattern_commit = r"(commit)\s([0-9a-zA-Z]+)"
@@ -318,7 +322,7 @@ def search_using_regex(stored_prev_line, result_key, var_value_dict, var_value, 
             pass
 
 
-def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, current_hash, previous_hash):
+def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, current_hash, previous_hash, encoding_file):
     number_results, result = ast_cpp_antlr.main(csv_wr_res, path_long, pattern_name, previous_result, current_hash, previous_hash)
     if result != 0:
         # comp = set(results_list).symmetric_difference(set(result))
@@ -337,6 +341,7 @@ def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, 
             print(f"{previous_result=}")
             print(f"{previous_hash=}")
             print(f"{comp=}\n")
+            write_row_final(csv_wr_res, path_long, result, encoding_file, previous_result, current_hash, previous_hash, caller='history')
             return result
         else:
             return previous_result
@@ -394,7 +399,7 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
             path_long = dict_results[each_hash][0]
 
         # print(f"{each_hash=}")
-        results_list = searching_using_antlr(csv_wr_res, path_long, pattern_name, results_list, each_hash, previous_hash)
+        results_list = searching_using_antlr(csv_wr_res, path_long, pattern_name, results_list, each_hash, previous_hash, encoding_file)
         previous_hash = each_hash
 
         # for hc_counter_res, (var_name, var_value, stored_line_number, stored_prev_line) in enumerate(results_list):

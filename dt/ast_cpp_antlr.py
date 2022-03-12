@@ -321,10 +321,15 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
             # Option number 1: print results
             # print(dict_sleep)
 
+            print(f"{t_res=} {len(t_res)=}")
             if csv_writer and len(t_res) > 0:
                 # write_row(csv_writer, location_file, str(dict_sleep), "None")
                 # , previous_result, current_hash, previous_hash
-                write_row_final(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash)
+                # if current_hash and previous_hash:
+                #     write_row_final(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash, caller='history')
+                # else:
+                if not (current_hash and previous_hash):
+                    write_row_final(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash)
                 # write_row(csv_writer, location_file, str(t_res), enc)
         except UnicodeDecodeError:
             print(f"[ERROR] UnicodeDecodeError: {location_file} encoding={enc}")
@@ -348,7 +353,7 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
         # return len(dict_sleep)
         return total_results, t_res
     else:
-        return 0
+        return 0, []
 
 
 if __name__ == "__main__":

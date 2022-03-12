@@ -3,12 +3,19 @@
 Starting both search_current.py and search_current_history.py one after another.
 """
 
+from datetime import datetime
 from dt import search_current
 from dt import search_current_history
 # from dt import graph_results
 
 
 def main() -> None:
+    print("---CURRENT TIME---")
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print(f"Start time: {current_time}")
+    print("---STARTING---")
+
     print("[SLEEPS] START")
     search_current.main("sleeps")
     search_current_history.main("sleeps")
@@ -32,6 +39,12 @@ def main() -> None:
     # search_current_history.main("var_with_number")
     # graph_results.main("var_with_number")
     # print("[VAR NUMBER] DONE")
+
+    print("---FINISHED---")
+    print(f"Started at: {current_time}")
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print(f"End time: {current_time}")
 
 
 if __name__ == '__main__':
