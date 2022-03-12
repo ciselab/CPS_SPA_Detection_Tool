@@ -22,11 +22,11 @@ def main() -> None:
     # graph_results.main("sleeps")
     print("[SLEEPS] DONE")
     #
-    print("[HARD CODED FINE TUNING] START")
-    search_current.main("hcft")
-    search_current_history.main("hcft")
-    # graph_results.main("hcft")
-    print("[HARD CODED FINE TUNING] DONE")
+    # print("[HARD CODED FINE TUNING] START")
+    # search_current.main("hcft")
+    # search_current_history.main("hcft")
+    # # graph_results.main("hcft")
+    # print("[HARD CODED FINE TUNING] DONE")
     #
     # print("[SLEEPS VAR NAME] START")
     # search_current.main("sleeps_var_name")
