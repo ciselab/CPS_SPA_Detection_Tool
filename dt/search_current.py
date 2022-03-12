@@ -7,19 +7,18 @@ import re
 import csv
 from datetime import datetime
 import dt.dict_repo_list
-# import dt.ast_cpp_v2 as ast_cpp
 import dt.ast_cpp_antlr as ast_cpp_antlr
 from dt.graph_creation import create_graph
-from dt.utils import get_csv_file, write_row, no_encoding_found
+from dt.utils.csv import get_csv_file, write_row, CsvWriter
+from dt.utils.files import no_encoding_found
 from dt.search_setup import use_search_pattern
 from dt.search_setup import var_name_pattern
 from dt.search_setup import var_number_pattern
+from dt.utils.csv import DELIMITER_SYMBOL
 
 
 results_long_list = []
 dir_location_report = os.path.join("..", "results")
-# delim_stand = u"\u25A0"
-delim_stand = u"\u25B2"     # changed to triangle
 
 
 def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name_pattern: str, enc=None) -> int:
@@ -79,7 +78,7 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name
                             count += 1
                             line_number_fix = line_number + 1
                             results_long_list.append((each_check[0], each_check[1], line_number_fix,
-                                                      delim_stand, remember_prev_line, delim_stand))
+                                                      DELIMITER_SYMBOL, remember_prev_line, DELIMITER_SYMBOL))
                 remember_prev_line = line
         if results_long_list:
             write_row(csv_writer, file, str(results_long_list), str(enc_select))
@@ -102,12 +101,12 @@ def read_file_encoding(file: os.path, p, url: str, csv_writer, key_project, name
     return count
 
 
-def walk_dirs(key_project: str) -> set:
+def walk_dirs(project_name: str) -> set:
     """
     Goes through the dirs, noted in dt.dict_repo_list.projects_modules, and returns the files.
 
     Args:
-        key_project: Name (key) of the project.
+        project_name: Name (key) of the project.
 
     Returns:
         Set of the files (full path).
@@ -119,15 +118,15 @@ def walk_dirs(key_project: str) -> set:
                      '.c++m', '.cppm', '.cxxm', '.kt',
                      '.java', '.go', '.py', '.rb', '.rs',
                      '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
-    start_input = dt.dict_repo_list.projects[key_project]["local"]
+    start_input = dt.dict_repo_list.projects[project_name]["local"]
     for each_dir, _, _ in os.walk(start_input):
-        for number, _ in enumerate(dt.dict_repo_list.projects_modules[key_project]):
+        for number, _ in enumerate(dt.dict_repo_list.projects_modules[project_name]):
             full_path_list = os.path.join(start_input,
-                                          dt.dict_repo_list.projects_modules[key_project][number].top_level)
+                                          dt.dict_repo_list.projects_modules[project_name][number].top_level)
             if each_dir == full_path_list:
                 start_full_path = os.path.join(start_input, each_dir)
                 for root, dirs, files in os.walk(start_full_path, topdown=True):
-                    if not dt.dict_repo_list.projects_modules[key_project][number].recursive:
+                    if not dt.dict_repo_list.projects_modules[project_name][number].recursive:
                         """If not True (True means going recursively through the dirs), 
                         the dirs are cleared so only the current level is checked."""
                         dirs.clear()
@@ -139,46 +138,34 @@ def walk_dirs(key_project: str) -> set:
     return full_files
 
 
-def dig_for_code(key_project: str, search_for_pattern: str, repo_dictionary: dict, csv_writer, name: str) -> int:
+def count_pattern_occurrences(key_project: str, csv_writer, name: str) -> int:
     """
-    Starts the mining process on the repository indicated by the given URL
+    Starts the mining process on the repository indicated by the given project name.
     Through the current state of the repository. Only looking at files with specified extensions.
 
     Args:
         key_project: Project name from the dictionary.
-        search_for_pattern: Pattern to find in the code to occur.
-        repo_dictionary: Dictionary of with the project name and local location.
         csv_writer: CSV Writers object
         name: Name of the pattern used.
 
     Returns:
-        count: How often the keyword occurs in the code of specified project.
+        count: How often the pattern occurs in the code of specified project.
     """
-    url = repo_dictionary[key_project]["local"]
     count = 0
-    p = re.compile(search_for_pattern, re.M)
     result_walk = walk_dirs(key_project)
 
     for file in result_walk:
-        if name == "sleeps":
-            # result = ast_cpp.main(csv_writer, file)
-            number_results, results_list = ast_cpp_antlr.main(csv_writer, file, name)
-            # result = read_file_encoding(file, p, url, csv_writer, key_project, name)
-        elif name == "hcft":
-            number_results, results_list = ast_cpp_antlr.main(csv_writer, file, name)
-        else:
-            number_results = read_file_encoding(file, p, url, csv_writer, key_project, name)
+        number_results, _ = ast_cpp_antlr.main(csv_writer, file, name)
         if isinstance(number_results, int):
             count += number_results
     return count
 
 
-def start_searching(search_for_pattern: str, title_graph: str, search_type: str, name: str) -> None:
+def start_searching(title_graph: str, search_type: str, name: str) -> None:
     """
     Start the search with received pattern.
 
     Args:
-        search_for_pattern: Pattern to search within the current round.
         title_graph: Title connected to the search pattern.
         search_type: Searching through the current state of the repository.
         # csv_writer: CSV Writers object
@@ -196,11 +183,12 @@ def start_searching(search_for_pattern: str, title_graph: str, search_type: str,
             print(f"File {file_commits_results} exists, removing file.")
             os.remove(file_commits_results)
 
+        writer = CsvWriter(pattern_project_filename)
         csv_file = get_csv_file(pattern_project_filename)
-        csv_writer = csv.writer(csv_file, delimiter=delim_stand, quotechar='"',
+        csv_writer = csv.writer(csv_file, delimiter=DELIMITER_SYMBOL, quotechar='"',
                                 quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
-        counted = dig_for_code(key_repo_name, search_for_pattern, repo_dictionary, csv_writer, name)
+        counted = count_pattern_occurrences(key_repo_name, csv_writer, name)
         print(f"{key_repo_name}: {counted}")
         if counted > 0:
             data_graph[key_repo_name] = counted
@@ -212,7 +200,7 @@ def main(pattern_name: str = "sleeps") -> None:
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print(f"Start time: {current_time}")
-    start_searching(use_search_pattern(pattern_name), pattern_name, "current", pattern_name)
+    start_searching(pattern_name, "current", pattern_name)
     print(f"Started at: {current_time}")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

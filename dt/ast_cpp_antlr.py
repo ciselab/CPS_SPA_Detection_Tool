@@ -2,7 +2,6 @@
 """
 Using Antlr4.
 """
-import json
 import os
 import pathlib
 from antlr4.ParserRuleContext import ParserRuleContext
@@ -11,16 +10,15 @@ from antlr4.tree.Tree import TerminalNodeImpl
 from antlr4 import FileStream, CommonTokenStream
 from dt.antlr.CPP14Lexer import CPP14Lexer
 from dt.antlr.CPP14Parser import CPP14Parser
-from dt.utils import write_row, write_row_final
-from dt.utils import file_encoding
+from dt.utils.csv import write_row
+from dt.utils.files import file_encoding
 import dt.antlr.CPP14ParserListener as CPP14ParserListener
 # try out
 # from dt.antlr.CPP14ParserVisitor import CPP14ParserVisitor
 # try out 2
 from antlr4 import ParseTreeWalker
 # Option 3 build out, so option 4
-from dt.ProjectListener import ProjectParserListener, TranslationUnit
-from typing import Optional
+from dt.ast.cpp.parsing import DtCppParserListener, TranslationUnit
 from datetime import datetime
 import dt.dict_repo_list
 
@@ -70,7 +68,7 @@ def reading_tree(tree: CPP14Parser.TranslationUnitContext) -> TranslationUnit:
         tree:
     """
     walker = ParseTreeWalker()
-    listener = ProjectParserListener()
+    listener = DtCppParserListener()
     walker.walk(listener, tree)
     return listener.get_translation_unit()
 
@@ -329,7 +327,7 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
                 #     write_row_final(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash, caller='history')
                 # else:
                 if not (current_hash and previous_hash):
-                    write_row_final(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash)
+                    write_row(csv_writer, location_file, str(t_res), enc, previous_result, current_hash, previous_hash)
                 # write_row(csv_writer, location_file, str(t_res), enc)
         except UnicodeDecodeError:
             print(f"[ERROR] UnicodeDecodeError: {location_file} encoding={enc}")

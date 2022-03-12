@@ -9,14 +9,13 @@ import pydriller
 import glob
 from pathlib import PurePosixPath
 from datetime import datetime
-from dt.utils import get_csv_file, write_row_final
+from dt.utils.csv import get_csv_file, write_row, write_row_results_more
 from dataclasses import dataclass
 import dt.dict_repo_list
 import dt.search_current
 from dt.search_setup import use_regex_pattern
 from dt.search_setup import var_name_pattern
 from dt.search_setup import var_number_pattern
-from dt.utils import write_row_results_more
 import dt.ast_cpp_antlr as ast_cpp_antlr
 from deepdiff import DeepDiff
 
@@ -341,7 +340,7 @@ def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, 
             print(f"{previous_result=}")
             print(f"{previous_hash=}")
             print(f"{comp=}\n")
-            write_row_final(csv_wr_res, path_long, result, encoding_file, previous_result, current_hash, previous_hash, caller='history')
+            write_row(csv_wr_res, path_long, result, encoding_file, previous_result, current_hash, previous_hash, caller='history')
             return result
         else:
             return previous_result
