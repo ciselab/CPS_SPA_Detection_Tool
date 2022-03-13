@@ -34,7 +34,11 @@ def process_project(project_name: str, pattern_name: str, write_pattern: bool = 
         csv_row = [relative_filename, file_encoding, count, results]
         writer.writerow(csv_row)
     if write_pattern:
-        write_pattern_data(pattern_name, dt.dict_repo_list.projects[project_name]['sha'], pattern_occurrences, project_name)
+        write_pattern_data(
+            project_name,
+            dt.dict_repo_list.projects[project_name]['sha'],
+            pattern_name,
+            pattern_occurrences)
 
 
 def write_pattern_data(project_name, project_hash, pattern_name, pattern_occurrences):

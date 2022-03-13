@@ -3,7 +3,6 @@
 Searching through previous versions of each file.
 """
 import ast
-import glob
 import os
 import re
 from dataclasses import dataclass
@@ -17,9 +16,10 @@ import dt.ast_cpp_antlr as ast_cpp_antlr
 import dt.dict_repo_list
 import dt.search_current
 from dt import patterns
-from dt.utils.csv import write_row, CsvWriter, CsvReader
-from dt.utils.files import remove_file_if_exists
-from dt.utils.paths import results_base_path, make_dir_if_not_exists, project_results_path, logs_base_path
+from dt.utils.csv import CsvWriter, CsvReader
+from dt.utils.files import remove_file_if_exists, remove_log_files
+from dt.utils.paths import results_base_path, make_dir_if_not_exists, project_results_path, logs_base_path, \
+    project_base_path
 
 
 @dataclass
@@ -34,112 +34,90 @@ class Project:
 
 
 current_project = Project()
-location_log_files = os.path.join(dt.dict_repo_list.location_github, "CPS_SPA_Detection_Tool", "results")
 
 
-def csv_read(csv_wr_res, pattern_name: str) -> None:
+def csv_read(csv_writer, pattern_name: str) -> None:
     """
     Read .csv file, apply expected field names.
     Starts the git log follow function for each result from the .csv file.
 
     Args:
-        csv_wr_res: csv.writer object, specifies .csv file.
+        csv_writer: csv.writer object, specifies .csv file.
         pattern_name: Used pattern name.
     """
-    result_files = [f for f in os.listdir(project_results_path(current_project.name))]
+    result_file = os.path.join(
+        project_results_path(current_project.name),
+        f'{pattern_name}_{current_project.name}_results.csv')
 
-    for counter_files, current_file in enumerate(result_files):
-        if not os.path.basename(current_file) == f"{pattern_name}_{current_project.name}_results.csv":
-            continue
-        full_file_path = os.path.join(project_results_path(current_project.name), current_file)
-        fieldnames = ['file_name', 'encoding', 'result_count', 'results']
-        with CsvReader(full_file_path, fieldnames=fieldnames) as reader:
-            for row in reader:
-                print(f"{row=}")
-                relative_file_path = row['file_name']
-                absolute_file_path = os.path.join(current_project.url_project, relative_file_path)
-                print(f"{row['encoding']=}")
-                check_follow(
-                    csv_wr_res,
-                    relative_file_path,
-                    counter_files,
-                    absolute_file_path,
-                    row['results'], row['encoding'],
-                    pattern_name)
+    fieldnames = ['filename', 'encoding', 'result_count', 'results']
+    with CsvReader(result_file, fieldnames=fieldnames) as reader:
+        for row in reader:
+            relative_file_path = row['filename']
+            absolute_file_path = os.path.join(current_project.url_project, relative_file_path)
+            check_follow(csv_writer, relative_file_path, absolute_file_path, row['results'], row['encoding'],
+                         pattern_name)
 
 
-def clean_git_log(log_results_path: str, encoding: str) -> dict:
+def parse_git_log(log_results_path: str) -> dict:
     """
     Checks if the file passed contains the same pattern.
 
     Args:
         log_results_path:  Path to the file.
-        encoding: Encoding used with this file.
 
     Returns:
         Overview of the results matching the pattern.
     """
-    if encoding == "None":
-        encoding = None
-    dict_changed_files = {}
-    last_name_change = None
-    try:
-        print(f"{encoding=}")
-        with open(log_results_path, 'r', encoding=encoding) as analyse_log_results:
-            for each_line in analyse_log_results:
-                pattern_commit = r"(commit)\s([0-9a-zA-Z]+)"
-                # changed_file_pattern = r"^(:[0-9a-zA-Z]+\s[0-9a-zA-Z]+\s[0-9a-zA-Z]+" \
-                #                        r"\s[0-9a-zA-Z]+\s[0-9a-zA-Z]+\s)([a-zA-Z0-9\/.-]+)\s([a-zA-Z0-9\/.-]+)\n"
-                changed_file_pattern = r"^(:[0-9]+\s[0-9]+\s[0-9a-fA-F]+\s[0-9a-fA-F]+" \
-                                       r"\s[0-9a-zA-Z]+\s)([a-zA-Z0-9\/.-_]*)\s([a-zA-Z0-9\/.-_]*)\n"
+    # RE PATTERNS
+    pattern_commit = r"commit\s" \
+                     r"([0-9a-zA-Z]+)"
+    changed_file_pattern = r"^:[0-9]+\s[0-9]+\s[0-9a-fA-F]+\s[0-9a-fA-F]+\s[0-9a-zA-Z]+\s" \
+                           r"([a-zA-Z0-9\/.-_]*)\s" \
+                           r"([a-zA-Z0-9\/.-_]*)"
 
-                matching_patterns_commit = re.match(pattern_commit, each_line)
-                if matching_patterns_commit:
-                    current_hash = matching_patterns_commit.groups()[1]
-                    if last_name_change:
-                        dict_changed_files[current_hash] = last_name_change
-                    else:
-                        dict_changed_files[current_hash] = None
+    # local data
+    filename_history = {}
+    last_name = None
 
-                matching_patterns_changed_file = re.match(changed_file_pattern, each_line)
-                if matching_patterns_changed_file:
-                    dict_changed_files[current_hash] = (matching_patterns_changed_file.groups()[1],
-                                                        matching_patterns_changed_file.groups()[2])
-                    last_name_change = (matching_patterns_changed_file.groups()[1],
-                                        matching_patterns_changed_file.groups()[2])
-    except UnicodeDecodeError as e:
-        error_enc = os.path.join(location_log_files, "encoding_error.log")
-        with open(error_enc, 'a') as ef_file:
-            now = datetime.now()
-            current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-            ef_file.write(f"[{current_date_time}] {e}")
-        pass
+    with open(log_results_path, 'r') as log_results:
+        for line in log_results:
+            matching_patterns_commit = re.match(pattern_commit, line)
+            if matching_patterns_commit:
+                current_hash = matching_patterns_commit.groups()[0]
+                if last_name:
+                    filename_history[current_hash] = last_name
+                else:
+                    filename_history[current_hash] = None
 
-    return dict_changed_files
+            matching_patterns_changed_file = re.match(changed_file_pattern, line)
+            if matching_patterns_changed_file:
+                match_groups = matching_patterns_changed_file.groups()
+                if len(match_groups[1]) > 0:  # we found a rename
+                    filename_history[current_hash] = match_groups[1]
+                    last_name = match_groups[0]
+
+    return filename_history
 
 
-def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str, results: str, encoding: str,
-                 pattern_name: str) -> None:
+def check_follow(csv_writer, rel_path: str, abs_path: str, results: str, encoding: str, pattern_name: str) -> None:
     """
     Using git log to follow when the file has been changed.
 
     Args:
-        csv_wr_res: .csv writing object.
-        path_short: Path from the project to the file.
-        counter_files: Counter (log result file number).
-        path_long: Full path to the file.
+        csv_writer: .csv writing object.
+        rel_path: Path from the project to the file.
+        abs_path: Full path to the file.
         results: Results contain var name and value and previous line.
         encoding: Encoding of the file.
         pattern_name: Pattern name of pattern used.
     """
     current_wd = os.getcwd()
-    dir_path = os.path.join("..", "..", current_project.name)
-    os.chdir(dir_path)
-    write_to_file = os.path.join(logs_base_path(), f"log_results_{counter_files}")
-    os.system(f"git log --raw --follow {path_short} > {write_to_file}")
+    os.chdir(project_base_path(current_project.name))
+    write_to_file = os.path.join(logs_base_path(), f"log_results_{current_project.name}")
+    os.system(f"git log --raw --follow {rel_path} > {write_to_file}")
 
-    dict_results = clean_git_log(write_to_file, encoding)
-    analyse_file_checkout(dict_results, path_long, results, encoding, csv_wr_res, pattern_name)
+    filename_history = parse_git_log(write_to_file)
+    analyse_file_checkout(filename_history, abs_path, results, encoding, csv_writer, pattern_name)
 
     os.chdir(current_wd)
 
@@ -172,47 +150,49 @@ def print_found_results(path_long: str, compared_hash: str, each_hash: str, var_
     print(f"current line: {each_line}")
 
 
-def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, current_hash, previous_hash,
+def searching_using_antlr(csv_writer, abs_path, pattern_name, previous_result, current_hash, previous_hash,
                           encoding_file):
     number_results: int
-    result: List[Tuple[int, str, str]]
-    number_results, result = ast_cpp_antlr.main(csv_wr_res, path_long, pattern_name, previous_result, current_hash,
-                                                previous_hash)
-    if result != 0:
-        path_short = os.path.relpath(path_long, start=current_project.url_project)
-        # comp = set(results_list).symmetric_difference(set(result))
-        # comp = set(results_list) ^ (set(result))
-        # comp = [item for item in results_list if item not in result]
-        comp = DeepDiff(previous_result, result, ignore_order=True)
-        # print(f"HISTORY: {result=}")
+    parse_results: List[Tuple[int, str, str]]
+    number_results, parse_results = ast_cpp_antlr.main(csv_writer, abs_path, pattern_name,
+                                                       previous_result, current_hash, previous_hash)
+    if len(parse_results) != 0:
+        rel_path = os.path.relpath(abs_path, start=current_project.url_project)
+        # comp = set(results_list).symmetric_difference(set(parse_results))
+        # comp = set(results_list) ^ (set(parse_results))
+        # comp = [item for item in results_list if item not in parse_results]
+        comp = DeepDiff(previous_result, parse_results, ignore_order=True)
+        # print(f"HISTORY: {parse_results=}")
         # print(f"COMPARE: {results_list=}")
         # print(f"\n{comp=}\n")
         if comp:
             # print("\nGOING THROUGH THE HISTORY")
-            # print(f"{result=}")
+            # print(f"{parse_results=}")
             # print(f"{current_hash=}")
             # print("COMPARE WITH")
             # print(f"{previous_result=}")
             # print(f"{previous_hash=}")
             # print(f"{comp=}\n")
-            write_row(csv_wr_res, path_short, result, encoding_file, previous_result, current_hash, previous_hash,
-                      caller='history')
-            return result
+            csv_row = [rel_path, encoding_file,
+                       current_hash, parse_results,
+                       previous_hash, previous_result]
+            csv_writer.writerow(csv_row)
+            return parse_results
         else:
             return previous_result
 
 
-def analyse_file_checkout(dict_results: dict, path_long: str, results: str, encoding: str, csv_wr_res,
+def analyse_file_checkout(filename_history: dict, path_long: str, results: str, encoding: str, csv_writer,
                           pattern_name: str) -> None:
     """
     Analysing the current file for the same pattern, var name with a changed var value.
 
     Args:
-        dict_results: Dict of the git log results.
+        filename_history: Dictionary tracking file renames throughout commits.
         path_long: Full path to the file.
         results: Results contain var name and value and previous line.
         encoding: File encoding.
-        csv_wr_res: .csv writing object.
+        csv_writer: .csv writing object.
         pattern_name: Pattern name of pattern used.
     """
     project_hash = current_project.sha_project
@@ -226,30 +206,18 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
 
     previous_hash = project_hash
 
-    for each_hash in dict_results.keys():
-        repo_check.checkout(each_hash)
+    for commit_hash in filename_history.keys():
+        repo_check.checkout(commit_hash)
 
-        if dict_results[each_hash]:  # Used if filename has been changed.
-            path_long = dict_results[each_hash][0]
+        if filename_history[commit_hash]:  # Used if filename has been changed.
+            path_long = filename_history[commit_hash]
 
-        results_list = searching_using_antlr(csv_wr_res, path_long, pattern_name, results_list, each_hash,
+        results_list = searching_using_antlr(csv_writer, path_long, pattern_name, results_list, commit_hash,
                                              previous_hash, encoding_file)
-        previous_hash = each_hash
+        previous_hash = commit_hash
 
     repo_check = pydriller.GitRepository(local_project)
     repo_check.checkout(project_hash)
-
-
-def remove_log_files() -> None:
-    """
-    Remove all the log files.
-    """
-    hc_logs_path = os.path.join(logs_base_path(), "log_results_*")
-    log_files_list = glob.glob(hc_logs_path)
-    if log_files_list:
-        print(f"Log files exist, removing {len(log_files_list)} files.")
-    for file in log_files_list:
-        os.remove(file)
 
 
 def hash_projects_to_file() -> None:
@@ -293,7 +261,7 @@ def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
 
     """ DONE """
     print(f"---COMPLETED ALL {len(dt.dict_repo_list.projects.keys())} PROJECTS---")
-    remove_log_files()
+    # remove_log_files()
     print(f"Started at: {current_time}")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

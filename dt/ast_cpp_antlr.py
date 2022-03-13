@@ -13,7 +13,6 @@ from dt.antlr.CPP14Lexer import CPP14Lexer
 from dt.antlr.CPP14Parser import CPP14Parser
 from dt.ast_impl.cpp.parsing import DtCppParserListener, TranslationUnit
 from dt.patterns import MagicalWaitingNumber
-from dt.utils.csv import write_row
 from dt.utils.files import get_file_encoding
 from dt.utils.paths import logs_base_path
 
@@ -37,8 +36,9 @@ def parse_ast(tree: CPP14Parser.TranslationUnitContext) -> TranslationUnit:
 
 
 # def main(csv_writer=None, location_file: str = location_file_default, search_ap: str = "hcft") -> Optional[int]:
-def main(csv_writer=None, location_file: str = location_file_default, search_ap: str = "hcft", previous_result: list = [], current_hash: str = "", previous_hash: str = ""):
-    print(f"file name: {location_file}")
+def main(csv_writer=None, location_file: str = location_file_default, search_ap: str = "hcft",
+         previous_result: list = [], current_hash: str = "", previous_hash: str = ""):
+    # print(f"file name: {location_file}")
     encoding: str = ""
     total_results: int = 0
     parse_results = []
@@ -73,14 +73,9 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
         print(f"{parse_results=} {len(parse_results)=}")
         if csv_writer and len(parse_results) > 0:
             if not (current_hash and previous_hash):
-                write_row(
-                    csv_writer,
-                    location_file,
-                    str(parse_results),
-                    encoding,
-                    previous_result,
-                    current_hash,
-                    previous_hash)
+                csv_row = [location_file, encoding, current_hash, str(parse_results),
+                           previous_hash, previous_result]
+                csv_writer.writerow(csv_row)
     except UnicodeDecodeError:
         print(f"[ERROR] UnicodeDecodeError: {location_file} encoding={encoding}")
     except FileNotFoundError as e:
@@ -88,7 +83,7 @@ def main(csv_writer=None, location_file: str = location_file_default, search_ap:
         with open(error_fnf, 'a') as ef_file:
             now = datetime.now()
             current_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-            ef_file.write(f"[{current_date_time}] {e}")
+            ef_file.write(f"[{current_date_time} - {current_hash}] {e}\n")
 
     return total_results, parse_results
 

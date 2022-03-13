@@ -1,8 +1,10 @@
+import glob
 import os
 from typing import Optional, List, Dict
 from chardet import UniversalDetector
 
 import dt.dict_repo_list
+from dt.utils.paths import logs_base_path
 
 
 def remove_file_if_exists(file: os.path) -> None:
@@ -13,6 +15,18 @@ def remove_file_if_exists(file: os.path) -> None:
     """
     if os.path.exists(file):
         print(f"File {file} exists, removing file.")
+        os.remove(file)
+
+
+def remove_log_files() -> None:
+    """
+    Remove all the log files.
+    """
+    hc_logs_path = os.path.join(logs_base_path(), "log_results_*")
+    log_files_list = glob.glob(hc_logs_path)
+    if log_files_list:
+        print(f"Log files exist, removing {len(log_files_list)} files.")
+    for file in log_files_list:
         os.remove(file)
 
 

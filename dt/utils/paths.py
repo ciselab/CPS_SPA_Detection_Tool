@@ -9,7 +9,9 @@ def make_dir_if_not_exists(path_name: os.path) -> None:
 
 
 def dt_data_base_path() -> os.path:
-    return os.path.join(os.path.expanduser("~"), "CPS_SPA_Detection_Tool")
+    _data_base_path = os.path.join(os.path.expanduser("~"), "CPS_SPA_Detection_Tool")
+    make_dir_if_not_exists(_data_base_path)
+    return _data_base_path
 
 
 def results_base_path() -> os.path:
@@ -25,13 +27,14 @@ def logs_base_path() -> os.path:
 
 
 def intermediate_results_base_path() -> os.path:
-    return os.path.join(results_base_path(), "intermediate")
+    _intermediate_results_base_path = os.path.join(results_base_path(),"intermediate")
+    make_dir_if_not_exists(_intermediate_results_base_path)
+    return _intermediate_results_base_path
 
 
 def project_results_path(project_name: str) -> os.path:
     _project_results_path = os.path.join(results_base_path(), project_name)
     make_dir_if_not_exists(_project_results_path)
-    print(f'{_project_results_path=}')
     return _project_results_path
 
 
