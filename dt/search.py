@@ -17,7 +17,7 @@ import dt.dict_repo_list
 from dt import patterns
 from dt.utils.csv import CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists, get_file_encoding, remove_log_files
-from dt.utils.paths import results_base_path, project_results_path, logs_base_path
+from dt.utils.paths import results_base_path, project_results_path, logs_base_path, EnsurePathExistence
 
 
 # GLOBAL PROCESSING UTILITIES
@@ -35,6 +35,7 @@ class Project:
     def base_directory(self):
         return dt.dict_repo_list.projects[self.name]["local"]
 
+    @EnsurePathExistence
     def result_path(self):
         return os.path.join(results_base_path(), self.name)
 
