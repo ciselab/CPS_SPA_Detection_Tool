@@ -17,8 +17,7 @@ import dt.dict_repo_list
 from dt import patterns
 from dt.utils.csv import CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists, get_file_encoding, remove_log_files
-from dt.utils.paths import results_base_path, project_results_path, make_dir_if_not_exists, \
-    logs_base_path
+from dt.utils.paths import results_base_path, project_results_path, logs_base_path
 
 
 # GLOBAL PROCESSING UTILITIES
@@ -71,34 +70,6 @@ class Project:
 current_project = Project()
 
 
-def history_search_15(pattern_name: str) -> None:
-    """
-    Start the history search with received pattern.
-
-    Args:
-        pattern_name: Name of the pattern
-    """
-    for project_name in dt.dict_repo_list.projects.keys():
-        global current_project
-        current_project = Project(name=project_name, pattern_name=pattern_name,
-                                  url_project=dt.dict_repo_list.projects[project_name]["local"],
-                                  sha_project=dt.dict_repo_list.projects[project_name]["sha"])
-        history_search()
-
-
-def search_current(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print(f"Start time: {current_time}")
-    dt.dict_repo_list.build_repo_dict()
-    dt.dict_repo_list.build_repo_dict_sha()
-    initial_search()
-    print(f"Started at: {current_time}")
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print(f"End time: {current_time}")
-
-
 # INITIAL/GENERAL PROCESSING
 def initial_search() -> None:
     # Set up results output file
@@ -126,14 +97,13 @@ def initial_search() -> None:
 def write_pattern_data(project_name, project_hash, pattern_name, pattern_occurrences):
     data_path = os.path.join(results_base_path(), f"pattern_data.csv")
     writer = CsvWriter(data_path)
-    print(f'[{project_name}] {pattern_occurrences} occurrences for {pattern_name}')
+    print(f'[{project_name}] {pattern_occurrences} possible occurrences for {pattern_name}')
     writer.writerow([project_name, project_hash, pattern_name, pattern_occurrences])
 
 
 def process_file(filename: os.path, encoding: str) -> Tuple[int, List]:
     abs_path = os.path.join(current_project.base_directory(), filename)
     return ast_cpp_antlr.parse_file(abs_path, encoding, current_project.pattern_name)
-    # return ast_cpp_antlr.main(None, abs_path, encoding, current_project.pattern_name)
 
 
 # HISTORY PROCESSING
@@ -173,10 +143,7 @@ def process_file_history(relative_file_path: os.path, encoding: str, initial_res
             relative_file_path = file_history[commit_hash]
 
         repo.checkout(commit_hash)
-
         _, results = process_file(relative_file_path, encoding)
-        # print(f"{newer_commit_hash=} {newer_results=}")
-        # print(f"{commit_hash=} {results=}\n")
 
         comp = DeepDiff(newer_results, results, ignore_order=True)
         if comp:
@@ -242,83 +209,6 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
     filename_history = parse_git_log(log_file)
     os.chdir(current_working_dir)
     return filename_history
-
-
-def print_found_results(path_long: str, compared_hash: str, each_hash: str, var_name_each: str, var_value_each,
-                        matching_patterns, current_prev_line: str, result_prev_line: str, each_line: str) -> None:
-    """
-    Printing results in the console, same as is written to a file.
-    Mainly used in development stage.
-    Args:
-        path_long: Location of the file (full path).
-        compared_hash: Hash from which the var is compared to.
-        each_hash: Current hash of the commit.
-        var_name_each: Name current variable.
-        var_value_each: Value of the variable to be compared with.
-        matching_patterns: Matched pattern.
-        current_prev_line: Currently analysed previous code line.
-        result_prev_line: Stored from previous analysis stage.
-        each_line: Current code line.
-    """
-    print(f"project name: {current_project.name}")
-    print(f"file name: {path_long}")
-    print(f"compared hash: {compared_hash}")
-    print(f"hash: {each_hash}")
-    print(f"var name: {var_name_each}")
-    print(f"var value 1: {var_value_each}")
-    print(f"var value 2: {matching_patterns}")
-    print(f"previous line current: {current_prev_line.strip()}")
-    print(f"previous line stored: {result_prev_line.strip()}")
-    print(f"current line: {each_line}")
-
-
-def hash_projects_to_file() -> None:
-    """
-    Writes projects current hash to file for backup purposes.
-    """
-    hash_file = os.path.join(results_base_path(), "intermediate", "hash_projects.txt")
-    make_dir_if_not_exists(os.path.dirname(hash_file))
-    with open(hash_file, 'w') as writer:
-        for project in dt.dict_repo_list.projects.values():
-            writer.write(f"{project['local']} , {project['sha']}\n")
-
-
-def search_current_history(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
-    """ BUILDING UP """
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print(f"Start time: {current_time}")
-
-    print("Starting")
-    dt.dict_repo_list.build_repo_dict()
-    dt.dict_repo_list.build_repo_dict_sha()
-    hash_projects_to_file()  # backup
-
-    for name in dt.dict_repo_list.projects.keys():
-        global current_project
-        current_project = Project(name=name, pattern_name=pattern_name,
-                                  url_project=dt.dict_repo_list.projects[name]["local"],
-                                  sha_project=dt.dict_repo_list.projects[name]["sha"])
-
-        """ REMOVING FILES """
-        remove_file_if_exists(current_project.output_filename())
-        remove_log_files()
-
-        """ START """
-        print(f"[{current_project.name}] Start reading")
-        # csv_writer = CsvWriter(current_project.output_filename())
-
-        # csv_read(csv_writer, pattern_name)
-        history_search()
-        print(f"[{current_project.name}] Done")
-
-    """ DONE """
-    print(f"---COMPLETED ALL {len(dt.dict_repo_list.projects.keys())} PROJECTS---")
-    remove_log_files()
-    print(f"Started at: {current_time}")
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print(f"End time: {current_time}")
 
 
 # Main Entry Point
