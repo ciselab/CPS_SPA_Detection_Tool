@@ -1,9 +1,9 @@
 import glob
 import os
-from typing import Optional, List, Dict
+from typing import Optional
+
 from chardet import UniversalDetector
 
-import dt.dict_repo_list
 from dt.utils.paths import logs_base_path
 
 
@@ -22,11 +22,10 @@ def remove_log_files() -> None:
     """
     Remove all the log files.
     """
-    hc_logs_path = os.path.join(logs_base_path(), "log_results_*")
-    log_files_list = glob.glob(hc_logs_path)
-    if log_files_list:
-        print(f"Log files exist, removing {len(log_files_list)} files.")
-    for file in log_files_list:
+    log_files = glob.glob(os.path.join(logs_base_path(), "history_*.log"))
+    if log_files:
+        print(f"Log files exist, removing {len(log_files)} files.")
+    for file in log_files:
         os.remove(file)
 
 
@@ -97,45 +96,3 @@ def __detect_file_encoding(file: os.path) -> Optional[str]:
         In case chardet is not able to detect which encoding was used.
         """
         print(f"UnicodeDecodeError: {file}")
-
-
-def get_project_files(project_name: str, language: str = 'cpp') -> set:
-    """
-    Goes through the dirs, noted in dt.dict_repo_list.projects_modules, and returns the files of interest.
-
-    Args:
-        project_name: Name (key) of the project.
-        language: the programming language to find files for.
-
-    Returns:
-        Set of the files (full path).
-    """
-    file_set = set()
-    # noinspection SpellCheckingInspection
-    file_extensions: Dict[str, List[str]] = {
-        'cpp': ['.c', '.cpp', '.h', '.hpp', '.cxx', '.cc', '.hh', '.h++'],
-    }
-    # search_in_ext = ['.c', '.cpp', '.h', '.hpp', '.cxx', '.hxx', '.cc', '.hh', '.h++',
-    #                  '.ipp', '.inl', '.txx', '.tpp', '.tpl',
-    #                  '.c++m', '.cppm', '.cxxm', '.kt',
-    #                  '.java', '.go', '.py', '.rb', '.rs',
-    #                  '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
-    project_directory = dt.dict_repo_list.projects[project_name]["local"]
-
-    for top_level, recursive in dt.dict_repo_list.projects_modules[project_name]:
-        directory_path = os.path.join(project_directory, top_level)
-        for root, dirs, files in os.walk(directory_path, topdown=True):
-            if not recursive:
-                dirs.clear()
-            for filename in files:
-                file_path = os.path.join(root, filename)
-                _, filename_ext = os.path.splitext(filename)
-                if filename_ext.lower() in file_extensions[language]:
-                    file_set.add(file_path)
-
-    return file_set
-
-
-def intermediary_results_filename(project_name: str, pattern_name: str) -> str:
-    return f"{pattern_name}_{project_name}_results.csv"
-

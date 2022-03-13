@@ -7,13 +7,6 @@ class MagicalWaitingNumber:
     def name(cls):
         return "mwn"
 
-    def __str__(self):
-        return __class__.name()
-
-    def __eq__(self, other):
-        if isinstance(other, str):
-            return str(self) == other
-
 
 class HardCodedFineTuning:
     @classmethod
