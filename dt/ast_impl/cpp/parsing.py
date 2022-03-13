@@ -161,6 +161,7 @@ class DtCppParserListener(CPP14ParserListener):
         for node in token_nodes:
             parsed_value: Union[int, float] = 0
             node_value: str = node.getText()
+            node_value = node_value.replace("\'", "")  # remove quote digit separator
             if node.symbol.type == CPP14Parser.IntegerLiteral:
                 # Remove type specifier suffixes, see:
                 # https://en.cppreference.com/w/cpp/language/integer_literal
