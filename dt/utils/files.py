@@ -16,23 +16,23 @@ def remove_file_if_exists(file: os.path) -> None:
         os.remove(file)
 
 
-def get_file_encoding(file: os.path, encoding: str = 'utf-8') -> str:
+def get_file_encoding(file: os.path, _encoding: str = 'utf-8') -> str:
     """
     Read a file and apply the correct encoding to read the file.
 
     Args:
         file: Path to the file to be read.
-        encoding: current encoding.
+        _encoding: encoding to match against.
 
     Returns:
         encoding: Returns the file's encoding.
     """
     common_encodings = ['utf-8', 'Windows-1252']
-    encoding_index = common_encodings.index(encoding)
+    encoding_index = common_encodings.index(_encoding)
 
     try:
-        with open(file, 'r', encoding=encoding):
-            print(f"encoding: {encoding}")
+        with open(file, 'r', encoding=_encoding):
+            pass
     except UnicodeDecodeError:
         """
         Some files are using an encoding that cannot be immediately read.
@@ -46,7 +46,7 @@ def get_file_encoding(file: os.path, encoding: str = 'utf-8') -> str:
             return get_file_encoding(file, common_encodings[encoding_index + 1])
     except Exception as e:
         print(f"Different error encountered: {file}, error: {e}")
-    return encoding
+    return _encoding
 
 
 def __detect_file_encoding(file: os.path) -> Optional[str]:

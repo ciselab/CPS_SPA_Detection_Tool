@@ -4,7 +4,7 @@ Starting both search_current.py and search_current_history.py one after another.
 """
 
 from datetime import datetime
-from dt import search_current
+from dt import search_current, patterns
 from dt import search_current_history
 # from dt import graph_results
 
@@ -17,8 +17,8 @@ def main() -> None:
     print("---STARTING---")
 
     print("[SLEEPS] START")
-    search_current.main("sleeps")
-    search_current_history.main("sleeps")
+    search_current.main(patterns.MAGICAL_WAITING_NUMBER)
+    search_current_history.main(patterns.MAGICAL_WAITING_NUMBER)
     # graph_results.main("sleeps")
     print("[SLEEPS] DONE")
     #

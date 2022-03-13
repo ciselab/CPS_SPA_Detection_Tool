@@ -16,11 +16,10 @@ from deepdiff import DeepDiff
 import dt.ast_cpp_antlr as ast_cpp_antlr
 import dt.dict_repo_list
 import dt.search_current
+from dt import patterns
 from dt.utils.csv import write_row, CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists
 from dt.utils.paths import results_base_path, make_dir_if_not_exists, project_results_path, logs_base_path
-
-hc_counter = 0
 
 
 @dataclass
@@ -177,10 +176,10 @@ def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, 
                           encoding_file):
     number_results: int
     result: List[Tuple[int, str, str]]
-    print(f'{path_long=}')
     number_results, result = ast_cpp_antlr.main(csv_wr_res, path_long, pattern_name, previous_result, current_hash,
                                                 previous_hash)
     if result != 0:
+        path_short = os.path.relpath(path_long, start=current_project.url_project)
         # comp = set(results_list).symmetric_difference(set(result))
         # comp = set(results_list) ^ (set(result))
         # comp = [item for item in results_list if item not in result]
@@ -196,7 +195,7 @@ def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, 
             # print(f"{previous_result=}")
             # print(f"{previous_hash=}")
             # print(f"{comp=}\n")
-            write_row(csv_wr_res, path_long, result, encoding_file, previous_result, current_hash, previous_hash,
+            write_row(csv_wr_res, path_short, result, encoding_file, previous_result, current_hash, previous_hash,
                       caller='history')
             return result
         else:
@@ -224,9 +223,6 @@ def analyse_file_checkout(dict_results: dict, path_long: str, results: str, enco
         encoding_file = None
 
     results_list = ast.literal_eval(results)
-
-    global hc_counter
-    hc_counter = hc_counter + 1
 
     previous_hash = project_hash
 
@@ -267,7 +263,7 @@ def hash_projects_to_file() -> None:
             writer.write(f"{project['local']} , {project['sha']}\n")
 
 
-def main(pattern_name: str = "sleeps") -> None:
+def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
     """ BUILDING UP """
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -285,9 +281,7 @@ def main(pattern_name: str = "sleeps") -> None:
                                   sha_project=dt.dict_repo_list.projects[name]["sha"])
 
         """ REMOVING FILES """
-        hc_final_results_path = current_project.get_output_filename()
-        remove_file_if_exists(hc_final_results_path)
-
+        remove_file_if_exists(current_project.get_output_filename())
         remove_log_files()
 
         """ START """
