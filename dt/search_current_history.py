@@ -3,7 +3,6 @@
 Searching through previous versions of each file.
 """
 import ast
-import csv
 import glob
 import os
 import re
@@ -19,10 +18,8 @@ import dt.dict_repo_list
 import dt.search_current
 from dt.utils.csv import write_row, CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists
-from dt.utils.paths import get_results_base_path, make_dir_if_not_exists
+from dt.utils.paths import results_base_path, make_dir_if_not_exists, project_results_path, logs_base_path
 
-delim_stand = u"\u25A0"
-delim_stand_triangle = u"\u25B2"
 hc_counter = 0
 
 
@@ -34,7 +31,7 @@ class Project:
     sha_project: str = ""
 
     def get_output_filename(self):
-        return os.path.join(get_results_base_path(), f"{self.name}_{self.pattern_name}_final.csv")
+        return os.path.join(project_results_path(self.name), f"{self.name}_{self.pattern_name}_final.csv")
 
 
 current_project = Project()
@@ -50,19 +47,18 @@ def csv_read(csv_wr_res, pattern_name: str) -> None:
         csv_wr_res: csv.writer object, specifies .csv file.
         pattern_name: Used pattern name.
     """
-    result_files = [f for f in os.listdir(get_results_base_path())]
+    result_files = [f for f in os.listdir(project_results_path(current_project.name))]
 
     for counter_files, current_file in enumerate(result_files):
         if not os.path.basename(current_file) == f"{pattern_name}_{current_project.name}_results.csv":
             continue
-        full_file_path = os.path.join(get_results_base_path(), current_file)
-        fieldnames = ['file_name', 'results', 'encoding']
+        full_file_path = os.path.join(project_results_path(current_project.name), current_file)
+        fieldnames = ['file_name', 'encoding', 'result_count', 'results']
         with CsvReader(full_file_path, fieldnames=fieldnames) as reader:
             for row in reader:
                 print(f"{row=}")
-                # dt.dict_repo_list.build_repo_dict()
-                absolute_file_path = row['file_name']
-                relative_file_path = os.path.relpath(absolute_file_path, current_project.url_project)
+                relative_file_path = row['file_name']
+                absolute_file_path = os.path.join(current_project.url_project, relative_file_path)
                 print(f"{row['encoding']=}")
                 check_follow(
                     csv_wr_res,
@@ -140,7 +136,7 @@ def check_follow(csv_wr_res, path_short: str, counter_files: int, path_long: str
     current_wd = os.getcwd()
     dir_path = os.path.join("..", "..", current_project.name)
     os.chdir(dir_path)
-    write_to_file = os.path.join(current_wd, "..", "results", f"log_results_{counter_files}")
+    write_to_file = os.path.join(logs_base_path(), f"log_results_{counter_files}")
     os.system(f"git log --raw --follow {path_short} > {write_to_file}")
 
     dict_results = clean_git_log(write_to_file, encoding)
@@ -181,6 +177,7 @@ def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, 
                           encoding_file):
     number_results: int
     result: List[Tuple[int, str, str]]
+    print(f'{path_long=}')
     number_results, result = ast_cpp_antlr.main(csv_wr_res, path_long, pattern_name, previous_result, current_hash,
                                                 previous_hash)
     if result != 0:
@@ -192,32 +189,18 @@ def searching_using_antlr(csv_wr_res, path_long, pattern_name, previous_result, 
         # print(f"COMPARE: {results_list=}")
         # print(f"\n{comp=}\n")
         if comp:
-            # print("yes\n")
-            print("\nGOING THROUGH THE HISTORY")
-            print(f"{result=}")
-            print(f"{current_hash=}")
-            print("COMPARE WITH")
-            print(f"{previous_result=}")
-            print(f"{previous_hash=}")
-            print(f"{comp=}\n")
+            # print("\nGOING THROUGH THE HISTORY")
+            # print(f"{result=}")
+            # print(f"{current_hash=}")
+            # print("COMPARE WITH")
+            # print(f"{previous_result=}")
+            # print(f"{previous_hash=}")
+            # print(f"{comp=}\n")
             write_row(csv_wr_res, path_long, result, encoding_file, previous_result, current_hash, previous_hash,
                       caller='history')
             return result
         else:
             return previous_result
-
-    # if each_matching_pattern != var_value_dict[result_key]:
-    #     if current_prev_line.strip() == stored_prev_line.strip():
-    #         write_row_results_more(csv_wr_res, current_project.name, path_long,
-    #                                var_hash_dict[result_key], each_hash,
-    #                                var_name, var_value_dict[result_key],
-    #                                each_matching_pattern)
-    #         print_found_results(path_long, var_hash_dict[result_key], each_hash,
-    #                             var_name, var_value_dict[result_key],
-    #                             each_matching_pattern, current_prev_line,
-    #                             stored_prev_line, each_line)
-    #         var_value_dict[result_key] = each_matching_pattern  # New comparison val
-    #         var_hash_dict[result_key] = each_hash
 
 
 def analyse_file_checkout(dict_results: dict, path_long: str, results: str, encoding: str, csv_wr_res,
@@ -265,12 +248,11 @@ def remove_log_files() -> None:
     """
     Remove all the log files.
     """
-    hc_logs_path_part = os.path.join(get_results_base_path(), "log_results_")
-    all_logs = hc_logs_path_part + "*"
-    found_log_files = glob.glob(all_logs)
-    if found_log_files:
-        print(f"Log files exists, removing {len(found_log_files)} files.")
-    for file in found_log_files:
+    hc_logs_path = os.path.join(logs_base_path(), "log_results_*")
+    log_files_list = glob.glob(hc_logs_path)
+    if log_files_list:
+        print(f"Log files exist, removing {len(log_files_list)} files.")
+    for file in log_files_list:
         os.remove(file)
 
 
@@ -278,7 +260,7 @@ def hash_projects_to_file() -> None:
     """
     Writes projects current hash to file for backup purposes.
     """
-    hash_file = os.path.join(get_results_base_path(), "intermediate", "hash_projects.txt")
+    hash_file = os.path.join(results_base_path(), "intermediate", "hash_projects.txt")
     make_dir_if_not_exists(os.path.dirname(hash_file))
     with open(hash_file, 'w') as writer:
         for project in dt.dict_repo_list.projects.values():

@@ -2,12 +2,6 @@
 """
 Common for utils.
 """
-import os
-import pathlib
-
-location = os.path.join(pathlib.Path.home(), "CPS_SPA_Detection_Tool", "results", "repo")
-print(f'{location=}')
-dir_location_report = os.path.join("..", "results")
 
 
 def list_file_content(file_location: str) -> list:

@@ -1,8 +1,6 @@
-import os
 import csv
-from typing import TextIO, List
-
-from dt.utils import dir_location_report
+import os
+from typing import List
 
 
 class CsvUtil:

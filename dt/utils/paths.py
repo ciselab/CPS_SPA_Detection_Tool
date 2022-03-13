@@ -1,29 +1,6 @@
 import os
+
 import dt
-import inspect
-from typing import Optional
-
-from dt.utils import location
-
-
-def build_results_path(project: str) -> Optional[str]:
-    """
-    Building the path to where the results file should be, checks if exists.
-
-    Args:
-        project: Name of the project.
-
-    Returns:
-        - Path to the project results file (containing commit hashes).
-        - None if path does not exists.
-
-    """
-    project_name = str(project + '.txt')
-    hash_file_location = os.path.join(location, project_name)
-    if os.path.exists(hash_file_location):
-        return hash_file_location
-    else:
-        return None
 
 
 def make_dir_if_not_exists(path_name: os.path) -> None:
@@ -31,23 +8,32 @@ def make_dir_if_not_exists(path_name: os.path) -> None:
         os.makedirs(path_name)
 
 
-def get_package_base_path() -> os.path:
-    return os.path.dirname(inspect.getfile(dt))
+def dt_data_base_path() -> os.path:
+    return os.path.join(os.path.expanduser("~"), "CPS_SPA_Detection_Tool")
 
 
-def get_results_base_path() -> os.path:
-    return os.path.join(get_package_base_path(), "..", "results")
+def results_base_path() -> os.path:
+    path = os.path.join(dt_data_base_path(), "results")
+    make_dir_if_not_exists(path)
+    return path
 
 
-def get_intermediate_results_base_path() -> os.path:
-    return os.path.join(get_results_base_path(), "intermediate")
+def logs_base_path() -> os.path:
+    path = os.path.join(dt_data_base_path(), "logs")
+    make_dir_if_not_exists(path)
+    return path
 
 
-def get_project_results_path(project_name: str) -> os.path:
-    project_results_path = os.path.join(get_results_base_path(), project_name)
-    make_dir_if_not_exists(project_results_path)
-    return project_results_path
+def intermediate_results_base_path() -> os.path:
+    return os.path.join(results_base_path(), "intermediate")
 
 
-if __name__ == "__main__":
-    print(f'{get_package_base_path()=}')
+def project_results_path(project_name: str) -> os.path:
+    _project_results_path = os.path.join(results_base_path(), project_name)
+    make_dir_if_not_exists(_project_results_path)
+    print(f'{_project_results_path=}')
+    return _project_results_path
+
+
+def project_base_path(project_name: str) -> os.path:
+    return dt.dict_repo_list.projects[project_name]["local"]

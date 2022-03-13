@@ -120,3 +120,8 @@ def get_project_files(project_name: str, language: str = 'cpp') -> set:
                     file_set.add(file_path)
 
     return file_set
+
+
+def intermediary_results_filename(project_name: str, pattern_name: str) -> str:
+    return f"{pattern_name}_{project_name}_results.csv"
+
