@@ -6,7 +6,7 @@ Create a graph of the results.
 import os
 import glob
 from functools import partial
-from dt import graph_creation
+from dt import graph_creation, patterns
 
 
 def raw_line_count(filename: str) -> int:
@@ -45,7 +45,7 @@ def find_files_to_graph(hc_logs_path_part: str) -> dict:
     return data_results_sleeps
 
 
-def main(pattern_name: str = "sleeps") -> None:
+def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
     print("---START CREATING GRAPHS---")
     print("First round of results")
     graph_creation.create_graph(find_files_to_graph(os.path.join("..", "results", f"{pattern_name}_")),

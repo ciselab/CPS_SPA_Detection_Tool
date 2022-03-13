@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-Starting both search_current.py and search_current_history.py one after another.
+Starting both search.py and search_current_history.py one after another.
 """
 
 from datetime import datetime
-from dt import search_current
-from dt import search_current_history
+from dt import search, patterns
 # from dt import graph_results
 
 
@@ -17,16 +16,15 @@ def main() -> None:
     print("---STARTING---")
 
     print("[SLEEPS] START")
-    search_current.main("sleeps")
-    search_current_history.main("sleeps")
+    search.main(patterns.MAGICAL_WAITING_NUMBER)
     # graph_results.main("sleeps")
     print("[SLEEPS] DONE")
     #
-    # print("[HARD CODED FINE TUNING] START")
-    # search_current.main("hcft")
+    print("[HARD CODED FINE TUNING] START")
+    search.main(patterns.HARDCODED_FINE_TUNING)
     # search_current_history.main("hcft")
     # # graph_results.main("hcft")
-    # print("[HARD CODED FINE TUNING] DONE")
+    print("[HARD CODED FINE TUNING] DONE")
     #
     # print("[SLEEPS VAR NAME] START")
     # search_current.main("sleeps_var_name")

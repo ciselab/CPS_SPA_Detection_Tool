@@ -28,16 +28,16 @@ Large projects: apollo, ardupilot, openpilot, PX4-Autopilot
 """
 # noinspection SpellCheckingInspection
 projects = {
-	"AirSim": {"local": None, "remote": "https://github.com/microsoft/AirSim", "sha": None},
+	# "AirSim": {"local": None, "remote": "https://github.com/microsoft/AirSim", "sha": None},
 	# "android_app_manager": {"local": None, "remote": "https://github.com/ros-android/android_app_manager", "sha": None},
 	# "android_camera_driver": {"local": None, "remote": "https://github.com/ros-android/android_camera_driver", "sha": None},
 	# "android_sensors_driver": {"local": None, "remote": "https://github.com/ros-android/android_sensors_driver", "sha": None},
 	# "apollo": {"local": None, "remote": "https://github.com/ApolloAuto/apollo", "sha": None},
-	"Arduino": {"local": None, "remote": "https://github.com/esp8266/Arduino", "sha": None},
+	# "Arduino": {"local": None, "remote": "https://github.com/esp8266/Arduino", "sha": None},
 	# "arduino-esp32": {"local": None, "remote": "https://github.com/espressif/arduino-esp32", "sha": None},
-	"Arduino-IRremote": {"local": None, "remote": "https://github.com/z3t0/Arduino-IRremote", "sha": None},
-	"ArduinoJson": {"local": None, "remote": "https://github.com/bblanchon/ArduinoJson", "sha": None},
-	"ardumower": {"local": None, "remote": "https://github.com/Ardumower/ardumower", "sha": None},
+	# "Arduino-IRremote": {"local": None, "remote": "https://github.com/z3t0/Arduino-IRremote", "sha": None},
+	# "ArduinoJson": {"local": None, "remote": "https://github.com/bblanchon/ArduinoJson", "sha": None},
+	# "ardumower": {"local": None, "remote": "https://github.com/Ardumower/ardumower", "sha": None},
 	# "ardupilot": {"local": None, "remote": "https://github.com/ArduPilot/ardupilot", "sha": None},
 	# "BeamNGpy": {"local": None, "remote": "https://github.com/BeamNG/BeamNGpy.git", "sha": None},
 	# "carla": {"local": None, "remote": "https://github.com/carla-simulator/carla", "sha": None},
@@ -68,7 +68,7 @@ projects = {
 	# "turtlebot": {"local": None, "remote": "https://github.com/turtlebot/turtlebot", "sha": None},
 	# "turtlebot3": {"local": None, "remote": "https://github.com/ROBOTIS-GIT/turtlebot3", "sha": None},
 	# "Valetudo": {"local": None, "remote": "https://github.com/Hypfer/Valetudo", "sha": None},
-	# "Test_CPS_SPA_DT": {"local": None, "remote": "https://github.com/IvDinten/Test_CPS_SPA_DT/tree/main", "sha": None},
+	"Test_CPS_SPA_DT": {"local": None, "remote": "https://github.com/IvDinten/Test_CPS_SPA_DT/tree/main", "sha": None},
 	# "AirSim": {"local": os.path.join("D:", "\GitHub", "AirSim"), "remote": "https://github.com/microsoft/AirSim", "sha": None}
 }
 
