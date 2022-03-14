@@ -31,13 +31,15 @@ def parse_ast(tree: CPP14Parser.TranslationUnitContext) -> TranslationUnit:
     return listener.get_translation_unit()
 
 
-def parse_file(abs_path, encoding, pattern_name) -> Tuple[int, List]:
+def parse_file(abs_path, encoding, pattern_name, skip_failed_encoding: int = 0) -> Tuple[int, List]:
     """
     Parses a CPP file using Antlr4 with the given encoding and antipattern name.
 
     :param abs_path: An absolute path to the file to parse
     :param encoding: The file encoding
     :param pattern_name: The pattern we wish to gather data for
+    :param skip_failed_encoding: Only used when get_file_encoding returns an encoding,
+        but Antlr4's FileStream cannot use it.
     :return: a Tuple containing the number of results and a List of those results
     """
     count_results: int = 0
@@ -66,8 +68,9 @@ def parse_file(abs_path, encoding, pattern_name) -> Tuple[int, List]:
             print(f"{pattern_name=} NOT IMPLEMENTED")
     except UnicodeDecodeError:
         print(f"[ERROR] UnicodeDecodeError: {abs_path} encoding={encoding}")
-        encoding = get_file_encoding(abs_path)
-        return parse_file(abs_path, encoding, pattern_name)
+        encoding = get_file_encoding(abs_path, skip_failed_encoding)
+        skip_failed_encoding = skip_failed_encoding + 1
+        return parse_file(abs_path, encoding, pattern_name, skip_failed_encoding)
     except FileNotFoundError as e:
         error_fnf = os.path.join(logs_base_path(), "antlr_error_file_not_found.log")
         with open(error_fnf, 'a') as ef_file:

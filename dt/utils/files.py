@@ -29,19 +29,22 @@ def remove_log_files() -> None:
         os.remove(file)
 
 
-def get_file_encoding(file: os.path, _encoding: str = 'utf-8') -> str:
+def get_file_encoding(file: os.path, _skip_failed_encoding: int = 0, _encoding: str = 'utf-8') -> str:
     """
     Read a file and apply the correct encoding to read the file.
 
     Args:
         file: Path to the file to be read.
         _encoding: encoding to match against.
+        _skip_failed_encoding: Only used when get_file_encoding returns an encoding,
+         but Antlr4's FileStream cannot use it.
 
     Returns:
         encoding: Returns the file's encoding.
     """
-    common_encodings = ['utf-8', 'Windows-1252']
+    common_encodings = ['utf-8', 'Windows-1252', 'ISO-8859-1']
     encoding_index = common_encodings.index(_encoding)
+    _encoding = common_encodings[encoding_index + _skip_failed_encoding]
 
     try:
         with open(file, 'r', encoding=_encoding):
@@ -49,14 +52,14 @@ def get_file_encoding(file: os.path, _encoding: str = 'utf-8') -> str:
     except UnicodeDecodeError:
         """
         Some files are using an encoding that cannot be immediately read.
-        Most of these files, seem to be using Windows-1252 followed by utf-8 encoding.
-        To keep the duration of this script as short as possible, this encoding will be tried first.
+        To keep the duration of this script as short as possible a selection of encodings
+        will be tried first.
         """
         if encoding_index == len(common_encodings) - 1:
-            # we tried the last one
+            # we tried the last one, chardet will try to detect the encoding
             return __detect_file_encoding(file)
         else:
-            return get_file_encoding(file, common_encodings[encoding_index + 1])
+            return get_file_encoding(file, _skip_failed_encoding, common_encodings[encoding_index + 1])
     except Exception as e:
         print(f"Different error encountered: {file}, error: {e}")
     return _encoding
