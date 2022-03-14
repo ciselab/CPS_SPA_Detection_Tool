@@ -31,7 +31,7 @@ def parse_ast(tree: CPP14Parser.TranslationUnitContext) -> TranslationUnit:
     return listener.get_translation_unit()
 
 
-def parse_file(abs_path, encoding, pattern_name, skip_failed_encoding: int = 0) -> Tuple[int, List]:
+def parse_file(abs_path: os.path, encoding: str, pattern_name: str, skip_failed_encoding: int = 0) -> Tuple[int, List]:
     """
     Parses a CPP file using Antlr4 with the given encoding and antipattern name.
 

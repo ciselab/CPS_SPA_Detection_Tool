@@ -56,7 +56,7 @@ def get_file_encoding(file: os.path, _skip_failed_encoding: int = 0, _encoding: 
         will be tried first.
         """
         if encoding_index == len(common_encodings) - 1:
-            # we tried the last one, chardet will try to detect the encoding
+            # Tried the last one, chardet will try to detect the encoding
             return __detect_file_encoding(file)
         else:
             return get_file_encoding(file, _skip_failed_encoding, common_encodings[encoding_index + 1])

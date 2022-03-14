@@ -20,15 +20,11 @@ class TranslationUnit:
                 results.append((val_name, str(val), str(line), func_name))
         return results, len(results)
 
-    # here
-
     def get_identifiers_with_numeric_values(self):
-        # print("HERE")
         results = []
         for current_func_name, current_func_def in self.functions.items():
             current_func_body = current_func_def.func_body
             for identifier in current_func_body.get_identifiers_with_numeric_values():
-                # print(f"{identifier=}")
                 line, val_name, val = identifier.get_value()
                 results.append((val_name, str(val), str(line), current_func_name))
         return results, len(results)
