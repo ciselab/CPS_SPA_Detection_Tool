@@ -42,7 +42,7 @@ def get_file_encoding(file: os.path, _skip_failed_encoding: int = 0, _encoding: 
     Returns:
         encoding: Returns the file's encoding.
     """
-    common_encodings = ['utf-8', 'Windows-1252', 'ISO-8859-1']
+    common_encodings = ['utf-8', 'Windows-1252', 'ISO-8859-1', 'cp437']
     encoding_index = common_encodings.index(_encoding)
     _encoding = common_encodings[encoding_index + _skip_failed_encoding]
 
