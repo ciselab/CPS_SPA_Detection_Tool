@@ -38,14 +38,14 @@ projects = {
 	"ardupilot": {"local": None, "remote": "https://github.com/ArduPilot/ardupilot", "sha": None},
 	"carla": {"local": None, "remote": "https://github.com/carla-simulator/carla", "sha": None},
 	"CoppeliaSimLib": {"local": None, "remote": "https://github.com/CoppeliaRobotics/CoppeliaSimLib", "sha": None},
-	# "GAAS": {"local": None, "remote": "https://github.com/generalized-intelligence/GAAS", "sha": None},
-	# "openpilot": {"local": None, "remote": "https://github.com/commaai/openpilot", "sha": None},
-	# "PiMower": {"local": None, "remote": "https://github.com/rohmer/PiMower", "sha": None},
-	# "PX4-Autopilot": {"local": None, "remote": "https://github.com/PX4/Firmware", "sha": None},
-	# "qgroundcontrol": {"local": None, "remote": "https://github.com/mavlink/qgroundcontrol", "sha": None},
-	# "rfid": {"local": None, "remote": "https://github.com/miguelbalboa/rfid", "sha": None},
-	# "stofzuigerrobot": {"local": None, "remote": "https://github.com/alvitawa/stofzuigerrobot", "sha": None},
-	# "turtlebot": {"local": None, "remote": "https://github.com/turtlebot/turtlebot", "sha": None},
+	"GAAS": {"local": None, "remote": "https://github.com/generalized-intelligence/GAAS", "sha": None},
+	"openpilot": {"local": None, "remote": "https://github.com/commaai/openpilot", "sha": None},
+	"PiMower": {"local": None, "remote": "https://github.com/rohmer/PiMower", "sha": None},
+	"PX4-Autopilot": {"local": None, "remote": "https://github.com/PX4/Firmware", "sha": None},
+	"qgroundcontrol": {"local": None, "remote": "https://github.com/mavlink/qgroundcontrol", "sha": None},
+	"rfid": {"local": None, "remote": "https://github.com/miguelbalboa/rfid", "sha": None},
+	"stofzuigerrobot": {"local": None, "remote": "https://github.com/alvitawa/stofzuigerrobot", "sha": None},
+	"turtlebot": {"local": None, "remote": "https://github.com/turtlebot/turtlebot", "sha": None},
 }
 
 # non_cpp_projects = {

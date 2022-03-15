@@ -1,0 +1,17 @@
+https://github.com/microsoft/AirSim.git
+https://github.com/ApolloAuto/apollo.git
+https://github.com/esp8266/Arduino.git
+https://github.com/z3t0/Arduino-IRremote.git
+https://github.com/bblanchon/ArduinoJson.git
+https://github.com/Ardumower/ardumower.git
+https://github.com/ArduPilot/ardupilot.git
+https://github.com/carla-simulator/carla.git
+https://github.com/CoppeliaRobotics/CoppeliaSimLib.git
+https://github.com/generalized-intelligence/GAAS.git
+https://github.com/commaai/openpilot.git
+https://github.com/rohmer/PiMower.git
+https://github.com/PX4/Firmware.git
+https://github.com/mavlink/qgroundcontrol.git
+https://github.com/miguelbalboa/rfid.git
+remote": "https://github.com/alvitawa/stofzuigerrobot.git
+https://github.com/turtlebot/turtlebot.git
