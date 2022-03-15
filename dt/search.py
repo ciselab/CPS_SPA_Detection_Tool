@@ -116,9 +116,12 @@ def history_search() -> None:
     fieldnames = ['filename', 'encoding', 'result_count', 'results']
     with CsvReader(result_file, fieldnames=fieldnames) as reader:
         for row in reader:
+            # Ignore files where no initial results were found
+            if row['result_count'] == '0':
+                continue
             relative_file_path = row['filename']
-            encoding = row["encoding"]
-            initial_results = ast.literal_eval(row["results"])
+            encoding = row['encoding']
+            initial_results = ast.literal_eval(row['results'])
             process_file_history(relative_file_path, encoding, initial_results)
 
 
