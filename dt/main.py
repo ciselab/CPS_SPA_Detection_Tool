@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Starting both search.py and search_current_history.py one after another.
+Starting the script for the selected AP.
 """
 
 from datetime import datetime

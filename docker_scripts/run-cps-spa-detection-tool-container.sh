@@ -16,7 +16,7 @@ EXTRA_MOUNT=""
 if [ -n "$1" ]; then
     if [ -d "$1" ]; then
         # The input argument should be an absolute path 
-        EXTRA_MOUNT="--mount type=bind,source=$1,target=/home/user/repo-mining/projects"
+        EXTRA_MOUNT="--mount type=bind,source=$1,target=/home/user/projects"
     fi
 fi
 

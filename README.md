@@ -13,13 +13,21 @@ Execute the following script for building the docker image:
 
 ### Docker image container
 The script `docker_scripts/run-cps-spa-detection-tool-container.sh` is created for this task. 
-For running the mining for remote repositories, this script can be executed without any input parameter.
-However, to perform the mining process for local repositories, we should pass the directory of local repositories as the input argument:
+We need to pass the directory of the local repositories as the input argument:
 
 `. docker_scripts/run-cps-spa-detection-tool-container.sh [local_repositories]`
+
+For example `. docker_scripts/run-cps-spa-detection-tool-container.sh ~/projects/`
 
 __! Note:__ This input argument should be an absolute path.
 
 ## Run
-In order to run both scripts in order, run `main.py` (make sure the working directory in the IDE is set to `CPS_SPA_Detection_Tool/dt`).
+Then next step is to execute Docker: `docker exec -it cps-spa-detection-tool-container /bin/bash`,
+the script can also be run immediately by doing instead `docker exec -it cps-spa-detection-tool-container /bin/bash "python dt/main.py"`.
+
+### Run after executing
+In order to run the script, run `main.py` (when using an IDE; make sure the working directory in the IDE is set to `CPS_SPA_Detection_Tool/dt`).
+From the terminal (using Docker), this can be done by `python dt/main.py`.
+
+## Notes
 Running the script with a selection of project can be done by removing/commenting the projects from the dictionary in `dict_repo_list.py` called `projects`.

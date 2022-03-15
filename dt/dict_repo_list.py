@@ -3,12 +3,13 @@
 Data for the test_repository_commits_mining script.
 """
 import os
-import pathlib
+# import pathlib
 from git import Repo
 from collections import namedtuple
 
 """ If the location of the local repositories are on a different location, change this here. """
-location_github = os.path.join(pathlib.Path.home(), "Documents", "GitHub")
+# location_github = os.path.join(pathlib.Path.home(), "Documents", "GitHub")
+location_github = os.path.join(os.path.expanduser("~"), "projects")		# For Docker usage
 
 """
 It is possible to manually set the location to a different path.
@@ -69,7 +70,6 @@ projects = {
 	# "turtlebot3": {"local": None, "remote": "https://github.com/ROBOTIS-GIT/turtlebot3", "sha": None},
 	# "Valetudo": {"local": None, "remote": "https://github.com/Hypfer/Valetudo", "sha": None},
 	# "Test_CPS_SPA_DT": {"local": None, "remote": "https://github.com/IvDinten/Test_CPS_SPA_DT/tree/main", "sha": None},
-	# "AirSim": {"local": os.path.join("D:", "\GitHub", "AirSim"), "remote": "https://github.com/microsoft/AirSim", "sha": None}
 }
 
 
@@ -134,7 +134,7 @@ projects_modules = {
 		Path_Entry("variants", True), Path_Entry("tools", True)
 	],
 	"Arduino-IRremote": [
-		Path_Entry("src", True), Path_Entry("pictures", True)
+		Path_Entry("src", True)
 	],
 	"ArduinoJson": [
 		Path_Entry(".vscode", True), Path_Entry("extras", True), Path_Entry("src", True),
