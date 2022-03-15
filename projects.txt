@@ -13,5 +13,5 @@ https://github.com/rohmer/PiMower.git
 https://github.com/PX4/Firmware.git
 https://github.com/mavlink/qgroundcontrol.git
 https://github.com/miguelbalboa/rfid.git
-remote": "https://github.com/alvitawa/stofzuigerrobot.git
+https://github.com/alvitawa/stofzuigerrobot.git
 https://github.com/turtlebot/turtlebot.git
