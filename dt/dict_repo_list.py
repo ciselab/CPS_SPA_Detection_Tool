@@ -46,6 +46,7 @@ projects = {
 	"rfid": {"local": None, "remote": "https://github.com/miguelbalboa/rfid", "sha": None},
 	"stofzuigerrobot": {"local": None, "remote": "https://github.com/alvitawa/stofzuigerrobot", "sha": None},
 	"turtlebot": {"local": None, "remote": "https://github.com/turtlebot/turtlebot", "sha": None},
+# 	"Test_CPS_SPA_DT": {"local": None, "remote": "https://github.com/IvDinten/Test_CPS_SPA_DT/tree/main", "sha": None},
 }
 
 # non_cpp_projects = {
@@ -72,7 +73,6 @@ projects = {
 # 	"robonomics_contracts": {"local": None, "remote": "https://github.com/airalab/robonomics_contracts", "sha": None},
 # 	"turtlebot3": {"local": None, "remote": "https://github.com/ROBOTIS-GIT/turtlebot3", "sha": None},
 # 	"Valetudo": {"local": None, "remote": "https://github.com/Hypfer/Valetudo", "sha": None},
-# 	"Test_CPS_SPA_DT": {"local": None, "remote": "https://github.com/IvDinten/Test_CPS_SPA_DT/tree/main", "sha": None},
 # }
 
 
