@@ -1,33 +1,23 @@
 FROM    python:3.9.1
 
-RUN adduser --disabled-password --gecos '' user
-USER user
-RUN mkdir ~/cps-spa-detection-tool
-
-# set work directory
+# Add a local user, switch to it and make a new WORKDIR
+RUN     useradd -m -U user
+USER    user
+RUN     mkdir /home/user/cps-spa-detection-tool
 WORKDIR /home/user/cps-spa-detection-tool
+ENV     PATH="/home/user/.local/bin:$PATH"
 
-# Set virtual environment
-ENV VIRTUAL_ENV=venv
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# Install and upgrade python setup utilities
+RUN     python3 -m pip install --user --upgrade pip setuptools wheel
 
-# Install dependencies
-RUN python3 -m pip install --upgrade pip virtualenv
-RUN pip install --upgrade pip setuptools wheel
-
-# Copy files required for setting up virtual env
+# Install the python requirements needed at runtime
 COPY    setup.py /home/user/cps-spa-detection-tool
 COPY    setup.cfg /home/user/cps-spa-detection-tool
 COPY    requirements.txt /home/user/cps-spa-detection-tool
+RUN     pip install --user -r requirements.txt
 
-# Copy files related to testing and reporting
-COPY    pyproject.toml /home/user/cps-spa-detection-tool
-COPY    build_virtual_env.sh /home/user/cps-spa-detection-tool
-
-# Copy the module
+# Copy the module and install
 COPY    /dt /home/user/cps-spa-detection-tool/dt
 COPY    /tests /home/user/cps-spa-detection-tool/tests
+RUN     pip install --user --no-use-pep517 --editable /home/user/cps-spa-detection-tool
 
-RUN pip install -r requirements.txt
-RUN pip install --editable /home/user/cps-spa-detection-tool

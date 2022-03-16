@@ -1,5 +1,5 @@
 # Stop and remove the previous docker container
-CHECK_CONTAINERS=$(docker container ls | grep 'cps-spa-detection-tool-container')
+CHECK_CONTAINERS=$(docker container ls -a | grep 'cps-spa-detection-tool-container')
 if [ -n "$CHECK_CONTAINERS" ]; then
   echo "Stopping and removing existing container..."
   docker stop cps-spa-detection-tool-container > /dev/null
@@ -22,6 +22,7 @@ fi
 
 # Run a new docker container.
 docker run -dit --name cps-spa-detection-tool-container \
---mount type=bind,source="$(pwd)/results",target=/home/user/repo-mining/results \
+--mount type=bind,source="$(pwd)/results",target=/home/user/cps-spa-detection-tool/results \
 $EXTRA_MOUNT \
+-u $(id -u):$(id -g) \
 cps-spa-detection-tool

@@ -18,7 +18,7 @@ def EnsurePathExistence(func):
 
 @EnsurePathExistence
 def dt_data_path() -> os.path:
-    return os.path.join(os.path.expanduser("~"), "CPS_SPA_Detection_Tool")
+    return os.path.join(os.path.expanduser("~"), "cps-spa-detection-tool")
 
 
 @EnsurePathExistence
