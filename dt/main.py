@@ -3,8 +3,10 @@
 Starting the script for the selected AP.
 """
 
+import os
 from datetime import datetime
 from dt import search, patterns
+from dt.utils import files, paths
 # from dt import graph_results
 
 
@@ -14,6 +16,11 @@ def main() -> None:
     current_time = now.strftime("%H:%M:%S")
     print(f"Start time: {current_time}")
     print("---STARTING---")
+
+    data_path = os.path.join(paths.results_base_path(), f"pattern_data.csv")
+    files.remove_file_if_exists(data_path)
+    data_path = os.path.join(paths.results_base_path(), f"pattern_data_final.csv")
+    files.remove_file_if_exists(data_path)
 
     print("[SLEEPS] START")
     search.main(patterns.MAGICAL_WAITING_NUMBER)

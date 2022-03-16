@@ -92,11 +92,12 @@ def initial_search() -> None:
         current_project.name,
         current_project.sha_project,
         current_project.pattern_name,
-        pattern_occurrences)
+        pattern_occurrences,
+        "pattern_data.csv")
 
 
-def write_pattern_data(project_name, project_hash, pattern_name, pattern_occurrences):
-    data_path = os.path.join(results_base_path(), f"pattern_data.csv")
+def write_pattern_data(project_name, project_hash, pattern_name, pattern_occurrences, file_name: str = "pattern_data.csv"):
+    data_path = os.path.join(results_base_path(), file_name)
     writer = CsvWriter(data_path)
     print(f'[{project_name}] {pattern_occurrences} possible occurrences for {pattern_name}')
     writer.writerow([project_name, project_hash, pattern_name, pattern_occurrences])
@@ -109,6 +110,7 @@ def process_file(filename: os.path, encoding: str) -> Tuple[int, List]:
 
 # HISTORY PROCESSING
 def history_search() -> None:
+    total_pattern_occurrences: int = 0
     # Clear old results
     remove_file_if_exists(current_project.output_filename())
     # Read the intermediate results
@@ -122,10 +124,18 @@ def history_search() -> None:
             relative_file_path = row['filename']
             encoding = row['encoding']
             initial_results = ast.literal_eval(row['results'])
-            process_file_history(relative_file_path, encoding, initial_results)
+            pattern_occurrences = process_file_history(relative_file_path, encoding, initial_results)
+            total_pattern_occurrences = total_pattern_occurrences + pattern_occurrences
+    write_pattern_data(
+        current_project.name,
+        current_project.sha_project,
+        current_project.pattern_name,
+        total_pattern_occurrences,
+        "pattern_data_final.csv")
 
 
-def process_file_history(relative_file_path: os.path, encoding: str, initial_results: List) -> None:
+def process_file_history(relative_file_path: os.path, encoding: str, initial_results: List) -> int:
+    pattern_occurrences: int = 0
     # Open a file writer to append newly found results
     writer = CsvWriter(current_project.output_filename())
     # Gather the current file's history and instantiate a repo object
@@ -149,12 +159,31 @@ def process_file_history(relative_file_path: os.path, encoding: str, initial_res
         repo.checkout(commit_hash)
         _, results = process_file(relative_file_path, encoding)
 
-        comp = DeepDiff(newer_results, results, ignore_order=True)
-        if comp:
-            csv_row = [relative_file_path, encoding,
-                       commit_hash, results,
-                       newer_filename, newer_commit_hash, newer_results]
-            writer.writerow(csv_row)
+        adjusted_newer_results = []
+        if len(newer_results) > 0:
+            for entry in newer_results:
+                line = tuple((entry[0], entry[1], entry[3]))
+                adjusted_newer_results.append(line)
+
+        adjusted_results = []
+        if len(results) > 0:
+            for entry in results:
+                line = tuple((entry[0], entry[1], entry[3]))
+                adjusted_results.append(line)
+
+            comp = DeepDiff(adjusted_newer_results, adjusted_results, ignore_order=True)
+
+            if comp:
+                if 'values_changed' in comp:
+                    pattern_occurrences = pattern_occurrences + len(comp['values_changed'])
+                if 'iterable_item_added' in comp:
+                    pattern_occurrences = pattern_occurrences + len(comp['iterable_item_added'])
+                if 'iterable_item_removed' in comp:
+                    pattern_occurrences = pattern_occurrences + len(comp['iterable_item_removed'])
+                csv_row = [relative_file_path, encoding,
+                           commit_hash, results,
+                           newer_filename, newer_commit_hash, newer_results]
+                writer.writerow(csv_row)
 
         newer_commit_hash = commit_hash
         newer_results = results
@@ -162,6 +191,7 @@ def process_file_history(relative_file_path: os.path, encoding: str, initial_res
 
     # checkout original commit
     repo.checkout(current_project.sha_project)
+    return pattern_occurrences
 
 
 def parse_git_log(log_file: os.path) -> Dict[str, str]:
