@@ -1,7 +1,13 @@
 FROM    python:3.9.1
 
+ARG     LOCAL_UID=1000
+ARG     LOCAL_GID=1000
+
 # Add a local user, switch to it and make a new WORKDIR
-RUN     useradd -m -U user
+RUN     groupadd -g ${LOCAL_GID} -o user
+RUN     useradd -m -g ${LOCAL_GID} -u ${LOCAL_UID} user
+
+# Switch to the created user
 USER    user
 RUN     mkdir /home/user/cps-spa-detection-tool
 WORKDIR /home/user/cps-spa-detection-tool
