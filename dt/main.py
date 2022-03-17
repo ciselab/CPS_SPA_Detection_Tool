@@ -17,9 +17,9 @@ def main() -> None:
     print(f"Start time: {current_time}")
     print("---STARTING---")
 
-    data_path = os.path.join(paths.results_base_path(), f"pattern_data.csv")
+    data_path = os.path.join(paths.results_base_path(), "pattern_data.csv")
     files.remove_file_if_exists(data_path)
-    data_path = os.path.join(paths.results_base_path(), f"pattern_data_final.csv")
+    data_path = os.path.join(paths.results_base_path(), "pattern_data_final.csv")
     files.remove_file_if_exists(data_path)
 
     print("[SLEEPS] START")
