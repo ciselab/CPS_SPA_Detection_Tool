@@ -88,19 +88,17 @@ def initial_search() -> None:
         pattern_occurrences += count
         csv_row = [relative_filename, file_encoding, count, results]
         writer.writerow(csv_row)
-    write_pattern_data(
-        current_project.name,
-        current_project.sha_project,
-        current_project.pattern_name,
-        pattern_occurrences,
-        "pattern_data.csv")
+    write_pattern_data(pattern_occurrences, "pattern_data.csv")
 
 
-def write_pattern_data(project_name, project_hash, pattern_name, pattern_occurrences, file_name: str = "pattern_data.csv"):
-    data_path = os.path.join(results_base_path(), file_name)
+def write_pattern_data(pattern_occurrences, file_name: str = "pattern_data.csv"):
+    data_path = os.path.join(current_project.result_path(), file_name)
     writer = CsvWriter(data_path)
-    print(f'[{project_name}] {pattern_occurrences} possible occurrences for {pattern_name}')
-    writer.writerow([project_name, project_hash, pattern_name, pattern_occurrences])
+    print(f'[{current_project.name}] {pattern_occurrences} possible occurrences '
+          f'for {current_project.pattern_name}')
+    writer.writerow([
+        current_project.name, current_project.sha_project,
+        current_project.pattern_name, pattern_occurrences])
 
 
 def process_file(filename: os.path, encoding: str) -> Tuple[int, List]:
@@ -126,12 +124,7 @@ def history_search() -> None:
             initial_results = ast.literal_eval(row['results'])
             pattern_occurrences = process_file_history(relative_file_path, encoding, initial_results)
             total_pattern_occurrences = total_pattern_occurrences + pattern_occurrences
-    write_pattern_data(
-        current_project.name,
-        current_project.sha_project,
-        current_project.pattern_name,
-        total_pattern_occurrences,
-        "pattern_data_final.csv")
+    write_pattern_data(total_pattern_occurrences, "pattern_data_final.csv")
 
 
 def process_file_history(relative_file_path: os.path, encoding: str, initial_results: List) -> int:
@@ -246,7 +239,7 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 
 # Main Entry Point
-def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
+def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER, projects: List[str] = ["Test_CPS_SPA_DT"]) -> None:
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -255,7 +248,10 @@ def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER) -> None:
     remove_log_files()
 
     global current_project
-    for project_name in dt.dict_repo_list.projects.keys():
+    for project_name in projects:
+        if project_name not in dt.dict_repo_list.projects:
+            continue
+
         current_project = Project(name=project_name,
                                   pattern_name=pattern_name,
                                   url_project=dt.dict_repo_list.projects[project_name]["local"],

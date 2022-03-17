@@ -27,3 +27,4 @@ COPY    /dt /home/user/cps-spa-detection-tool/dt
 COPY    /tests /home/user/cps-spa-detection-tool/tests
 RUN     pip install --user --no-use-pep517 --editable /home/user/cps-spa-detection-tool
 
+ENTRYPOINT ["python3", "dt/main.py"]

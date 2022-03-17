@@ -4,10 +4,10 @@ Starting the script for the selected AP.
 """
 
 import os
+import sys
 from datetime import datetime
 from dt import search, patterns
 from dt.utils import files, paths
-# from dt import graph_results
 
 
 def main() -> None:
@@ -17,33 +17,18 @@ def main() -> None:
     print(f"Start time: {current_time}")
     print("---STARTING---")
 
-    data_path = os.path.join(paths.results_base_path(), "pattern_data.csv")
-    files.remove_file_if_exists(data_path)
-    data_path = os.path.join(paths.results_base_path(), "pattern_data_final.csv")
-    files.remove_file_if_exists(data_path)
+    for project_name in sys.argv[1:]:
+        result_path = paths.project_results_path(project_name)
+        files.remove_file_if_exists(os.path.join(result_path, "pattern_data.csv"))
+        files.remove_file_if_exists(os.path.join(result_path, "pattern_data_final.csv"))
 
-    print("[SLEEPS] START")
-    search.main(patterns.MAGICAL_WAITING_NUMBER)
-    # graph_results.main("sleeps")
-    print("[SLEEPS] DONE")
-    #
+    print("[MAGICAL WAITING NUMBER] START")
+    search.main(patterns.MAGICAL_WAITING_NUMBER, projects=sys.argv[1:])
+    print("[MAGICAL WAITING NUMBER] DONE")
+
     print("[HARD CODED FINE TUNING] START")
-    search.main(patterns.HARDCODED_FINE_TUNING)
-    # search_current_history.main("hcft")
-    # # graph_results.main("hcft")
+    search.main(patterns.HARDCODED_FINE_TUNING, projects=sys.argv[1:])
     print("[HARD CODED FINE TUNING] DONE")
-    #
-    # print("[SLEEPS VAR NAME] START")
-    # search_current.main("sleeps_var_name")
-    # search_current_history.main("sleeps_var_name")
-    # graph_results.main("sleeps_var_name")
-    # print("[SLEEPS VAR NAME] DONE")
-    #
-    # print("[VAR NUMBER] START")
-    # search_current.main("var_with_number")
-    # search_current_history.main("var_with_number")
-    # graph_results.main("var_with_number")
-    # print("[VAR NUMBER] DONE")
 
     print("---FINISHED---")
     print(f"Started at: {current_time}")
