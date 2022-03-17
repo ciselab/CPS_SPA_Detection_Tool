@@ -3,11 +3,9 @@
 Starting the script for the selected AP.
 """
 
-import os
 import sys
 from datetime import datetime
 from dt import search, patterns
-from dt.utils import files, paths
 
 
 def main() -> None:
@@ -17,18 +15,16 @@ def main() -> None:
     print(f"Start time: {current_time}")
     print("---STARTING---")
 
-    for project_name in sys.argv[1:]:
-        result_path = paths.project_results_path(project_name)
-        files.remove_file_if_exists(os.path.join(result_path, "pattern_data.csv"))
-        files.remove_file_if_exists(os.path.join(result_path, "pattern_data_final.csv"))
+    project_name = sys.argv[1]
+    pattern_name = sys.argv[2]
 
-    print("[MAGICAL WAITING NUMBER] START")
-    search.main(patterns.MAGICAL_WAITING_NUMBER, projects=sys.argv[1:])
-    print("[MAGICAL WAITING NUMBER] DONE")
+    pattern_cls = patterns.pattern_lookup.get(pattern_name, None)
+    if pattern_cls is None:
+        return
 
-    print("[HARD CODED FINE TUNING] START")
-    search.main(patterns.HARDCODED_FINE_TUNING, projects=sys.argv[1:])
-    print("[HARD CODED FINE TUNING] DONE")
+    print(f"[{pattern_cls.header_name()}] START")
+    search.main(project_name, pattern_cls.name())
+    print(f"[{pattern_cls.header_name()}] DONE")
 
     print("---FINISHED---")
     print(f"Started at: {current_time}")

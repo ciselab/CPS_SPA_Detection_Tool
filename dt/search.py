@@ -17,7 +17,9 @@ import dt.dict_repo_list
 from dt import patterns
 from dt.utils.csv import CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists, get_file_encoding, remove_log_files
-from dt.utils.paths import results_base_path, project_results_path, logs_base_path, EnsurePathExistence
+from dt.utils.paths import results_base_path, project_results_path
+from dt.utils.paths import logs_base_path, EnsurePathExistence
+from dt.patterns import MAGICAL_WAITING_NUMBER
 
 
 # GLOBAL PROCESSING UTILITIES
@@ -30,7 +32,9 @@ class Project:
     language: str = "cpp"
 
     def output_filename(self):
-        return os.path.join(project_results_path(self.name), f"{self.name}_{self.pattern_name}_final.csv")
+        return os.path.join(
+            project_results_path(self.name),
+            f"{self.pattern_name}_{self.name}_final.csv")
 
     def base_directory(self):
         return dt.dict_repo_list.projects[self.name]["local"]
@@ -40,7 +44,13 @@ class Project:
         return os.path.join(results_base_path(), self.name)
 
     def intermediate_filename(self):
-        return f"{self.pattern_name}_{self.name}_results.csv"
+        return f"{self.pattern_name}_{self.name}_initial.csv"
+
+    def pattern_filename(self, final=False):
+        if final:
+            return f"{self.pattern_name}_pattern_data_final.csv"
+        else:
+            return f"{self.pattern_name}_pattern_data_initial.csv"
 
     def files(self) -> set:
         file_set = set()
@@ -74,7 +84,9 @@ current_project = Project()
 # INITIAL/GENERAL PROCESSING
 def initial_search() -> None:
     # Set up results output file
-    results_path = os.path.join(current_project.result_path(), current_project.intermediate_filename())
+    results_path = os.path.join(
+        current_project.result_path(),
+        current_project.intermediate_filename())
     remove_file_if_exists(results_path)
 
     # Set up writer and counter for intermediate results
@@ -88,7 +100,7 @@ def initial_search() -> None:
         pattern_occurrences += count
         csv_row = [relative_filename, file_encoding, count, results]
         writer.writerow(csv_row)
-    write_pattern_data(pattern_occurrences, "pattern_data.csv")
+    write_pattern_data(pattern_occurrences, current_project.pattern_filename())
 
 
 def write_pattern_data(pattern_occurrences, file_name: str = "pattern_data.csv"):
@@ -112,7 +124,10 @@ def history_search() -> None:
     # Clear old results
     remove_file_if_exists(current_project.output_filename())
     # Read the intermediate results
-    result_file = os.path.join(current_project.result_path(), current_project.intermediate_filename())
+    result_file = os.path.join(
+        current_project.result_path(),
+        current_project.intermediate_filename())
+
     fieldnames = ['filename', 'encoding', 'result_count', 'results']
     with CsvReader(result_file, fieldnames=fieldnames) as reader:
         for row in reader:
@@ -122,9 +137,13 @@ def history_search() -> None:
             relative_file_path = row['filename']
             encoding = row['encoding']
             initial_results = ast.literal_eval(row['results'])
-            pattern_occurrences = process_file_history(relative_file_path, encoding, initial_results)
+            pattern_occurrences = process_file_history(
+                relative_file_path,
+                encoding,
+                initial_results)
+
             total_pattern_occurrences = total_pattern_occurrences + pattern_occurrences
-    write_pattern_data(total_pattern_occurrences, "pattern_data_final.csv")
+    write_pattern_data(total_pattern_occurrences, current_project.pattern_filename(final=True))
 
 
 def process_file_history(relative_file_path: os.path, encoding: str, initial_results: List) -> int:
@@ -239,7 +258,7 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 
 # Main Entry Point
-def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER, projects: List[str] = ["Test_CPS_SPA_DT"]) -> None:
+def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER):
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -248,26 +267,33 @@ def main(pattern_name: str = patterns.MAGICAL_WAITING_NUMBER, projects: List[str
     remove_log_files()
 
     global current_project
-    for project_name in projects:
-        if project_name not in dt.dict_repo_list.projects:
-            continue
+    if project_name not in dt.dict_repo_list.projects.keys():
+        return
 
-        current_project = Project(name=project_name,
-                                  pattern_name=pattern_name,
-                                  url_project=dt.dict_repo_list.projects[project_name]["local"],
-                                  sha_project=dt.dict_repo_list.projects[project_name]["sha"])
-        project_start_time = datetime.now()
-        project_start_time_fmt = project_start_time.strftime("%H:%M:%S")
-        print(f"\t[{current_project.name}] Start time: {project_start_time_fmt}")
-        # Process current revision
-        initial_search()
-        # for interesting files, process history
-        history_search()
-        # Print end time and duration
-        project_end_time = datetime.now()
-        project_end_time_fmt = datetime.now().strftime("%H:%M:%S")
-        print(f"\t[{current_project.name}] End time: {project_end_time_fmt}, "
-              f"duration: {project_end_time - project_start_time}")
+    current_project = Project(name=project_name,
+                              pattern_name=pattern_name,
+                              url_project=dt.dict_repo_list.projects[project_name]["local"],
+                              sha_project=dt.dict_repo_list.projects[project_name]["sha"])
+
+    remove_file_if_exists(os.path.join(
+        current_project.result_path(),
+        current_project.pattern_filename()))
+    remove_file_if_exists(os.path.join(
+        current_project.result_path(),
+        current_project.pattern_filename(final=True)))
+
+    project_start_time = datetime.now()
+    project_start_time_fmt = project_start_time.strftime("%H:%M:%S")
+    print(f"\t[{current_project.name}] Start time: {project_start_time_fmt}")
+    # Process current revision
+    initial_search()
+    # for interesting files, process history
+    history_search()
+    # Print end time and duration
+    project_end_time = datetime.now()
+    project_end_time_fmt = datetime.now().strftime("%H:%M:%S")
+    print(f"\t[{current_project.name}] End time: {project_end_time_fmt}, "
+          f"duration: {project_end_time - project_start_time}")
 
     end_time = datetime.now()
     end_time_fmt = start_time.strftime("%H:%M:%S")
