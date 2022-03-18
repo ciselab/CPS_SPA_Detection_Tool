@@ -262,8 +262,6 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
-    dt.dict_repo_list.build_repo_dict()
-    dt.dict_repo_list.build_repo_dict_sha()
     remove_log_files()
 
     global current_project
