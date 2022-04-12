@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 """
-Creates one file of all results files
+Creates one file of all number of results files.
+
+Each pattern for each project creates an one line file with results.
+Due to compatibility of using Docker with a container for each project and pattern.
+This script combines all these results into one file.
 """
 from os import walk
 from dt.utils.files import remove_file_if_exists
