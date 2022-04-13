@@ -31,3 +31,7 @@ From the terminal (using Docker), this can be done by `python dt/main.py`.
 
 ## Notes
 Running the script with a selection of project can be done by removing/commenting the projects from the dictionary in `dict_repo_list.py` called `projects`.
+
+## Manual Validation
+To generate the .md files for manual validation of this tool, run `results_analyses_to_md_csv.py`.
+Currently, only a selection of files are being analysed.
