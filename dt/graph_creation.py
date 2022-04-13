@@ -3,18 +3,18 @@
 Creating a graph from results
 """
 import re
-import matplotlib.pyplot as plt
 import time
 import pathlib
 import os
+import matplotlib.pyplot as plt
 
 
-def create_graph(data: dict, data_title: str, sub_dir: str):
+def create_graph(data: dict, data_title: str, sub_dir: str) -> None:
     """
     Create a bar graph with the input received.
 
     Args:
-        data: Data to create the graph with.
+        data: Data to create the graph with in {key(each bar): value}.
         data_title: Title for the graph.
         sub_dir: Subdirectory to store the graph in.
     """
@@ -24,7 +24,8 @@ def create_graph(data: dict, data_title: str, sub_dir: str):
     plt.xticks(range(len(data)), list(data.keys()), rotation=90)
 
     current = str(time.time())
-    result_current = re.match('[0-9]+', current)
+    pattern = r"[0-9]+"
+    result_current = re.match(pattern, current)
     format_current = result_current[0]
 
     location = os.path.join(pathlib.Path.home(), "CPS_SPA_Detection_Tool", "results", sub_dir)
