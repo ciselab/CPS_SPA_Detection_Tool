@@ -20,10 +20,14 @@ code/ardumower/i2c.cpp
 [b07e4b72a5d8431441a8bc779a20c60c9af8b99e : code/ardumower/i2c.cpp]{https://github.com/Ardumower/ardumower/blob/b07e4b72a5d8431441a8bc779a20c60c9af8b99e/code/ardumower/i2c.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+delayMircoseconds -> Magical Waiting number, can't remember whether hard coded fine tuning also applies
+delay -> several delay() function calls with different waiting times that remained constant appear, maybe it got them confused?
+counter, clockCount -> Variables initialized with a constantvalue, used for counting, no fine tuning.
+i -> buffer index, initialized with 0
+nDevices -> counter
 
 
 ## Result number #2
@@ -42,10 +46,13 @@ ardumower/pid.cpp
 [54f4753675d236e0b4fee57fb92abd9122345f42 : ardumower/pid.cpp]{https://github.com/Ardumower/ardumower/blob/54f4753675d236e0b4fee57fb92abd9122345f42/ardumower/pid.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+Ta -> variable value capepd at 1 if computed value is > 1.
+y_min, y_max -> same here
+lastControlTime ->  42:   Ta = ((now - lastControlTime) / 1000000.0);
+                    43:   lastControlTime = now;    not sure how it got this value
 
 
 ## Result number #3
@@ -68,11 +75,15 @@ code/ardumower/drivers.cpp
 [0e4b3fb1476aa51f335f2ea13338fce80251a85a : code/ardumower/drivers.cpp]{https://github.com/Ardumower/ardumower/blob/0e4b3fb1476aa51f335f2ea13338fce80251a85a/code/ardumower/drivers.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
-
+formatString -> last 2 index positions are initiliazed with the null '\0' value.
+MAX_ECHO_TIME -> when used as argument in pulseIn() function call it has an added value of +1000, false.
+delayMicroseconds, delay -> used several times with different inputs, false.
+year, month,day, dayOfWeek, hour, minute -> some byte operations on year for storing in buf array, false.
+buf -> array initiliazed, false.
+t -> counter initiliazed with 0.
 
 ## Result number #4
 
@@ -90,11 +101,15 @@ tests/imuahrs/imu.cpp
 [8f1d027f77c92c5a7633289fa36618ead3ae38c7 : tests/imuahrs/imu.cpp]{https://github.com/Ardumower/ardumower/blob/8f1d027f77c92c5a7633289fa36618ead3ae38c7/tests/imuahrs/imu.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
-
+now -> unused variable init. to 0.
+k -> hard coded.
+looptime -> float dtc2=float(looptime)/1000.0; variable used in computing another one.
+tau -> indeed hard coded, but not fine tuned. Mathematical constant?
+a, P_11, x_bias -> variable init. to 0, false.
+Q_Gyro, R_angle, Q_angle -> hard coded.
 
 ## Result number #5
 
@@ -148,6 +163,7 @@ code/ardumower/rmcs.h
 [('STATE_PERI_FIND', '0', '204', 'Robot'), ('STATE_FORWARD', '0', '200', 'Robot'), ('STATE_OFF', '0', '196', 'Robot'), ('indexOf', '3', '183', 'Robot'), ('substring', '5', '177', 'Robot'), (1, '5', '176', 'Robot')]
 [('STATE_PERI_FIND', '0', '201', 'Robot'), ('STATE_FORWARD', '0', '197', 'Robot'), ('STATE_OFF', '0', '193', 'Robot'), ('substring', '5', '177', 'Robot'), (1, '5', '176', 'Robot')]
 
+
 ### Files
 [3603a9bfd0db3773770528766111789907696b0b : code/ardumower/rmcs.h]{https://github.com/Ardumower/ardumower/blob/3603a9bfd0db3773770528766111789907696b0b/code/ardumower/rmcs.h}
 [5b7af40bf59a725ee3ce0003eccf791da6ea93be : code/ardumower/rmcs.h]{https://github.com/Ardumower/ardumower/blob/5b7af40bf59a725ee3ce0003eccf791da6ea93be/code/ardumower/rmcs.h}
@@ -160,10 +176,22 @@ code/ardumower/rmcs.h
 [1e75e2dfff3be5aef84f97f789c7bf0aec7705c0 : code/ardumower/rmcs.h]{https://github.com/Ardumower/ardumower/blob/1e75e2dfff3be5aef84f97f789c7bf0aec7705c0/code/ardumower/rmcs.h}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+Console -> line 607: rmcsSendIMU(Console,1); , false
+0,1 -> line 593: rmcsSendDrop(Console,0,1); , false, similar to the other lines identified
+motorRightSpeedRpmSet, motorLeftSpeedRpmSet -> if-else structure, false
+STATE_MANUAL -> line 474: setNextState(STATE_MANUAL, 0); , false STATE_MANUAL is not given a value at all
+STATE_PERI_FIND, STATE_FORWARD, STATE_OFF -> line 466: setNextState(STATE_PERI_FIND, 0); , false
+RMCS_interval_imu, RMCS_interval_drop, RMCS_interval_perimeter, RMCS_interval_gps, RMCS_interval_odometry, RMCS_interval_bumper, RMCS_interval_sonar, RMCS_interval_motor_current, RMCS_interval_state,  -> if-else structure, false
+commandParts -> line 258, similar for 256: enableTrigger = commandParts[2]; , on line 218 commandParts is initialized, false
+indexEndOfCommand -> line 247: commandData = commandData.substring(indexEndOfCommandPart +1); , false
+
+substring -> line 230:  String commandData = command.substring(7); , false
+frequency, indexArrayCommandParts, indexEndOfCommandPart -> simple int that is initialized to 0, false
+
+indexOf -> line 183: String eventType = command.substring(6 + command.indexOf(','), 3);
 
 
 ## Result number #7
@@ -186,10 +214,14 @@ ardumower/adcman.cpp
 [7978541769ce436b8f720d99471c6da1555240e2 : ardumower/adcman.cpp]{https://github.com/Ardumower/ardumower/blob/7978541769ce436b8f720d99471c6da1555240e2/ardumower/adcman.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+magic -> variable initialized to 0, used for storing data that is being read from a given address.
+value -> line 225: capture[channel][position] =  min(SCHAR_MAX,  max(SCHAR_MIN, value / 4)); , false
+ADC -> line 215: volatile int16_t value = adc_get_latest_value(ADC) >> 2; , false
+channel -> line 131: ADMUX = _BV(REFS0) | (channel & 0x07); , false
+capturedChannels -> line 245: return captureComplete[ch];    ch not hard coded either, false
 
 
 ## Result number #8
@@ -205,11 +237,18 @@ ardumower/due.cpp
 [15a7b8e45298f545e3e82b9432ed0961eb09eb6a : ardumower/due.cpp]{https://github.com/Ardumower/ardumower/blob/15a7b8e45298f545e3e82b9432ed0961eb09eb6a/ardumower/due.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
-
+FLASH_ACCESS_MODE_128 -> line 53: retCode = flash_init(FLASH_ACCESS_MODE_128, 6); , false
+0 -> 0 and 0 are successive parms for a function call
+dataLength -> dataLength and 1 are successive parms for a function call
+ulPin -> pinEnabled[ulPin] = 1; in an if case, wouldn't count it as hard coded.
+TCChanEnabled -> value set to 1, works as a boolean.
+toggle_count -> in if-else structure, used for storing a computed value or it's set on the identified line to -1 if duration < 0, false.
+                on the other line identified, it's just initialized to 0.
+duration -> line 176: if (duration > 0 ) toggle_count = 2 * frequency * duration / 1000; not sure how the value of 1000 showed up.
+TC2 -> line 212: TC_GetStatus(TC2, 0);
 
 ## Result number #9
 
@@ -263,10 +302,10 @@ ardumower/perimeter.cpp
 [99b9d83baa40f1827c6f384ca934efc3a4f141a3 : ardumower/perimeter.cpp]{https://github.com/Ardumower/ardumower/blob/99b9d83baa40f1827c6f384ca934efc3a4f141a3/ardumower/perimeter.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+sum -> variable usedfor summing the values in some arrays.
 
 
 ## Result number #11
@@ -308,10 +347,13 @@ ardumower/adcman.cpp
 [e7219b4e561029165052863133a905f10d28e6dc : ardumower/adcman.cpp]{https://github.com/Ardumower/ardumower/blob/e7219b4e561029165052863133a905f10d28e6dc/ardumower/adcman.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+capturedChannels -> value is set to 0, works as a counter
+channel -> line 104: ADMUX = _BV(REFS0) | (channel & 0x07);
+value -> same as previous cases of the "value" variable , it's divided by 4 when used as a parm for a function call.
+ADC -> line 151: value = adc_get_latest_value(ADC) >> 2;
 
 
 ## Result number #13
@@ -558,10 +600,12 @@ ardumower/perimeter.cpp
 [99b9d83baa40f1827c6f384ca934efc3a4f141a3 : ardumower/perimeter.cpp]{https://github.com/Ardumower/ardumower/blob/99b9d83baa40f1827c6f384ca934efc3a4f141a3/ardumower/perimeter.cpp}
 
 ### True or False Positive
-[todo]
+False Positive
 
 ### Note
-[todo]
+127 ->  sumMax = ((float)sumMax) / ((float)(Hsum*127)) * 4095.0;
+all sum* variables -> used for sum operations
+idxPin -> used for storing values.
 
 
 ## Result number #22
