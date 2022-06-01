@@ -69,9 +69,9 @@ CHANGED:('lastControlTime', '1000000.0', '37', 'PID')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/54f4753675d236e0b4fee57fb92abd9122345f42/ardumower/pid.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/1844733dc6977b79c0632fd3dbe9bc9626db62ee/ardumower/pid.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Only a line change occurred.
 
 ### Number of warnings:
 2
@@ -182,9 +182,9 @@ CHANGED:(1, '255', '211', 'sendMotorMenu')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/8996f79e1029c38215369b983cb6ef2627c80224/ardumower/pfod.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/7076af2539a8d80eb720ee6927b0f9105e1c6bb5/ardumower/pfod.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+`moterSpeedMax` changed from range 1-100 to 1-255.
 
 ####Values removed
 Values: [('batFull', '0.72', '444', 'sendBatteryMenu'), ('batFull', '0.72', '443', 'sendBatteryMenu'), (1, '8000', '480', 'sendStationMenu'), (1, '8000', '479', 'sendStationMenu'), (1, '2000', '504', 'sendOdometryMenu'), ('odometryTicksPerRevolution', '1', '515', 'processOdometryMenu'), (59, '0', '556', 'sendTimerDetailMenu'), ('hour', '1', '581', 'processTimerDetailMenu'), ('STATE_OFF', '0', '688', 'processCommandMenu'), ('sign', '1.0', '796', 'processManualMenu'), ('STATE_MANUAL', '0', '795', 'processManualMenu'), ('motorSpeedMax', '2', '789', 'processManualMenu'), ('sign', '1.0', '788', 'processManualMenu'), ('sign', '1.0', '787', 'processManualMenu'), ('STATE_MANUAL', '0', '786', 'processManualMenu'), ('millis', '200', '954', 'pfodLoop'), ('millis', '200', '931', 'pfodLoop'), ('nextPlotTime', '0', '1100', 'readSerialPfod'), ('nextPlotTime', '0', '1091', 'readSerialPfod'), ('nextPlotTime', '0', '1084', 'readSerialPfod'), ('nextPlotTime', '0', '1078', 'readSerialPfod'), ('nextPlotTime', '0', '1072', 'readSerialPfod'), (1, '8000', '484', 'sendStationMenu'), (1, '8000', '483', 'sendStationMenu'), (59, '0', '554', 'sendTimerDetailMenu'), (23, '0', '553', 'sendTimerDetailMenu'), ('hour', '1', '579', 'processTimerDetailMenu'), ('STATE_MANUAL', '0', '806', 'processManualMenu'), ('STATE_MANUAL', '0', '800', 'processManualMenu'), ('motorSpeedMax', '2', '794', 'processManualMenu'), ('sign', '1.0', '793', 'processManualMenu'), ('sign', '1.0', '792', 'processManualMenu'), ('sign', '1.0', '784', 'processManualMenu'), ('millis', '200', '1008', 'pfodLoop'), ('millis', '200', '979', 'pfodLoop'), ('millis', '200', '950', 'pfodLoop'), ('millis', '200', '904', 'pfodLoop'), ('nextPlotTime', '0', '1102', 'readSerialPfod'), ('nextPlotTime', '0', '1096', 'readSerialPfod'), ('nextPlotTime', '0', '1080', 'readSerialPfod')]
@@ -238,9 +238,9 @@ CHANGED:(1, '255', '184', 'sendMotorMenu')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/da8fa2af1970ffc5d4a0dc039d7c679fae70a493/ardumower/pfod.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/0b4e86d089b3f8bbb72594aaeb6eb6a96ca45c7e/ardumower/pfod.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+`motorCurrentMax` changed from range 1-2000 to 1-255.
 
 ####Values removed
 Values: [(0, '200', '409', 'sendBatteryMenu'), ('batSenseZero', '1', '420', 'processBatteryMenu'), (1, '8000', '430', 'sendStationMenu'), ('PI', '2', '716', 'processCompassMenu'), ('STATE_ROLL_WAIT', '0', '713', 'processCompassMenu'), ('STATE_ROLL_WAIT', '0', '709', 'processCompassMenu'), ('sign', '1.0', '739', 'processManualMenu'), ('motorSpeedMax', '2', '732', 'processManualMenu'), ('sign', '1.0', '731', 'processManualMenu'), ('sign', '1.0', '730', 'processManualMenu'), ('STATE_MANUAL', '0', '729', 'processManualMenu'), ('millis', '200', '926', 'pfodLoop'), ('millis', '200', '874', 'pfodLoop'), ('millis', '200', '851', 'pfodLoop'), ('nextPlotTime', '0', '1027', 'readSerialPfod'), ('nextPlotTime', '0', '1021', 'readSerialPfod'), ('nextPlotTime', '0', '1015', 'readSerialPfod'), (1, '8000', '428', 'sendStationMenu'), ('STATE_OFF', '0', '664', 'processCommandMenu'), ('STATE_ROLL_WAIT', '0', '719', 'processCompassMenu'), ('STATE_ROLL_WAIT', '0', '715', 'processCompassMenu'), ('STATE_MANUAL', '0', '751', 'processManualMenu'), ('STATE_MANUAL', '0', '745', 'processManualMenu'), ('motorSpeedMax', '2', '739', 'processManualMenu'), ('sign', '1.0', '737', 'processManualMenu'), ('STATE_MANUAL', '0', '736', 'processManualMenu'), ('millis', '200', '953', 'pfodLoop'), ('millis', '200', '924', 'pfodLoop'), ('millis', '200', '895', 'pfodLoop'), ('millis', '200', '872', 'pfodLoop'), ('nextPlotTime', '0', '1053', 'readSerialPfod'), ('nextPlotTime', '0', '1041', 'readSerialPfod')]
@@ -258,9 +258,9 @@ CHANGED:('batFactor', '0.1', '420', 'processBatteryMenu')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/deb10377b29b9068c2bdfa6b6b6602b4db148366/ardumower/pfod.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/4ff4f08670413f135d429d54e116ca7b68d92d1f/ardumower/pfod.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Battery factor changed from 0.01 to 0.1.
 
 ### Number of warnings:
 11
@@ -315,9 +315,9 @@ CHANGED:('STATE_STATE_FORWARD', '0', '197', 'Robot')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/12c5245cbfad6667aeb02787acaaa69901c82467/code/ardumower/rmcs.h
 Version 2(old): https://github.com/Ardumower/ardumower/blob/9250f71d655cbf3671d7cfdf011b59d08df43861/code/ardumower/rmcs.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Variable name change occurred.
 
 ####Values removed
 Values: [('STATE_FORWARD', '0', '485', 'Robot'), ('STATE_OFF', '0', '479', 'Robot'), ('STATE_REMOTE', '0', '475', 'Robot'), ('PI', '2', '468', 'Robot'), ('STATE_ROLL_WAIT', '0', '467', 'Robot'), ('PI', '2', '464', 'Robot'), ('STATE_ROLL_WAIT', '0', '463', 'Robot'), ('STATE_STATION_CHARGING', '0', '460', 'Robot'), ('STATE_STATION', '0', '457', 'Robot'), ('STATE_PERI_TRACK', '0', '431', 'Robot'), ('STATE_PERI_FIND', '0', '428', 'Robot'), (1, '4', '424', 'Robot')]
@@ -391,9 +391,9 @@ CHANGED:('TC1', '0', '209', 'TC3_Handler')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/15a7b8e45298f545e3e82b9432ed0961eb09eb6a/ardumower/due.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/e73cf192f6e4b8538e71ce4bdd9375c84800db41/ardumower/due.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `TC_GetStatus` from using TC2 to using TC1, changed handler from `TC6_Handler` to `TC3_Handler`. Seems to be a change in design, but not one that is related to a HCFT pattern.
 
 ### Number of warnings:
 1
@@ -421,9 +421,9 @@ CHANGED:(127, '4096.0', '227', 'int16_t')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/7ebaf4e6b7bbd52a5c801f50fb410c5fa648bc29/tests/perimeterV2/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/652b5ae2ac628bb5b8062681ed95cb2394186d95/tests/perimeterV2/perimeter.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Normalize changed from 4095 to 4096.
 
 ####Values added
 Values: [(127, '4096.0', '228', 'int16_t'), (127, '4096.0', '227', 'int16_t')]
@@ -459,9 +459,9 @@ CHANGED:('sumMin', '0', '194', 'int16_t')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/4080b7222dbcea0d58907f3a876fe894c3253ebb/tests/perimeterV2/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/0b1ccb199228b53f2c47f1a78413fa68acab2593/tests/perimeterV2/perimeter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Incorrectly detected method name, change here is only a change in the method name from `corrFilter` to `convFilter`.
 
 ####Values removed
 Values: [(1, '6', '152', 'Perimeter'), ('idxPin', '0', '126', 'Perimeter'), (1, '3', '158', 'Perimeter'), ('i', '1', '148', 'Perimeter'), ('i', '1', '147', 'Perimeter'), ('callCounter', '0', '134', 'Perimeter')]
@@ -516,9 +516,9 @@ CHANGED:('sum', '0', '317', 'PerimeterClass')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/99b9d83baa40f1827c6f384ca934efc3a4f141a3/ardumower/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/d8e6ab4a51df461bbbe93424d4b5f226ff6fb521/ardumower/perimeter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Only a class name change occurred.
 
 ### Number of warnings:
 1
@@ -621,9 +621,9 @@ CHANGED:('TC1', '0', '209', 'TC3_Handler')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/15a7b8e45298f545e3e82b9432ed0961eb09eb6a/ardumower/due.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/e73cf192f6e4b8538e71ce4bdd9375c84800db41/ardumower/due.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed handler and TC used.
 
 ### Number of warnings:
 1
@@ -707,9 +707,9 @@ CHANGED:('motorLeftSpeedRpmSet', '0', '59', 'Robot')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/43143278c6d0a32f4ee49885dd74432fe7b95290/code/ardumower/ros.h
 Version 2(old): https://github.com/Ardumower/ardumower/blob/83c5aa29cdada6734a4dc03078ec85890b48a6ac/code/ardumower/ros.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Only a line change occurred.
 
 ### Number of warnings:
 3
@@ -737,9 +737,9 @@ CHANGED:('STATE_OFF', '0', '12', 'Robot')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/f593a3507442e78463453e5dce4e523770a0b8ee/code/ardumower/battery.h
 Version 2(old): https://github.com/Ardumower/ardumower/blob/6bec4d035a68119128de12a73a8f1ea0a3b7dda6/code/ardumower/battery.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change made on how to handle different states.
 
 ### Number of warnings:
 2
@@ -986,9 +986,9 @@ CHANGED:(127, '4096.0', '227', 'int16_t')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/7ebaf4e6b7bbd52a5c801f50fb410c5fa648bc29/ardumower/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/652b5ae2ac628bb5b8062681ed95cb2394186d95/ardumower/perimeter.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Normalization changed from 4095.0 to 4096.0.
 
 ####Values added
 Values: [(127, '4096.0', '228', 'int16_t'), (127, '4096.0', '227', 'int16_t')]
@@ -1024,9 +1024,9 @@ CHANGED:(1, '6', '152', 'Perimeter')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/a3cc41f7ce5984c10f2ece406f32a44920ad19ae/ardumower/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/f50a9d8e0958dbd386e3abd3cb00e02e65caf0d5/ardumower/perimeter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Variable has been changed, though this seems to be the area from which the filter is being used. So yes, the values has been tweaked, but it is not a HCFT.
 
 ####Values removed
 Values: [('i', '1', '144', 'Perimeter'), ('i', '1', '143', 'Perimeter')]
@@ -1044,9 +1044,9 @@ CHANGED:('idxPin', '0', '130', 'Perimeter')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/25944416753fa3cb9ac053e4a93a3e4047873bd9/ardumower/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/e57cf30e63344dd6ebde0539eb16a8830f7e6208/ardumower/perimeter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change of line number.
 
 ####Values added
 Values: [('i', '1', '148', 'Perimeter'), ('i', '1', '147', 'Perimeter'), ('signalAvg', '0', '137', 'Perimeter'), ('signalMax', '9999', '136', 'Perimeter'), ('signalMin', '9999', '135', 'Perimeter'), ('callCounter', '0', '134', 'Perimeter'), ('idxPin', '0', '130', 'Perimeter'), ('sum', '0', '197', 'int16_t'), ('sumMin', '0', '194', 'int16_t'), ('sumMax', '0', '193', 'int16_t')]
@@ -1064,9 +1064,9 @@ CHANGED:('sum', '0', '317', 'PerimeterClass')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/99b9d83baa40f1827c6f384ca934efc3a4f141a3/ardumower/perimeter.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/d8e6ab4a51df461bbbe93424d4b5f226ff6fb521/ardumower/perimeter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change of line number.
 
 ### Number of warnings:
 12
@@ -1094,9 +1094,9 @@ CHANGED:('lastControlTime', '1000000.0', '37', 'PID')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/54f4753675d236e0b4fee57fb92abd9122345f42/ardumower/pid.cpp
 Version 2(old): https://github.com/Ardumower/ardumower/blob/1844733dc6977b79c0632fd3dbe9bc9626db62ee/ardumower/pid.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change of line number.
 
 ### Number of warnings:
 2
@@ -1115,9 +1115,9 @@ CHANGED:('PI', '2.0', '495', 'Robot')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/86ec6a92433fa8d63e59432ea153bf7112c6c08e/code/ardumower/consoleui.h
 Version 2(old): https://github.com/Ardumower/ardumower/blob/693d737018279001c2523595353c549c71c6de5f/code/ardumower/consoleui.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change from int 2 to double 2.0.
 
 ####Values changed
 NEW:2.0
@@ -1126,9 +1126,9 @@ CHANGED:('PI', '2', '495', 'Robot')
 Version 1(new): https://github.com/Ardumower/ardumower/blob/693d737018279001c2523595353c549c71c6de5f/code/ardumower/consoleui.h
 Version 2(old): https://github.com/Ardumower/ardumower/blob/f7e982b81757bfad8dd4edd4a502613cdcec2f81/code/ardumower/consoleui.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change from int 2 to double 2.0.
 
 ####Values added
 Values: [('cmd', '0', '442', 'Robot'), ('STATE_ROS', '0', '439', 'Robot')]

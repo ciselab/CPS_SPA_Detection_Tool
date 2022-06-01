@@ -117,9 +117,9 @@ CHANGED:('__wsr_vecbase', '1073741824', '83', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/656a33e6f82482535782213a6e96c2bd49b22a39/cores/esp8266/reboot_uart_dwnld.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/83f5f29cfdaa85b5b8874e29cb342a662feebff3/cores/esp8266/reboot_uart_dwnld.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Function name has been changed.
 
 ### Number of warnings:
 1
@@ -138,9 +138,9 @@ CHANGED:(6, '0', '407', 'transmission_status_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/16801f3dacf5e913ffef0c53051b83a8d155413a/libraries/ESP8266WiFiMesh/src/TcpIpMeshBackend.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/a49f0470963a5282d87a6fe662ba55b1ab308c2d/libraries/ESP8266WiFiMesh/src/TcpIpMeshBackend.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+`uint8_t targetBSSID[6] {0};` can be found on line 405. Changed return type, incorrect tdetection of function name.
 
 ####Values removed
 Values: [('attemptNumber', '1', '321', 'transmission_status_t')]
@@ -525,9 +525,9 @@ CHANGED:('fraction', '1.0', '175', 'ICACHE_FLASH_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/1f32b7f66e22c5c26a54328e4f0997db369a9cbb/cores/esp8266/Stream.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f165a0afcdadcfd392fc1f7adef27b2cc2d7748d/cores/esp8266/Stream.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed return type, incorrect detection of function name.
 
 ####Values changed
 NEW:('fraction', '1.0', '182', 'ICACHE_FLASH_ATTR')
@@ -536,9 +536,9 @@ CHANGED:('fraction', '1.0', '180', 'Stream')
 Version 1(new): https://github.com/esp8266/Arduino/blob/160f99c31c6e9fe7734f6422a1d85a3704d3ae70/cores/esp8266/Stream.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/04fe8e8b58707147b751cc45b8b97adb7bacace5/cores/esp8266/Stream.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed return type, incorrect detection of function name.
 
 ### Number of warnings:
 3
@@ -642,9 +642,9 @@ CHANGED:('currentOffset', '0', '757', 'size_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f60defc3d306152c13a20065aaa3d81ea17e690b/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/9fcf14f81fa9be589530e9596b7c5a264dc81ee8/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed line number.
 
 ####Values added
 Values: [('address', '4', '753', 'size_t'), ('aligned', '4', '748', 'size_t'), ('currentOffset', '0', '746', 'size_t'), ('size', '3', '745', 'size_t')]
@@ -680,9 +680,9 @@ CHANGED:('bytesLeft', '0', '606', 'spi_flash_write_puya')
 Version 1(new): https://github.com/esp8266/Arduino/blob/fabd169abceebb0a5fee306850b9176d98b80795/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/d1b70dfc1d457739fbe9cfb60260d3a4c298eff5/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed return type.
 
 ####Values removed
 Values: [('rc', '0', '586', 'spi_flash_write_puya')]
@@ -700,9 +700,9 @@ CHANGED:('_SPIFFS_start', '1075838976', '529', 'uint32_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/a389a995fb12459819e33970ec80695f1eaecc58/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/eea9999dc5eaf464a432f77d5b65269f9baf198d/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed var name.
 
 ####Values added
 Values: [('bytesLeft', '0', '607', 'spi_flash_write_puya'), ('rc', '0', '588', 'spi_flash_write_puya')]
@@ -765,9 +765,9 @@ CHANGED:('bytes', '2', '225', 'FlashMode_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/c77fbb23831de303bdf46c5e461504bed5bdffdb/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/788095c66e220c6fe2e88b5205845c851502e475/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed line number.
 
 ####Values changed
 NEW:('bytes', '2', '225', 'FlashMode_t')
@@ -776,9 +776,9 @@ CHANGED:('bytes', '2', '239', 'FlashMode_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/788095c66e220c6fe2e88b5205845c851502e475/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f11c65e9a77eb721eff4388a96c1bc936d561149/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change of line number.
 
 ####Values changed
 NEW:200
@@ -787,9 +787,9 @@ CHANGED:('buff', '150', '293', 'String')
 Version 1(new): https://github.com/esp8266/Arduino/blob/e85605325405d1e80044c7c1dab7afece3ca46ae/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/26eede862f1e13ab9f9ba81aafb3162865edb02e/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Changed buff size.
 
 ####Values added
 Values: [('bytes', '2', '235', 'FlashMode_t'), ('buff', '150', '293', 'String')]
@@ -807,9 +807,9 @@ CHANGED:('getFlashChipSize', '12288', '300', 'EspClass')
 Version 1(new): https://github.com/esp8266/Arduino/blob/5a19cc24bf8cbddc4563da9fb4f843ea0dd2ec28/cores/esp8266/Esp.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/5852c484ca2784aca640b10f937ab1a7fdc0ccb0/cores/esp8266/Esp.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+[recheck] adjustments made due to the size of the chip.
 
 ####Values added
 Values: [(8, '1024', '301', 'EspClass'), ('getFlashChipSize', '12288', '300', 'EspClass')]
@@ -940,9 +940,9 @@ CHANGED:('UART_CLK_FREQ', '115200', '320', 'user_init')
 Version 1(new): https://github.com/esp8266/Arduino/blob/6cb16997d8cedacc0dc5b1acda9a3e868b7b4395/cores/esp8266/core_esp8266_main.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/afe40211ef2011e642fa8fd963389f7dadcf612c/cores/esp8266/core_esp8266_main.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Line change.
 
 ####Values added
 Values: [('aligned', '16', '296', 'app_entry_redefinable'), ('UART_CLK_FREQ', '115200', '320', 'user_init')]
@@ -1078,9 +1078,9 @@ CHANGED:(0, '0', '52', 'loop_schedule')
 Version 1(new): https://github.com/esp8266/Arduino/blob/e21371d6d01ec724c26c38dbcd6b1eab7c00eeea/cores/esp8266/main.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/e199fc349c2932e35be46cfd683af43a655edccb/cores/esp8266/main.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Line change.
 
 ####Values changed
 NEW:(0, '0', '52', 'loop_schedule')
@@ -1089,9 +1089,9 @@ CHANGED:(0, '0', '48', 'loop_task')
 Version 1(new): https://github.com/esp8266/Arduino/blob/e199fc349c2932e35be46cfd683af43a655edccb/cores/esp8266/main.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/04fe8e8b58707147b751cc45b8b97adb7bacace5/cores/esp8266/main.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Line change.
 
 ### Number of warnings:
 2
@@ -1110,9 +1110,9 @@ CHANGED:('val', '0', '52', '__analogWrite')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f2d83ba43df9f1c2ef1ff8ad5748ade6e3353de6/cores/esp8266/core_esp8266_wiring_pwm.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_wiring_pwm.cpp
 ####True or False Positive:
-[todo]
+Falses
 ####Note:
-[todo]
+Findable on line 56. Moved to a different line and name function has been changed.
 
 ####Values added
 Values: [('res', '1', '86', '__analogWriteResolution')]
@@ -1212,9 +1212,9 @@ CHANGED:('current_step', '65535', '97', 'pwm_timer_isr')
 Version 1(new): https://github.com/esp8266/Arduino/blob/0c703b3baf0f3137161373560d1914b880d57af3/cores/esp8266/core_esp8266_wiring_pwm.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/6ae438b035029d59d4885cc1dd1707560f7044b3/cores/esp8266/core_esp8266_wiring_pwm.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Added linker attributes to function. 
 
 ####Values changed
 NEW:('pwm_mask', '65535', '106', 'pwm_timer_isr')
@@ -1223,9 +1223,9 @@ CHANGED:('pwm_mask', '65535', '105', 'pwm_timer_isr')
 Version 1(new): https://github.com/esp8266/Arduino/blob/6ae438b035029d59d4885cc1dd1707560f7044b3/cores/esp8266/core_esp8266_wiring_pwm.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/6ab3c76e036bb8a6e791eeaf13ec53ec7062ee2b/cores/esp8266/core_esp8266_wiring_pwm.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change line number.
 
 ####Values added
 Values: [('PWMRANGE', '1', '136', '__analogWrite')]
@@ -1309,9 +1309,9 @@ CHANGED:('delay', '0', '252', 'int8_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/c312a2eaf1356ceaafad7c4935fa850e087c84fe/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/60fe7b4ca8cdca25366af8a7c0a7b70d32c797f8/libraries/ESP8266WiFi/src/ESP8266WiFiMulti.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Result lost information about line number.
 
 ####Values removed
 Values: [('delay', '0', '84', 'wl_status_t'), ('bestBSSID', '6', '80', 'wl_status_t'), ('delay', '0', '68', 'wl_status_t')]
@@ -1384,9 +1384,9 @@ CHANGED:('loopPins', '1', '318', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/656a33e6f82482535782213a6e96c2bd49b22a39/cores/esp8266/core_esp8266_waveform_phase.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_waveform_phase.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Added linker attributes to function. 
 
 ####Values changed
 NEW:('loopPins', '1', '318', 'ICACHE_RAM_ATTR')
@@ -1395,9 +1395,9 @@ CHANGED:('loopPins', '1', '312', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_waveform_phase.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f8115c32c937733c07232a33a8d6187af669d032/cores/esp8266/core_esp8266_waveform_phase.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change line number.
 
 ### Number of warnings:
 3
@@ -1425,9 +1425,9 @@ CHANGED:('delay', '0', '146', 'startWaveformCycles')
 Version 1(new): https://github.com/esp8266/Arduino/blob/ea1fdb210f84fbed421340a1341376e179e4addb/cores/esp8266/core_esp8266_waveform.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/1af4ea661f4123d6aa1df87d3e0eadaf93e4c918/cores/esp8266/core_esp8266_waveform.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change line number.
 
 ####Values changed
 NEW:('delay', '0', '146', 'startWaveformCycles')
@@ -1436,9 +1436,9 @@ CHANGED:('delay', '0', '142', 'startWaveform')
 Version 1(new): https://github.com/esp8266/Arduino/blob/1af4ea661f4123d6aa1df87d3e0eadaf93e4c918/cores/esp8266/core_esp8266_waveform.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/eea9999dc5eaf464a432f77d5b65269f9baf198d/cores/esp8266/core_esp8266_waveform.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change line number.
 
 ### Number of warnings:
 3
@@ -1568,9 +1568,9 @@ CHANGED:('pbuf_unit_size', '512', '308', '_reserve')
 Version 1(new): https://github.com/esp8266/Arduino/blob/3d1fbc60ab5c96294a6c68ea6bb9f292cb11aead/libraries/ESP8266WiFi/src/include/UdpContext.h
 Version 2(old): https://github.com/esp8266/Arduino/blob/a44632b8cf9f54fe7226765fcbe6528ac83fc262/libraries/ESP8266WiFi/src/include/UdpContext.h
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Moved to line 296, the size of the `pbuf_unit_size` changed.
 
 ####Values changed
 NEW:512
@@ -1579,9 +1579,9 @@ CHANGED:('pbuf_unit_size', '1024', '307', '_reserve')
 Version 1(new): https://github.com/esp8266/Arduino/blob/874cf0ef98bbcafd9abbdac2fec776f1ec5b1231/libraries/ESP8266WiFi/src/include/UdpContext.h
 Version 2(old): https://github.com/esp8266/Arduino/blob/25d814bdfb4b025b234d8415b68fd24ea221a58e/libraries/ESP8266WiFi/src/include/UdpContext.h
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Moved to line 308, the size of the `pbuf_unit_size` changed.
 
 ####Values changed
 NEW:('_rx_buf_offset', '0', '351', '_recv')
@@ -1590,9 +1590,9 @@ CHANGED:('_rx_buf_offset', '0', '328', '_recv')
 Version 1(new): https://github.com/esp8266/Arduino/blob/25d814bdfb4b025b234d8415b68fd24ea221a58e/libraries/ESP8266WiFi/src/include/UdpContext.h
 Version 2(old): https://github.com/esp8266/Arduino/blob/3049d48d560dfe1a676de3fe8e4aeec5f8ebf059/libraries/ESP8266WiFi/src/include/UdpContext.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change
 
 ####Values changed
 NEW:512
@@ -1601,9 +1601,9 @@ CHANGED:('pbuf_unit_size', '1024', '284', '_reserve')
 Version 1(new): https://github.com/esp8266/Arduino/blob/3049d48d560dfe1a676de3fe8e4aeec5f8ebf059/libraries/ESP8266WiFi/src/include/UdpContext.h
 Version 2(old): https://github.com/esp8266/Arduino/blob/5354464a010a5e042bcf1514ec1bd9242de02940/libraries/ESP8266WiFi/src/include/UdpContext.h
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+The size of the `pbuf_unit_size` changed.
 
 ### Number of warnings:
 9
@@ -1678,9 +1678,9 @@ CHANGED:('delay_end', '0', '48', 'delay')
 Version 1(new): https://github.com/esp8266/Arduino/blob/d9684351c2d11dfe441e89edac43396689ac8ac5/cores/esp8266/core_esp8266_wiring.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/eea9999dc5eaf464a432f77d5b65269f9baf198d/cores/esp8266/core_esp8266_wiring.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `delay` to `__delay`.
 
 ### Number of warnings:
 2
@@ -2013,9 +2013,9 @@ CHANGED:('pin', '0', '228', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/656a33e6f82482535782213a6e96c2bd49b22a39/cores/esp8266/core_esp8266_wiring_digital.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_wiring_digital.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ####Values added
 Values: [('system_set_os_print', '0', '240', 'initPins')]
@@ -2052,9 +2052,9 @@ CHANGED:('i', '0', '118', 'interrupt_handler')
 Version 1(new): https://github.com/esp8266/Arduino/blob/214d8bc8b8cb59fff65727484789d097b2727785/cores/esp8266/core_esp8266_wiring_digital.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/466fa6f5a9390c4250baceecb50c7c471d8a4c2a/cores/esp8266/core_esp8266_wiring_digital.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ####Values changed
 NEW:interrupt_handler
@@ -2063,9 +2063,9 @@ CHANGED:('i', '0', '117', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/466fa6f5a9390c4250baceecb50c7c471d8a4c2a/cores/esp8266/core_esp8266_wiring_digital.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/6c20126a5ffec5227cb1d31fcfe74f82f4857df9/cores/esp8266/core_esp8266_wiring_digital.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ####Values changed
 NEW:ICACHE_RAM_ATTR
@@ -2074,9 +2074,9 @@ CHANGED:('i', '0', '117', 'interrupt_handler')
 Version 1(new): https://github.com/esp8266/Arduino/blob/6c20126a5ffec5227cb1d31fcfe74f82f4857df9/cores/esp8266/core_esp8266_wiring_digital.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/57642c10b6491a30be932097edd45280500b9b70/cores/esp8266/core_esp8266_wiring_digital.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ####Values added
 Values: [('xt_rsil', '15', '128', 'interrupt_handler')]
@@ -2130,9 +2130,9 @@ CHANGED:('val', '1', '119', 'digitalWrite')
 Version 1(new): https://github.com/esp8266/Arduino/blob/6ea230a1bc6b74901f0e9b6a7416183abeee2c35/cores/esp8266/core_esp8266_wiring_digital.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/e40d18e10739ee61c7bd194b8c63f79ce0f692cb/cores/esp8266/core_esp8266_wiring_digital.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] changed `digitalWrite` to `__digitalWrite`.
 
 ####Values added
 Values: [(67, '1', '82', 'pinMode'), (1, '0', '80', 'pinMode'), ('val', '1', '119', 'digitalWrite'), ('pin', '0', '186', 'detachInterrupt')]
@@ -2178,9 +2178,9 @@ CHANGED:('sessionKey', '1', '146', 'uint64_t')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f059e5732272ca825577920e22122c7673058b9c/libraries/ESP8266WiFiMesh/src/EncryptedConnectionData.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/2ec2679d6eb55fc35d26a893b0a1e37a9da41170/libraries/ESP8266WiFiMesh/src/EncryptedConnectionData.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values added
 Values: [('SHA256_NATURAL_LENGTH', '0', '132', 'uint64_t'), (8, '0', '131', 'uint64_t')]
@@ -2329,9 +2329,9 @@ CHANGED:('broadcastMetadataDelimiter', '1', '347', 'String')
 Version 1(new): https://github.com/esp8266/Arduino/blob/2fef67dcb0bbcb5aaa6096b12c14c1d1a5994333/libraries/ESP8266WiFiMesh/src/FloodingMesh.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/3132325bf8b3116b2b974dcac26d2509606bb0b1/libraries/ESP8266WiFiMesh/src/FloodingMesh.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Name change.
 
 ### Number of warnings:
 2
@@ -2350,9 +2350,9 @@ CHANGED:('yieldNow', '100', '138', 'run_scheduled_functions')
 Version 1(new): https://github.com/esp8266/Arduino/blob/c312a2eaf1356ceaafad7c4935fa850e087c84fe/cores/esp8266/Schedule.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/59315836f283cf8eb56f7fea7cdcf0f79b3799e9/cores/esp8266/Schedule.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change in function structure.
 
 ####Values added
 Values: [('yieldNow', '100', '148', 'run_scheduled_recurrent_functions')]
@@ -2490,9 +2490,9 @@ CHANGED:('fmt', '6', '37', 'print_version')
 Version 1(new): https://github.com/esp8266/Arduino/blob/9985a32914f16bea727769d73e288f9a3a4621fd/bootloaders/eboot/eboot.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/1d0bc5efdf7e175608cc1c038b592b511143ed26/bootloaders/eboot/eboot.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Added missing ``.
 
 ####Values added
 Values: [('buff', '4', '101', 'uint8_t'), ('aligned', '4', '101', 'uint8_t'), ('i', '255', '178', 'copy_raw'), ('size', '4', '139', 'copy_raw'), ('buffer_size', '1', '130', 'copy_raw'), ('args', '0', '230', 'main'), ('args', '2', '215', 'main'), ('print_version', '0', '199', 'main'), ('res', '9', '195', 'main')]
@@ -2519,9 +2519,9 @@ CHANGED:('args', '2', '133', 'main')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f3f500936d831be890a62a959e21ceff4fd246ef/bootloaders/eboot/eboot.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/73740d6e6d5c0a684438d73a78d319c4c3cd5686/bootloaders/eboot/eboot.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values changed
 NEW:('res', '9', '120', 'main')
@@ -2530,9 +2530,9 @@ CHANGED:('res', '9', '153', 'main')
 Version 1(new): https://github.com/esp8266/Arduino/blob/73740d6e6d5c0a684438d73a78d319c4c3cd5686/bootloaders/eboot/eboot.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/bdf24031ebf5435834ee854e04c0d8c0e2da6a8a/bootloaders/eboot/eboot.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values added
 Values: [('res', '9', '153', 'main')]
@@ -2569,9 +2569,9 @@ CHANGED:('i2c_freq', '100000', '118', 'initVariant')
 Version 1(new): https://github.com/esp8266/Arduino/blob/fbec557ddb12ad6663bd387a2980197dca79e576/variants/wifio/WifioWiring.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/ad216c0ef57d4e3c26ef4f0f927b4cf3aa440146/variants/wifio/WifioWiring.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Name var change.
 
 ### Number of warnings:
 1
@@ -2673,9 +2673,9 @@ CHANGED:('uint32_t', '0', '533', 'ESP8266WiFiGenericClass')
 Version 1(new): https://github.com/esp8266/Arduino/blob/216680bb576d845547349ab992043c6d6f83fe73/libraries/ESP8266WiFi/src/ESP8266WiFiGeneric.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/5c4db3acf4353870b6a5663ba06d712d67e6c179/libraries/ESP8266WiFi/src/ESP8266WiFiGeneric.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+[check] Different vars.
 
 ####Values added
 Values: [('mac', '6', '179', 'WiFiEventHandler'), ('', '0', '', 'WiFiEventHandler')]
@@ -2786,9 +2786,9 @@ CHANGED:('uint32_t', '25', '39', '_startTone')
 Version 1(new): https://github.com/esp8266/Arduino/blob/1af4ea661f4123d6aa1df87d3e0eadaf93e4c918/cores/esp8266/Tone.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/c548958f6ebbf372e3771e8a9012a5faab34d73b/cores/esp8266/Tone.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed from line 39 to 38, added `microsecondsToClockCycles`.
 
 ####Values changed
 NEW:25
@@ -2797,9 +2797,9 @@ CHANGED:('uint32_t', '100', '39', '_startTone')
 Version 1(new): https://github.com/esp8266/Arduino/blob/c548958f6ebbf372e3771e8a9012a5faab34d73b/cores/esp8266/Tone.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/eea9999dc5eaf464a432f77d5b65269f9baf198d/cores/esp8266/Tone.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Changed low period frequency.
 
 ####Values removed
 Values: [(2.0, '0.5', '66', 'tone')]
@@ -2826,9 +2826,9 @@ CHANGED:('T1INDEX', '1', '123', 't1IntHandler')
 Version 1(new): https://github.com/esp8266/Arduino/blob/748f3f93fa18b9e057e91e542d3e432296df5205/cores/esp8266/Tone.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/4b55ee14efcbd05d8c2162db1f347f465da73b87/cores/esp8266/Tone.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ####Values added
 Values: [('T1INDEX', '1', '123', 't1IntHandler')]
@@ -2893,9 +2893,9 @@ CHANGED:(240, '4', '280', 't_httpUpdate_return')
 Version 1(new): https://github.com/esp8266/Arduino/blob/bf7f33d91847ef301b46e4842a253090bc59a62b/libraries/ESP8266httpUpdate/src/ESP8266httpUpdate.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/c450023a321c4f375336e0ff56b833e7e3c5ca0d/libraries/ESP8266httpUpdate/src/ESP8266httpUpdate.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed line number and function name.
 
 ####Values added
 Values: [('buf', '4', '241', 't_httpUpdate_return'), ('delay', '100', '229', 't_httpUpdate_return')]
@@ -2923,9 +2923,9 @@ CHANGED:('sp_yield', '8', '956', 'STATIC')
 Version 1(new): https://github.com/esp8266/Arduino/blob/c312a2eaf1356ceaafad7c4935fa850e087c84fe/cores/esp8266/hwdt_app_entry.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/8a42163a50e97fddd2dd1d7522fbe6bfc5eeb929/cores/esp8266/hwdt_app_entry.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Usage of `sp_suspend` vs  `sp_yield`.
 
 ### Number of warnings:
 1
@@ -2953,9 +2953,9 @@ CHANGED:('bytes', '0', '70', 'IPAddress')
 Version 1(new): https://github.com/esp8266/Arduino/blob/b28e879af6d544152bba7125364405439c578617/cores/esp8266/IPAddress.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/664d92fbd04cabfdf21e96f5cf174219db64ada4/cores/esp8266/IPAddress.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed return type.
 
 ####Values added
 Values: [('bytes', '0', '70', 'IPAddress'), ('szRet', '20', '69', 'IPAddress')]
@@ -2983,9 +2983,9 @@ CHANGED:('len', '0', '84', 'base64_decode_chars')
 Version 1(new): https://github.com/esp8266/Arduino/blob/d85e78380647246d76cbe63be2af3025642f8f10/cores/esp8266/libb64/cdecode.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/bda06d686c06be9a94771bb4d29538af32d7ccf7/cores/esp8266/libb64/cdecode.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ### Number of warnings:
 1
@@ -3013,9 +3013,9 @@ CHANGED:('nextBlockSize', '0', '565', 'umm_realloc')
 Version 1(new): https://github.com/esp8266/Arduino/blob/8b662ed3b345d2ded3c2ac484949b03e10bdc43c/cores/esp8266/umm_malloc/umm_malloc.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/b26388812a52218041c470652805bdca7fd0d320/cores/esp8266/umm_malloc/umm_malloc.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values removed
 Values: [('c', '0', '725', 'umm_realloc'), ('UMM_NFREE', '0', '393', 'umm_malloc_core'), ('c', '0', '657', 'umm_realloc'), ('c', '0', '645', 'umm_realloc'), ('nextBlockSize', '0', '524', 'umm_realloc'), ('prevBlockSize', '0', '523', 'umm_realloc')]
@@ -3079,9 +3079,9 @@ CHANGED:('blockNo', '0', '972', 'umm_info')
 Version 1(new): https://github.com/esp8266/Arduino/blob/707c87fdb603744389aae575c4da12928eaff95b/cores/esp8266/umm_malloc/umm_malloc.c
 Version 2(old): https://github.com/esp8266/Arduino/blob/339140c756cea6acc9c0c023477f054c6f9990bb/cores/esp8266/umm_malloc/umm_malloc.c
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ### Number of warnings:
 4
@@ -3109,9 +3109,9 @@ CHANGED:('c_str', '0', '257', 'getUnencryptedMessageID')
 Version 1(new): https://github.com/esp8266/Arduino/blob/962a23d253b2e0d8eb2e4be6fbaa442e9902d32b/libraries/ESP8266WiFiMesh/src/JsonTranslator.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/2fef67dcb0bbcb5aaa6096b12c14c1d1a5994333/libraries/ESP8266WiFiMesh/src/JsonTranslator.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed function name.
 
 ####Values added
 Values: [('endIndex', '1', '160', 'getConnectionState'), ('c_str', '0', '240', 'getDuration'), ('c_str', '0', '278', 'getDesync'), ('c_str', '0', '288', 'getUnencryptedMessageID'), ('longResult', '65535', '299', 'getMeshMessageCount'), ('c_str', '0', '298', 'getMeshMessageCount')]
@@ -3158,9 +3158,9 @@ CHANGED:('out', '32', '80', 'String')
 Version 1(new): https://github.com/esp8266/Arduino/blob/77ab33f7bf2c7fdba04c0f1dc8a015a4dae2095c/cores/esp8266/MD5Builder.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/2cf902cb7655bb821b202aab4ef628e48582bb24/cores/esp8266/MD5Builder.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+[Recheck] Changed from line 80 to 79. Changed the size of `out`.
 
 ### Number of warnings:
 1
@@ -3206,9 +3206,9 @@ CHANGED:('_rx_buf_offset', '0', '580', '_consume')
 Version 1(new): https://github.com/esp8266/Arduino/blob/2d58be744baeb2dd446ceb68762eb8465a09ddcc/libraries/ESP8266WiFi/src/include/ClientContext.h
 Version 2(old): https://github.com/esp8266/Arduino/blob/e752e96e9fd63436b689aa3e6cb3010f27b55aae/libraries/ESP8266WiFi/src/include/ClientContext.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values added
 Values: [('_rx_buf', '0', '574', '_consume')]
@@ -3316,9 +3316,9 @@ CHANGED:('_rx_buf', '0', '210', 'flush')
 Version 1(new): https://github.com/esp8266/Arduino/blob/8db4dcea426b2a1b7d1cca6d5bf4c351284f2240/libraries/ESP8266WiFi/src/include/ClientContext.h
 Version 2(old): https://github.com/esp8266/Arduino/blob/a2b82ed6b6d74d271adf1759ae4bf945b7270adc/libraries/ESP8266WiFi/src/include/ClientContext.h
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Different var.
 
 ####Values removed
 Values: [('_rx_buf', '0', '190', '_consume'), ('_pcb', '0', '253', '_error')]
@@ -3411,9 +3411,9 @@ CHANGED:('_begin', '1', '116', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/656a33e6f82482535782213a6e96c2bd49b22a39/cores/esp8266/cbuf.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/a16e1e5b8a700bfa0a886685d9d9f59e37fe406b/cores/esp8266/cbuf.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed linker attributes to function.
 
 ####Values removed
 Values: [('_begin', '1', '35', 'ICACHE_RAM_ATTR')]
@@ -3441,9 +3441,9 @@ CHANGED:('SLC_BUF_LEN', '4', '174', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/656a33e6f82482535782213a6e96c2bd49b22a39/cores/esp8266/core_esp8266_i2s.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/e99df4fe1a86d5348379a27bd7d6d654cf26525b/cores/esp8266/core_esp8266_i2s.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed linker attributes to function.
 
 ####Values changed
 NEW:('scd_div_best', '1', '457', 'i2s_set_rate')
@@ -3452,9 +3452,9 @@ CHANGED:('scd_div_best', '1', '448', 'i2s_set_rate')
 Version 1(new): https://github.com/esp8266/Arduino/blob/e0cfb5a9950a05f245d3ff2573bf2272525c89e9/cores/esp8266/core_esp8266_i2s.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/1e016a4237fb3d4aa6304232067ed987b47a4e4a/cores/esp8266/core_esp8266_i2s.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values changed
 NEW:('scd_div_best', '1', '448', 'i2s_set_rate')
@@ -3463,9 +3463,9 @@ CHANGED:('scd_div_best', '1', '447', 'i2s_set_rate')
 Version 1(new): https://github.com/esp8266/Arduino/blob/1e016a4237fb3d4aa6304232067ed987b47a4e4a/cores/esp8266/core_esp8266_i2s.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/ec7644227ef19ebbf23a839154a878b7e9f7d577/cores/esp8266/core_esp8266_i2s.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ####Values changed
 NEW:save_rate
@@ -3474,9 +3474,9 @@ CHANGED:('i2s_set_rate', '44100', '533', 'i2s_rxtx_begin')
 Version 1(new): https://github.com/esp8266/Arduino/blob/19d09eae2b5ff9ed7cc48b5fa2c912d1297462b9/cores/esp8266/core_esp8266_i2s.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/eea9999dc5eaf464a432f77d5b65269f9baf198d/cores/esp8266/core_esp8266_i2s.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed function name.
 
 ### Number of warnings:
 4
@@ -3532,9 +3532,9 @@ CHANGED:(240, '4', '320', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/dcdd4313cb1996a526e253d3be8536f8a27626c8/cores/esp8266/core_esp8266_vm.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/8ffe41b7df9292ff04a6ce22de2815d075330a35/cores/esp8266/core_esp8266_vm.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed linker attributes to function.
 
 ### Number of warnings:
 2
@@ -3628,9 +3628,9 @@ CHANGED:('delay', '100', '146', 'HardwareSerial')
 Version 1(new): https://github.com/esp8266/Arduino/blob/c312a2eaf1356ceaafad7c4935fa850e087c84fe/cores/esp8266/HardwareSerial.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/c9f27410f7a7f4860602c412c3de666dddc8700c/cores/esp8266/HardwareSerial.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Name var change.
 
 ####Values added
 Values: [('detectedBaudrate', '0', '136', 'HardwareSerial')]
@@ -3657,9 +3657,9 @@ CHANGED:('_uart', '1', '108', 'HardwareSerial')
 Version 1(new): https://github.com/esp8266/Arduino/blob/e4d9c279ef1991256793745242c177148ca58b2a/cores/esp8266/HardwareSerial.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/3a110aa698dd17e0d80704db47c8e43c986b0f86/cores/esp8266/HardwareSerial.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Different var.
 
 ####Values removed
 Values: [('delay', '0', '121', 'uart_wait_tx_empty'), ('tmp', '0', '128', 'uart_flush'), ('uart', '15', '316', 'uart_set_pins'), ('uart', '15', '309', 'uart_set_pins'), ('delay', '0', '328', 'uart0_write_char'), ('delay', '0', '333', 'uart1_write_char'), ('system_set_os_print', '0', '352', 'uart_set_debug'), ('system_set_os_print', '1', '347', 'uart_set_debug'), ('system_set_os_print', '1', '343', 'uart_set_debug')]
@@ -3731,9 +3731,9 @@ CHANGED:('UART_INT_ST', '0', '107', 'uart_interrupt_handler')
 Version 1(new): https://github.com/esp8266/Arduino/blob/2b3302c714f9b32e1b9f77d32990109a1fe7930b/cores/esp8266/HardwareSerial.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/be5f1f83c154fcd80b6bf3223a7e1482042f445d/cores/esp8266/HardwareSerial.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Added linker attributes to function.
 
 ####Values removed
 Values: [(0, '255', '76', 'uart0_rx_handler'), (0, '511', '125', 'uart0_interrupt_enable'), (0, '0', '133', 'uart0_interrupt_disable'), ('UART_FIFO', '0', '185', 'uart_write_char')]
@@ -3799,9 +3799,9 @@ CHANGED:('offset', '416', '153', '__wrap_system_restart_local')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f45da1cf259d4eafad3308b508fa6f5ce3cdc9f3/cores/esp8266/core_esp8266_postmortem.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/7a43092df0c8734577870f5630ee0062150c1074/cores/esp8266/core_esp8266_postmortem.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+[Recheck] Changed the amount of stack taken by the `REASON_EXCEPTION_RST` exception handler.
 
 ####Values removed
 Values: [('s_panic_what', '0', '246', '__panic_func')]
@@ -3893,9 +3893,9 @@ CHANGED:('tz', '1', '196', 'configTime')
 Version 1(new): https://github.com/esp8266/Arduino/blob/b02643e7fadc5c7d618613058f70835d9c16649a/cores/esp8266/time.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/abdd2bdbb6a5caf31807d82ebd7b447947a9c360/cores/esp8266/time.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed function name.
 
 ####Values changed
 NEW:('sntp_getservername', '2', '85', 'sntp_set_timezone_in_seconds')
@@ -3904,9 +3904,9 @@ CHANGED:('sntp_get_current_timestamp', '1000000', '91', '_gettimeofday_r')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f066ed2495c8d6f04841243d90f6deaef21a0119/cores/esp8266/time.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/05d28bc045d331edc37fb4f6622dacf518e12723/cores/esp8266/time.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Different var.
 
 ####Values added
 Values: [('sntp_set_timezone_in_seconds', '0', '125', 'configTime')]
@@ -4008,9 +4008,9 @@ CHANGED:('GP16O', '1', '601', 'ICACHE_RAM_ATTR')
 Version 1(new): https://github.com/esp8266/Arduino/blob/656a33e6f82482535782213a6e96c2bd49b22a39/cores/esp8266/core_esp8266_waveform_pwm.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_waveform_pwm.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Changed linker attributes to function.
 
 ####Values changed
 NEW:('leftover', '0', '225', '_cleanAndRemovePWM')
@@ -4019,9 +4019,9 @@ CHANGED:('leftover', '0', '217', '_cleanAndRemovePWM')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_waveform_pwm.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/ccdde5f396d442f73dc101a1badeed3291f4652c/cores/esp8266/core_esp8266_waveform_pwm.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+[check] Line number change.
 
 ### Number of warnings:
 3

@@ -7,68 +7,88 @@ src/ir_BoseWave.cpp
 
 ### Compare results
 
+#### Result #1
+
 ####Values removed
 Values: [('BOSEWAVE_REPEAT_SPACE', '1000', '65', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/cae4f4e16d47691d44021c76e35d03ca90a797f6/src/ir_BoseWave.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/15a1fbc8d02fc610808f62494589d1cd2c4e2d93/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed 1000 to MICROS_IN_ONE_MILLI. It went from being hard-coded to using a var, though this has not something to do with performance.
+
+#### Result #2
 
 ####Values removed
 Values: [('enableIROut', '38', '47', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/22451e789a7ba113d384720cde92e80c66bf5c2c/src/ir_BoseWave.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/cae4f4e16d47691d44021c76e35d03ca90a797f6/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+The value 38 was changed to the BOSEWAVE_KHZ var. This was a fix for a potential HCFT situation.
+
+#### Result #3
 
 ####Values removed
 Values: [('tOffset', '1', '71', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/1e8026609cb741023ff1053e8ae317b0bca377c8/src/ir_BoseWave.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/51087db8b7a7d3eb1dab79f6a02c70ef0aefed75/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Instead of using a counter `tOffset`, `results.rawbuf[1]` is increased manually. Does not fit the type for HCFT.
+
+#### Result #4
 
 ####Values removed
 Values: [('space', '0', '59', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/a79b87110c7e3fdd43cf13e09ce183cc10b1a84d/src/ir_BoseWave.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/1e8026609cb741023ff1053e8ae317b0bca377c8/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+The LED was set to end being off, this line was removed in the new version.
+
+#### Result #5
 
 ####Values added
 Values: [('space', '0', '57', 'IRsend'), ('aNumberOfRepeats', '1', '45', 'IRsend'), ('enableIROut', '38', '43', 'IRsend'), ('tDecodedValue', '8', '111', 'IRrecv'), ('tDecodedValue', '255', '110', 'IRrecv'), ('tOffset', '1', '70', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/f9d32954c624e0e7c0fc06d553d418a0980f72b6/src/ir_BoseWave.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/3e808fec61bcc3285ec11a39611e5ccc50b9799d/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+`space`: regarding the led be turned off in the end: False
+`aNumberOfRepeats`: Canged code structure: False
+`enableIROut`: Hardcoded IR carrier frequency, see result #2 for the fix: True
+`tDecodedValue`: (For both) Rewrote how to handle a success scenario: False
+`tOffset`: Changed the name `index` to `tOffset`: False
+
+#### Result #6
 
 ####Values removed
 Values: [('index', '1', '122', 'IRrecv'), ('index', '0', '110', 'IRrecv'), ('complement', '0', '108', 'IRrecv'), ('command', '0', '107', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_BoseWave.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/2992d5e87a9c84b1960e2cd8a5dff722c39bbffb/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`index`: (For both; incorrect find, value is there: False
+`complement`: Incorrect find, value is there: False
+`command`: Incorrect find, value is there: False
+
+#### Result #7
 
 ####Values removed
 Values: [('command', '0', '108', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/8834de0bf0fcbf68efc343447bbbb91ac0f4770b/src/ir_BoseWave.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/e8d461604bfec93b7314532cf8766d81d549bc4d/src/ir_BoseWave.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`command`: Incorrect find, value is there
 
 ### Number of warnings:
 7
@@ -80,14 +100,16 @@ src/ir_DistanceProtocol.cpp
 
 ### Compare results
 
+#### Result #8
+
 ####Values added
 Values: [('tMaxDurationIndex', '0', '136', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/58a2725663ecc0c62ac312460fc9d1adcc1f479d/src/ir_DistanceProtocol.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/94fa49a0f858c60b593d1437da59c873c6c3d547/src/ir_DistanceProtocol.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`tMaxDurationIndex` is available on line 151 in the older version.
 
 ### Number of warnings:
 1
@@ -99,77 +121,96 @@ src/ir_RC5_RC6.cpp
 
 ### Compare results
 
+#### Result #9
+
 ####Values removed
 Values: [('enableIROut', '36', '491', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/27fa380bdabcffc1a24b532d8da7eb338ad8d184/src/ir_RC5_RC6.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/cae4f4e16d47691d44021c76e35d03ca90a797f6/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `enableIROut` from `36` to `RC5_RC6_KHZ` to avoid a potential HCFT.
+
+#### Result #10
 
 ####Values removed
 Values: [('used', '0', '483', 'IRrecv'), ('data', '0', '482', 'IRrecv'), ('val', '1', '192', 'getRClevel'), ('used', '0', '188', 'getRClevel'), ('avail', '3', '181', 'getRClevel'), ('avail', '2', '179', 'getRClevel'), ('avail', '1', '177', 'getRClevel'), (1, '0', '173', 'getRClevel')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/3283ef70875d2cafa69be93564045fba76128450/src/ir_RC5_RC6.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/8007e6539fffac67b609c05b1ec82d59cffe075c/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Big rewrite of the functions `IRrecv::decodeRC6`, no direct replacement for variables.
+
+#### Result #11
 
 ####Values added
 Values: [('val', '1', '192', 'getRClevel'), (1, '0', '173', 'getRClevel')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/2ccae65ef6e866947714028da9100a77bf12e219/src/ir_RC5_RC6.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/1acdcce7b2d015a20a4ce0e4162a3458da669351/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `val` variable 1 to `MARK`. Fixed ambiguity of what the 1 or 0 meant.
+
+#### Result #12
 
 ####Values removed
 Values: [('space', '0', '647', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/3ca432fc670c97550ebb066e61de00e67f3afe44/src/ir_RC5_RC6.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/aac8748a3d07e2c6605f65880f63ea2435a4aede/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `space(0);  // Always end with the LED off` to `ledOff();  // Always end with the LED off`. Fixed ambiguity what space() meant, code is better readable.
+
+#### Result #13
 
 ####Values removed
 Values: [('toggleBit', '1', '614', 'IRsend'), (1, '0', '543', 'IRrecv'), (1, '1', '541', 'IRrecv'), ('offset', '1', '496', 'IRrecv'), ('used', '0', '495', 'IRrecv'), ('data', '0', '494', 'IRrecv'), ('toggleBit', '1', '628', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/7ecfa03d06fe67fb60573321cd031f35d1a01897/src/ir_RC5_RC6.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/4fb32a608c42727cc2d6d3529eafb229e70c437f/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Issue with the result, `toggleBit` was found on line 614 in the file where it was supposed to be removed. In the file it should be available in, is was on line 625.
+`toggleBit` on line 628 is available in the "available file"; and moved in the other file.
+`1,0` and `1,1` was moved to a different line.
+`offset`, `used`, `data` were moved to a different line.
+
+#### Result #14
 
 ####Values added
 Values: [('used', '0', '485', 'getRClevel'), ('avail', '3', '478', 'getRClevel'), ('avail', '2', '476', 'getRClevel'), ('avail', '1', '474', 'getRClevel')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/a79b87110c7e3fdd43cf13e09ce183cc10b1a84d/src/ir_RC5_RC6.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/a876cb1679a01e6db31a4e856630ee89adeb7348/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Method `getRClevel` is available in the beginning of the file. The file has been extended by 308 extra lines of code.
+
+#### Result #15
 
 ####Values added
 Values: [('nbits', '1', '263', 'IRsend')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/e8f8f2dd63ecb0d50c8a3f209d1e7389f4d4ee53/src/ir_RC5_RC6.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/052e160a3752b4b2d71c8d606333f75c5371f7f6/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Moved `nbits` out of the for loop.
+
+#### Result #16
 
 ####Values removed
 Values: [('enableIROut', '36', '218', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_RC5_RC6.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/2992d5e87a9c84b1960e2cd8a5dff722c39bbffb/src/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`enableIROut` available on a different line.
 
 ### Number of warnings:
 8
@@ -181,14 +222,16 @@ ir_RC5_RC6.cpp
 
 ### Compare results
 
+#### Result #17
+
 ####Values added
 Values: [('enableIROut', '36', '133', 'IRsend')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/88e243fe068e06d2ed602fefe6bd5effd07006e1/ir_RC5_RC6.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/eb0360e75888b8491bb2e0a6883fca8ea360135a/ir_RC5_RC6.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Available on a different line (125).
 
 ### Number of warnings:
 1
@@ -200,32 +243,38 @@ src/ir_Kaseikyo.cpp
 
 ### Compare results
 
+#### Result #18
+
 ####Values removed
 Values: [('enableIROut', '37', '287', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/22451e789a7ba113d384720cde92e80c66bf5c2c/src/ir_Kaseikyo.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/cae4f4e16d47691d44021c76e35d03ca90a797f6/src/ir_Kaseikyo.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `enableIROut(36)` to `enableIROut(KASEIKYO_KHZ)`, fixed a potential for HCFT.
+
+#### Result #19
 
 ####Values added
 Values: [('offset', '1', '241', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/e85ae16e6780f9d3a0e83487f0bac30e635a7b25/src/ir_Kaseikyo.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/4fb32a608c42727cc2d6d3529eafb229e70c437f/src/ir_Kaseikyo.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Incorrrect result, variable with same value is available.
+
+#### Result #20
 
 ####Values removed
 Values: [('enableIROut', '37', '257', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/a79b87110c7e3fdd43cf13e09ce183cc10b1a84d/src/ir_Kaseikyo.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/977debf4e6c7331a96d9798b82dc5ce682da4950/src/ir_Kaseikyo.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+`enableIROut` available in a different line (273). Though this value has been changed before from 36, see result #36.
 
 ### Number of warnings:
 3
@@ -237,23 +286,27 @@ src/private/IRTimer.hpp
 
 ### Compare results
 
+#### Result #21
+
 ####Values removed
 Values: [('sSliceNumberForSendPWM', '0', '1330', 'enableSendPWM')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/1ce638b7f64cbb7abdf48fd41c87819ee252e0a8/src/private/IRTimer.hpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/fb798a5505f0a887f5b89321d21a0eae767a1f17/src/private/IRTimer.hpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`sSliceNumberForSendPWM` has been moved from a void function to in a #define (line 1324), no changes to the var value.
+
+#### Result #22
 
 ####Values added
 Values: [('sSliceNumberForSendPWM', '0', '1330', 'enableSendPWM')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/2077fd1f508aa44da4fa1cc612347efa8aa35b85/src/private/IRTimer.hpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/1ce638b7f64cbb7abdf48fd41c87819ee252e0a8/src/private/IRTimer.hpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Different implementation with `sSliceNumberForSendPWM`.
 
 ### Number of warnings:
 2
@@ -270,63 +323,76 @@ Values: [('enableIROut', '38', '357', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/22451e789a7ba113d384720cde92e80c66bf5c2c/src/ir_NEC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/e6b39b72df25a77c28cef62a073fd6c8475e4d28/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+`enableIROut` changed from hardcoded value 38 to using `NEC_KHZ` to set the value (still on line 357, and it still has a value of 38 kHz).
 
 ####Values added
 Values: [('offset', '1', '202', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/e85ae16e6780f9d3a0e83487f0bac30e635a7b25/src/ir_NEC.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/4fb32a608c42727cc2d6d3529eafb229e70c437f/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`offset` is available on line 202 in both files, no changes were made.
 
 ####Values removed
 Values: [('enableIROut', '38', '266', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/a79b87110c7e3fdd43cf13e09ce183cc10b1a84d/src/ir_NEC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/1e8026609cb741023ff1053e8ae317b0bca377c8/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`enableIROut` is available on line 264.
 
 ####Values removed
 Values: [('aAddress', '16', '85', 'IRsend'), ('enableIROut', '38', '78', 'IRsend'), ('tCommand', '8', '204', 'IRrecv'), ('tCommand', '255', '203', 'IRrecv'), ('data', '16', '202', 'IRrecv'), ('offset', '1', '167', 'IRrecv'), ('data', '0', '166', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/c55628ab24d2a0e735f910d199915d0ca3b4a15f/src/ir_NEC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/f9d32954c624e0e7c0fc06d553d418a0980f72b6/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+`aAddress` is available on line 70, though this is an incorrect finding, the value 16 does not belong to `aAddress` but to calling `sendPulseDistanceWidthData`: Incorrect
+`enableIROut` is available on line 58: Incorrect
+`tCommand` available on line 143: Incorrect
+Other `tCommand` is available on line 142: Incorrect
+`data` changed from being hardcoded `data >> 16` to `results.value >> NEC_ADDRESS_BITS`: False
+`offset` available on line 93, changed structure of function: Incorrect
+
 
 ####Values added
 Values: [('aAddress', '16', '92', 'IRsend'), ('enableIROut', '38', '85', 'IRsend'), ('tCommand', '8', '197', 'IRrecv'), ('tCommand', '255', '196', 'IRrecv'), ('data', '16', '195', 'IRrecv'), ('offset', '1', '166', 'IRrecv'), ('data', '0', '165', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/2992d5e87a9c84b1960e2cd8a5dff722c39bbffb/src/ir_NEC.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/e8f8f2dd63ecb0d50c8a3f209d1e7389f4d4ee53/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+For `aAddress`, `sendPulseDistanceWidthData` was changed, see line 39: Incorrect
+`enableIROut` available on line 27: Incorrect
+`tCommand` structure changed: False
+`data` structure changed: False
+`offset` available on line 64: Incorrect
+`data` available on line 63: Incorrect
+
 
 ####Values removed
 Values: [('offset', '1', '65', 'IRrecv'), ('data', '0', '64', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_NEC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/2992d5e87a9c84b1960e2cd8a5dff722c39bbffb/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`offset` available on line 64: Incorrect
+`data` available on line 63: Incorrect
 
 ####Values removed
 Values: [(1, '0', '103', 'IRrecv'), (1, '1', '101', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/b651caaf682ad4eb26bbae7e6d20f3f3b7c396b3/src/ir_NEC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_NEC.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed structure.
 
 ### Number of warnings:
 7
@@ -343,18 +409,18 @@ Values: [('space', '0', '43', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/3ca432fc670c97550ebb066e61de00e67f3afe44/src/ir_Dish.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/aac8748a3d07e2c6605f65880f63ea2435a4aede/src/ir_Dish.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `space(0)` to turn off the LED to `ledOff()`. 
 
 ####Values added
 Values: [('space', '0', '52', 'IRsend')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/df1a126897f283119b0e187fd30dfa6d79509584/src/ir_Dish.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_Dish.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Added `space(0)` to end with the LED off.
 
 ### Number of warnings:
 2
@@ -371,36 +437,37 @@ Values: [('space', '0', '47', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/a79b87110c7e3fdd43cf13e09ce183cc10b1a84d/src/ir_Whynter.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/1e8026609cb741023ff1053e8ae317b0bca377c8/src/ir_Whynter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Added `space(0)` to end with the LED off.
 
 ####Values removed
 Values: [('offset', '1', '54', 'IRrecv'), ('data', '0', '53', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_Whynter.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/2992d5e87a9c84b1960e2cd8a5dff722c39bbffb/src/ir_Whynter.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`offset` available on line 54: incorrect
+`data` available on line 53: incorrect
 
 ####Values removed
 Values: [(1, '0', '93', 'IRrecv'), (1, '1', '91', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/b651caaf682ad4eb26bbae7e6d20f3f3b7c396b3/src/ir_Whynter.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_Whynter.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Uncommented code, changed structure.
 
 ####Values added
 Values: [('data', '0', '53', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/0d4805a1299ea5ba944000dac4f41b2f2f128458/src/ir_Whynter.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/b651caaf682ad4eb26bbae7e6d20f3f3b7c396b3/src/ir_Whynter.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`data` available on line 54.
 
 ### Number of warnings:
 4
@@ -417,9 +484,9 @@ Values: [(1, '0', '76', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/88e243fe068e06d2ed602fefe6bd5effd07006e1/ir_Whynter.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/eb0360e75888b8491bb2e0a6883fca8ea360135a/ir_Whynter.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Available on lin 72.
 
 ### Number of warnings:
 1
@@ -436,45 +503,46 @@ Values: [('enableIROut', '38', '226', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/27fa380bdabcffc1a24b532d8da7eb338ad8d184/src/ir_JVC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/cae4f4e16d47691d44021c76e35d03ca90a797f6/src/ir_JVC.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed `enableIROut(38)` to `enableIROut(JVC_KHZ)`, avoided hard-coding in target file.
 
 ####Values added
 Values: [('offset', '1', '155', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/e85ae16e6780f9d3a0e83487f0bac30e635a7b25/src/ir_JVC.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/4fb32a608c42727cc2d6d3529eafb229e70c437f/src/ir_JVC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`offset` available on same line.
 
 ####Values removed
 Values: [('enableIROut', '38', '223', 'IRsend')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/a79b87110c7e3fdd43cf13e09ce183cc10b1a84d/src/ir_JVC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/1e8026609cb741023ff1053e8ae317b0bca377c8/src/ir_JVC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`enableIROut` available on line 219.
 
 ####Values removed
 Values: [('offset', '1', '60', 'IRrecv'), ('data', '0', '59', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/aac2a966377c9ec99007131614d3826e990a1881/src/ir_JVC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/2992d5e87a9c84b1960e2cd8a5dff722c39bbffb/src/ir_JVC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Available on the same lines.
 
 ####Values removed
 Values: [('offset', '1', '57', 'IRrecv'), ('data', '0', '56', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/85cd7fdd65d52601020dd0cb69d927e1530e7fd5/src/ir_JVC.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/668752283b5cbe1bc7281b31d588d0acce9e0f68/src/ir_JVC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`offset` available on line 58: incorrect
+`data` available on line 58: incorrect
 
 ### Number of warnings:
 5
@@ -491,9 +559,9 @@ Values: [('data', '0', '59', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/88e243fe068e06d2ed602fefe6bd5effd07006e1/ir_JVC.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/eb0360e75888b8491bb2e0a6883fca8ea360135a/ir_JVC.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+`data` available on line 54
 
 ### Number of warnings:
 1
@@ -510,36 +578,36 @@ Values: [('aSerial', '0', '243', 'IRrecv'), (1, '2', '242', 'IRrecv')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/e85ae16e6780f9d3a0e83487f0bac30e635a7b25/src/irPronto.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/7ecfa03d06fe67fb60573321cd031f35d1a01897/src/irPronto.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed function name and added functionality. Still available on line 239 and 238.
 
 ####Values added
 Values: [('size', '0', '286', 'size_t')]
 Not available in: https://github.com/z3t0/Arduino-IRremote/blob/44d6a7da150637ab72846743f00501990cab4dc5/src/irPronto.cpp
 Added in: https://github.com/z3t0/Arduino-IRremote/blob/51087db8b7a7d3eb1dab79f6a02c70ef0aefed75/src/irPronto.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Available on line 257.
 
 ####Values removed
 Values: [('stream', '0', '146', 'IRrecv'), (1, '2', '145', 'IRrecv')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/efbdb1d440e4d1246479fc726fe004d79c686fe5/src/irPronto.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/85bf1c76a9d726ecf5d6fce4d454b70763767b6e/src/irPronto.cpp
 ####True or False Positive:
-[todo]
+Incorrect
 ####Note:
-[todo]
+Available on line 150 and 151.
 
 ####Values removed
 Values: [('skip', '0', '130', 'sendPronto'), ('skip', '0', '126', 'sendPronto'), ('skip', '0', '123', 'sendPronto'), (1000000, '0.5', '105', 'sendPronto'), ('cp', '0.241246', '104', 'sendPronto'), ('i', '3', '439', 'decode'), ('i', '4', '434', 'decode'), ('rptLen', '2', '428', 'decode'), ('code', '0', '405', 'decode'), ('code', '0', '388', 'decode'), ('i', '3', '461', 'irDump'), (2, '2', '459', 'irDump'), ('code', '2', '457', 'irDump'), ('FF', '255', '456', 'irDump')]
 Available in: https://github.com/z3t0/Arduino-IRremote/blob/2bce3d6936f685374163687c3ca3f57c2437ae01/src/irPronto.cpp
 Removed in: https://github.com/z3t0/Arduino-IRremote/blob/f94b85756260a3cdb5191b6141dfb875606f31ff/src/irPronto.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed structure.
 
 ####Values removed
 Values: [('skip', '0', '126', 'sendPronto'), ('skip', '0', '123', 'sendPronto'), ('skip', '0', '122', 'sendPronto'), ('skip', '0', '120', 'sendPronto'), ('skip', '0', '119', 'sendPronto'), (1000000, '0.5', '102', 'sendPronto'), ('cp', '0.241246', '101', 'sendPronto'), ('i', '3', '469', 'decode'), ('i', '4', '464', 'decode'), ('rptLen', '2', '458', 'decode'), ('code', '0', '435', 'decode'), ('code', '0', '423', 'decode'), ('i', '3', '492', 'irDump'), (2, '2', '490', 'irDump'), ('code', '2', '488', 'irDump'), ('FF', '255', '487', 'irDump')]
@@ -567,9 +635,9 @@ CHANGED:('code', '2', '480', 'irDump')
 Version 1(new): https://github.com/z3t0/Arduino-IRremote/blob/845e912e9f291dbbdfbafe0dba63154bdae931df/irPronto.cpp
 Version 2(old): https://github.com/z3t0/Arduino-IRremote/blob/3dec9973919d5a55bb15c20763d80ac7db9d129a/irPronto.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Only a line number change happened (for this).
 
 ### Number of warnings:
 1
@@ -993,9 +1061,9 @@ CHANGED:('enableIROut', '37', '167', 'IRsend')
 Version 1(new): https://github.com/z3t0/Arduino-IRremote/blob/cae4f4e16d47691d44021c76e35d03ca90a797f6/src/ir_Template.cpp
 Version 2(old): https://github.com/z3t0/Arduino-IRremote/blob/27fa380bdabcffc1a24b532d8da7eb338ad8d184/src/ir_Template.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Changed  IR carrier frequency from 38 to 37.
 
 ####Values changed
 NEW:decodedRawData
@@ -1004,9 +1072,9 @@ CHANGED:('value', '65535', '236', 'IRrecv')
 Version 1(new): https://github.com/z3t0/Arduino-IRremote/blob/4fb32a608c42727cc2d6d3529eafb229e70c437f/src/ir_Template.cpp
 Version 2(old): https://github.com/z3t0/Arduino-IRremote/blob/e85ae16e6780f9d3a0e83487f0bac30e635a7b25/src/ir_Template.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed name (structure), no value change happened.
 
 ####Values removed
 Values: [('space', '0', '188', 'IRsend')]
