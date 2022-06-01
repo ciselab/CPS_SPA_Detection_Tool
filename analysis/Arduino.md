@@ -140,7 +140,7 @@ Version 2(old): https://github.com/esp8266/Arduino/blob/a49f0470963a5282d87a6fe6
 ####True or False Positive:
 False
 ####Note:
-`uint8_t targetBSSID[6] {0};` can be found on line 405. Changed return type, incorrect tdetection of function name.
+`uint8_t targetBSSID[6] {0};` can be found on line 405. Changed return type, incorrect detection of function name.
 
 ####Values removed
 Values: [('attemptNumber', '1', '321', 'transmission_status_t')]
