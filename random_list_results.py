@@ -16,9 +16,10 @@ random_lists = join(results_base_path(), "random_project_files.csv")
 #     "number_hcft_Arduino_final": 340,
 # }
 dict_projects_result_files = {
-    "Arduino-IRremote": 24,
-    "Arduino": 92,
-    "ardupilot": 499,
+    # "Arduino-IRremote": 24,
+    # "Arduino": 92,
+    # "ardupilot": 499,
+    "ardupilot": 63,
 }
 # list_projects_number = [number_hcft_Arduino_IRremote_final, number_hcft_ardumower_final, number_hcft_Arduino_final]
 

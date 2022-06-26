@@ -1,5 +1,9 @@
 # ardupilot
 
+## Random selection
+[ardupilot]	32	57	14	19	15	55	17	25	58	20	51	9	31	40	7	50	28	43	36	49	34	56	38	47	45	10	48	27	4	13	12	11	59	24	29	53	35	37	2	16	3	8	61	42	18	62	39	41	54	21	22	60	52	30	46	44	5	6	26	33	23
+First 10 of this list were selected for manual verification. Generate by using random_list_results.py.
+
 ## Result number #1
 
 ### File name(s)
@@ -34,6 +38,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/1e41f7cc61436ac65fa0
 
 ### File name(s)
 libraries/AP_HAL/HAL.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -47,6 +52,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/ebc1f9acf67646f60d22
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -139,6 +145,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/63bafa2c7fdc8b7506939ae6bc
 
 ### File name(s)
 libraries/AP_Baro/AP_Baro_BMP280.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -152,6 +159,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/cb8a34f78456674af1ec
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:('_t_fine', '128000', '176', 'AP_Baro_BMP280')
@@ -171,6 +179,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/375c7b0f5f3da92a4f4a
 
 ### File name(s)
 libraries/AP_Frsky_Telem/AP_Frsky_SPort_Passthrough.h
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -184,6 +193,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/617b023c6f00004945f8
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(14, '15', '76', 'AP_Frsky_SPort_Passthrough')
@@ -195,6 +205,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/c61570697140633d0fb3
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(13, '14', '75', 'AP_Frsky_SPort_Passthrough')
@@ -206,6 +217,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/aa55578008963fe58a9f
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(12, '13', '73', 'AP_Frsky_SPort_Passthrough')
@@ -217,6 +229,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/24382e25fc0ff2e880e9
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(11, '12', '72', 'AP_Frsky_SPort_Passthrough')
@@ -228,6 +241,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/6b26a64f77e28c937e35
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 5
@@ -1122,6 +1136,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/da5d5c92034f446b3227a48466
 
 ### File name(s)
 ArduCopter/heli.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -1153,6 +1168,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/5ac13c0355fcefff47f3
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:get_control_in
@@ -1946,6 +1962,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/36bba2e02caabe005dd59457
 
 ### File name(s)
 libraries/AP_Landing/AP_Landing_Deepstall.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -1968,6 +1985,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/cc150f75c78e770c69c6
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(200, '1000.0', '465', 'AP_Landing_Deepstall')
@@ -2378,6 +2396,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/a8cf38b3667838689608
 
 ### File name(s)
 libraries/AP_RCProtocol/examples/RCProtocolTest/RCProtocolTest.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -2438,6 +2457,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/4e88adf86e0b7758ea25
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(135, '198', '228', 'loop')
@@ -2496,6 +2516,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/8d8853d4b70ab76f98d3
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('sumd_output', '1', '205', 'loop'), (1500, '1500', '202', 'loop'), (135, '198', '201', 'loop')]
@@ -2845,6 +2866,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/753f7d864addf0ce7140940670
 
 ### File name(s)
 libraries/AP_Notify/ToshibaLED_I2C.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -2867,6 +2889,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/0b69e4346436a9f67be7
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 2
@@ -3991,6 +4014,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/3ef77617fd8b2533cda42fa9
 ArduPlane/Attitude.cpp
 ArduPlane/servos.cpp
 ArduPlane/Attitude.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -4433,6 +4457,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/9c1ac2d9e6856bc8e561
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('STANDARD_SPEED', '100.0', '229', 'calc_nav_roll')]
@@ -5581,6 +5606,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/87fca1985fd6dd8bea74c9ac20
 
 ### File name(s)
 libraries/SITL/SIM_RichenPower.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -5594,6 +5620,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/98562cc5236219eb92e3
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -5837,6 +5864,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/1660b027cae7e69d0a0b
 
 ### File name(s)
 libraries/AP_HAL_ChibiOS/CANFDIface.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -5850,6 +5878,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/439a944801fd0240a3dd
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [(1, '1', '1079', 'UAVCAN_STM32_IRQ_HANDLER')]
@@ -6330,6 +6359,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/7f347e39dd45942d7e58
 
 ### File name(s)
 libraries/AP_IOMCU/iofirmware/ioprotocol.h
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -6352,6 +6382,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/cc03b2975c16d03185d9
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:55
@@ -6390,6 +6421,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/191f72d2e64a2f1eadc163586f
 ### File name(s)
 libraries/AP_NavEKF3/AP_NavEKF3_Measurements.cpp
 libraries/AP_NavEKF2/AP_NavEKF2_Measurements.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -6403,6 +6435,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/4605870788427302ed73
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:5.0
@@ -6414,6 +6447,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/ebb8bb4f6fd846b55f41
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('accel_diff_limit', '1.0', '1071', 'NavEKF3_core'), ('accel_limit', '1.0', '1070', 'NavEKF3_core'), ('gyro_diff_limit', '0.1', '1069', 'NavEKF3_core'), ('radians', '3.0', '1068', 'NavEKF3_core')]
@@ -6549,6 +6583,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/e0e534628bdf2bcbbc1d930488
 
 ### File name(s)
 libraries/AP_Math/AP_Math.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -6670,6 +6705,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/8abbbe57139bfa335cde
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 13
@@ -6924,6 +6960,9 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/6a59dd04a7d3f5bfa54c
 
 ### File name(s)
 libraries/DataFlash/DataFlash_Backend.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -6934,9 +6973,10 @@ CHANGED:('msg', '64', '411', 'DataFlash_Backend')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/4c794ebba3d2928c58bf51648e0ffc4d12cf2b1a/libraries/DataFlash/DataFlash_Backend.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/6daa2412357e903edb6abe8b750bda3d3a5a5968/libraries/DataFlash/DataFlash_Backend.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Added a Null termination to the log_Message.msg.
+[ANALYSE]
 
 ####Values removed
 Values: [('charlen', '64', '238', 'DataFlash_Backend'), ('charlen', '16', '235', 'DataFlash_Backend'), ('charlen', '4', '211', 'DataFlash_Backend'), ('charlen', '0', '175', 'DataFlash_Backend'), ('offset', '0', '170', 'DataFlash_Backend')]
@@ -7242,6 +7282,9 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/970dbf3c8d09118858961893
 
 ### File name(s)
 ArduPlane/control_modes.pde
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -7270,9 +7313,10 @@ CHANGED:('oldSwitchPosition', '0', '73', 'reset_control_switch')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/4f242aedec3e3f31a46ab2e6a0f13c854facb777/ArduPlane/control_modes.pde
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/6ed78c89ac6846fb38b045a7aa1f1898f3681930/ArduPlane/control_modes.pde
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+From the commit message: "the mode would not revert if the switch was in position 0".
+[ANALYSE]
 
 ####Values changed
 NEW:uint8_t
@@ -7292,9 +7336,10 @@ CHANGED:('change_command', '1', '42', 'read_control_switch')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/764d86216eb415289486f948641e6c63be230cbf/ArduPlane/control_modes.pde
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/d13d117e61de348a14f176e8097444340b88a276/ArduPlane/control_modes.pde
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+From commit message: "fixed mission reset by setting waypoint to zero".
+[ANALYSE]
 
 ####Values added
 Values: [('oldSwitchPosition', '0', '71', 'reset_control_switch')]
@@ -8345,6 +8390,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/4482743af503ddb4ca280ebf17
 
 ### File name(s)
 libraries/AP_Baro/AP_Baro_LPS2XH.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -8358,6 +8404,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/88effef51ac3abcd6ce8
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -8366,6 +8413,9 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/88effef51ac3abcd6ce8
 
 ### File name(s)
 libraries/AP_GPS/AP_GPS_NMEA.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -8443,9 +8493,10 @@ CHANGED:(514, '100', '367', 'AP_GPS_NMEA')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/3108d661d229e135ed8cc66fe1066793c923ae93/libraries/AP_GPS/AP_GPS_NMEA.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/cad260a4818e3e1186a4528fe14c1a7e2ee22f9a/libraries/AP_GPS/AP_GPS_NMEA.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Corrected Knots m/sec calculation.
+[ANALYSE]
 
 ####Values added
 Values: [('_term', '0', '315', 'AP_GPS_NMEA'), ('_new_longitude', '100', '267', 'AP_GPS_NMEA'), ('_new_latitude', '100', '266', 'AP_GPS_NMEA'), ('_new_longitude', '100', '256', 'AP_GPS_NMEA'), ('_new_latitude', '100', '255', 'AP_GPS_NMEA'), ('_term', '1', '248', 'AP_GPS_NMEA')]
@@ -8491,6 +8542,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/aef16160dcafca3ac0a572c350
 
 ### File name(s)
 libraries/AP_Math/tests/test_scurve.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -8504,6 +8556,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/75411afd21511ed4cca4
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -8512,6 +8565,9 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/75411afd21511ed4cca4
 
 ### File name(s)
 libraries/AP_Math/matrixN.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -8522,9 +8578,10 @@ CHANGED:('i', '0.5', '51', 'T')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/ce53ae63ae3bb03f2d148dd7dee41551436ff014/libraries/AP_Math/matrixN.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/39ae285a7fd0737942c70c6b22ae91a4251ed97f/libraries/AP_Math/matrixN.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Performance optimatization.
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -8533,6 +8590,9 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/39ae285a7fd0737942c7
 
 ### File name(s)
 Tools/AP_Bootloader/support.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[FALSE]
 
 ### Compare results
 
@@ -8583,9 +8643,10 @@ CHANGED:('chThdSleepMicroseconds', '100', '46', 'cin_word')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/0ebd05aa1a2a38f728c30ad10b4eb15c2b2ae5e4/Tools/AP_Bootloader/support.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/fe4aa4bbc75fd46efe1c08baae8347cf47f127b2/Tools/AP_Bootloader/support.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+This is an MWN antipattern instead of an HCFT.
+[ANALYSE]
 
 ####Values added
 Values: [('ret', '0', '296', 'size_t'), ('chThdSleepMilliseconds', '1000', '326', 'init_uarts')]
@@ -8766,6 +8827,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/dc452d41d24be2be31a1eb53
 
 ### File name(s)
 libraries/AP_OSD/AP_OSD_Backend.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -8788,6 +8850,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/785cf293cde16b9f0d98
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('buff', '32', '28', 'AP_OSD_Backend')]
@@ -8891,6 +8954,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/5c8b39562fe95bf7b2e7e4cb0e
 
 ### File name(s)
 ArduCopter/control_modes.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -8994,6 +9058,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/69f1841d8ee34488913b
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('CH7_wp_index', '1', '118', 'read_trim_switch'), (1.5, '1.5', '209', 'trim_accel'), (1.5, '1.5', '208', 'trim_accel'), ('control_in', '3000', '206', 'trim_accel'), ('control_in', '3000', '205', 'trim_accel')]
@@ -9162,6 +9227,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/72f94444c4a6fbdf4ecbf80c
 ### File name(s)
 ArduPlane/failsafe.cpp
 ArduPlane/failsafe.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -9184,6 +9250,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/1ae669bb01ebaa2aee10
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('chan', '0', '109', 'Plane')]
@@ -9474,6 +9541,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/b489e8a6555d90ac25f94ea393
 
 ### File name(s)
 libraries/SITL/SIM_FlightAxis.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -9514,6 +9582,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/3b0cd9f101398a57a8df
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('dt_seconds', '0.001', '255', 'FlightAxis')]
@@ -10383,6 +10452,9 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/2457dbf0cd5a2235663a816cef
 
 ### File name(s)
 libraries/AP_RangeFinder/AP_RangeFinder_GYUS42v2.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -10393,9 +10465,10 @@ CHANGED:('buffer', '5', '68', 'AP_RangeFinder_GYUS42v2')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/0f7c3e39640911fd19677eda5674cfe116c7a6c8/libraries/AP_RangeFinder/AP_RangeFinder_GYUS42v2.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/6ec497229b4d7c8872082a0e2491e803a0da482e/libraries/AP_RangeFinder/AP_RangeFinder_GYUS42v2.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Adjustments made for use with Meters instead of cm.
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -10697,6 +10770,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/6786e832a1cb38be2563b1b9ab
 
 ### File name(s)
 libraries/AP_Logger/AP_Logger_Block.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -10728,6 +10802,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/49bf0a3057cba85cf279
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 3
@@ -10764,6 +10839,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/278883c521fb9df465c864e6
 
 ### File name(s)
 ArduCopter/radio.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -10878,6 +10954,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/f3a95ff3cb9f46f08582
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('OCR5B', '65535', '63', 'init_rc_out'), ('OCR1C', '65535', '62', 'init_rc_out'), ('OCR1B', '65535', '61', 'init_rc_out'), ('failsafeCounter', '1', '191', 'throttle_failsafe'), ('failsafeCounter', '3', '181', 'throttle_failsafe'), ('failsafeCounter', '11', '173', 'throttle_failsafe')]
@@ -11091,6 +11168,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/cb118c6b73d41dd91b258f6662
 
 ### File name(s)
 libraries/AP_Logger/LogStructure.h
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -11167,6 +11245,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/255c685a8a9bf486bf98
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 8
@@ -11444,6 +11523,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/6c16da21c512485cce2742abf4
 
 ### File name(s)
 libraries/AP_HAL_SITL/sitl_gps.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -11484,6 +11564,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/f6d475c1e6a39da34e88
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [(2, '15', '181', 'gps_time')]
@@ -11630,6 +11711,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/1a4b4fa85ed211378c6cce54f7
 
 ### File name(s)
 libraries/AP_GPS/AP_GPS_SBF.h
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -11643,6 +11725,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/5f8633e3221f9d5970da
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('lag_sec', '0.08', '47', 'AP_GPS_SBF')]
@@ -11699,6 +11782,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/467554ee0ef7e192465ea27deb
 
 ### File name(s)
 libraries/AC_AttitudeControl/AC_AttitudeControl_Heli.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -11723,6 +11807,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/5148e41c1af92457cb18
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('_angle_boost', '0', '369', 'int16_t')]
@@ -12017,6 +12102,9 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/24d8cc62e2970a72e8f902d8
 
 ### File name(s)
 ArduCopter/esc_calibration.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[FALSE]
 
 ### Compare results
 
@@ -12036,9 +12124,10 @@ CHANGED:('delay', '10', '137', 'Copter')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/d186e1c6484d90ce294977beebc045e03876fe88/ArduCopter/esc_calibration.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/e3934fac807b5a12aba1bebccdc2fc328f9a50ea/ArduCopter/esc_calibration.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Increased delay, this would be a MWN instead of a HCFT antipattern.
+[ANALYSE]
 
 ####Values removed
 Values: [('delay', '10', '125', 'esc_calibration_auto'), ('delay', '10', '116', 'esc_calibration_auto')]
@@ -12056,6 +12145,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/278883c521fb9df465c864e6
 
 ### File name(s)
 ArduCopter/esc_calibration.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -12069,6 +12159,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/ad3bce105c8be969d68b
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('delay', '5', '138', 'esc_calibration_auto'), ('delay', '3000', '129', 'esc_calibration_auto'), ('delay', '10', '125', 'esc_calibration_auto'), ('delay', '10', '116', 'esc_calibration_auto')]
@@ -12175,6 +12266,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/8eafc209a91de053e5aff99e
 
 ### File name(s)
 libraries/AP_Math/vector3.h
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -12188,6 +12280,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/97b7130bb9d21c4f2778
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -13032,6 +13125,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/899e6e66b091905ccb82bed6
 
 ### File name(s)
 libraries/AP_HAL_ChibiOS/sdcard.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -13045,6 +13139,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/b84dcd483d21f9b119af
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('bouncebuffer', '512', '58', 'sdcard_init'), ('f_mount', '1', '142', 'sdcard_stop')]
@@ -13350,6 +13445,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/c6fe5e534052f42976eee6a2
 
 ### File name(s)
 libraries/AP_HAL_ChibiOS/SPIDevice.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -13381,6 +13477,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/01e9c557210ec2fe2c3b
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 3
@@ -13710,6 +13807,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/daf9a45efddb93f08841
 
 ### File name(s)
 libraries/AP_IOMCU/AP_IOMCU.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -13723,6 +13821,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/454717cf6f35cbf3a37d
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('enabled', '1', '854', 'AP_IOMCU'), ('mixing_gain', '1000', '850', 'AP_IOMCU'), ('throttle_is_angle', '0', '845', 'AP_IOMCU'), ('throttle_is_angle', '1', '843', 'AP_IOMCU'), ('i', '1', '832', 'AP_IOMCU')]
@@ -14075,6 +14174,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/a469b93d2398e3bfc6b7b2c1
 
 ### File name(s)
 libraries/AP_RangeFinder/examples/RFIND_test/RFIND_test.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -14088,6 +14188,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/c98e598ae2cc5cf4b100
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -14096,6 +14197,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/c98e598ae2cc5cf4b100
 
 ### File name(s)
 libraries/AP_RangeFinder/examples/RFIND_test/RFIND_test.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -14109,6 +14211,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/d5f02ec0dfbe223670dc
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('var_info', '3.1', '46', 'setup')]
@@ -15355,6 +15458,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/278883c521fb9df465c864e6
 
 ### File name(s)
 ArduCopter/navigation.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -15570,6 +15674,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/860f4b260552297253a2
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('temp', '0', '615', 'int16_t')]
@@ -15673,6 +15778,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/64cfaf74b7abc75d8a13
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:150
@@ -15684,6 +15790,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/36f947acb9f16cda55be
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('alt_change', '0', '341', 'set_new_altitude')]
@@ -15841,6 +15948,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/c35ad2d4931fe85ae436
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('y_actual_speed', '1', '62', 'calc_XY_velocity'), ('x_actual_speed', '1', '61', 'calc_XY_velocity'), (1000, '1000', '172', 'calc_nav_rate'), (3000, '3000', '216', 'calc_nav_lon'), (3000, '3000', '223', 'calc_nav_lat'), (3000, '3000', '301', 'update_crosstrack'), ('off_x', '5729.57795', '465', 'int32_t'), ('alt_change', '0', '333', 'set_new_altitude'), (3000, '3000', '206', 'calc_nav_lon'), (3000, '3000', '213', 'calc_nav_lat')]
@@ -15906,6 +16014,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/6784989e83c565797169
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [(2500, '2500', '173', 'calc_loiter'), (2500, '2500', '159', 'calc_loiter')]
@@ -16062,6 +16171,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/c1aa015ef114021cb8e6
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [(1200, '1200', '213', 'update_crosstrack'), ('original_target_bearing', '100.0', '228', 'calc_nav_pitch_roll'), ('off_x', '5729.57795', '345', 'int32_t')]
@@ -16202,6 +16312,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/bae05178f068472b02b78b8c
 
 ### File name(s)
 ArduCopterMega/navigation.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -16260,6 +16371,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/c637bf09470fb01155aa
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('waypoint_speed', '50', '155', 'calc_rate_nav'), ('groundspeed', '0', '149', 'calc_rate_nav'), (0.5, '1', '207', 'update_loiter'), ('waypoint_speed', '50', '158', 'calc_rate_nav'), (0.5, '1', '210', 'update_loiter')]
@@ -17107,6 +17219,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/d7a0eb42eeff3a8bf88f8e49
 ### File name(s)
 libraries/AP_HAL_AVR/utility/print_vprintf.cpp
 libraries/AP_HAL/utility/print_vprintf.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -17129,6 +17242,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/60122f9877983f1c92f4
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:(1, '60', '190', 'print_vprintf')
@@ -17268,6 +17382,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/e8d8ca5eef6293fd815bd42e7b
 
 ### File name(s)
 libraries/AP_Proximity/AP_Proximity_MAV.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -17328,6 +17443,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/5b745aa1f16307ebafac
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('dir_correction', '1.0', '110', 'AP_Proximity_MAV'), ('dir_correction', '1.0', '108', 'AP_Proximity_MAV'), ('increment', '72', '97', 'AP_Proximity_MAV')]
@@ -17503,6 +17619,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/7dd7565d14207691ae392f29
 
 ### File name(s)
 libraries/AP_Math/crc.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -17570,6 +17687,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/fb48d8ee1bc019fd343e
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:('crc', '65535', '243', 'uint16_t')
@@ -17694,6 +17812,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/40f1b5f9ae17820ee7fdd89eb9
 
 ### File name(s)
 libraries/AP_HAL_ChibiOS/CanIface.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -17707,6 +17826,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/439a944801fd0240a3dd
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [(1, '1', '1001', 'CH_IRQ_HANDLER')]
@@ -18647,6 +18767,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/8e8ab3af96a236dadf8c5556d1
 
 ### File name(s)
 libraries/AP_HAL_Linux/RCInput_RCProtocol.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -18660,6 +18781,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/209bb132fad14d46c3ec
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -18812,6 +18934,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/f4cdf57d8fb876a27a9f5a07
 
 ### File name(s)
 libraries/AP_HAL_ChibiOS/Util.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -18870,6 +18993,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/e5435e02ad6e13650ad0
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('CHIBIOS_SHORT_BOARD_NAME', '13', '252', 'Util'), ('UDID_START', '12', '251', 'Util'), ('board_name', '14', '249', 'Util'), ('serialid', '12', '248', 'Util')]
@@ -18905,6 +19029,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/5feef04f5f13d4f37a1fea16
 
 ### File name(s)
 libraries/AP_GPS/AP_GPS_MAV.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -18918,6 +19043,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/0cd97ce3d8f394e2b853
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('yaw', '0', '58', 'AP_GPS_MAV')]
@@ -18955,6 +19081,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/e34aa0bc726d8d0705c7
 
 ### File name(s)
 libraries/AP_HAL/tests/test_prescaler.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -18968,6 +19095,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/ea1af70f2be0c353bafb
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -19252,6 +19380,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/2196d47d08d40b2356505ae872
 
 ### File name(s)
 libraries/AP_InertialSensor/AP_InertialSensor_MPU6000.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -19323,6 +19452,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/ece01da10e5e79a933c6
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('rx', '2', '413', 'uint8_t'), ('tx', '2', '412', 'uint8_t'), ('reg', '128', '410', 'uint8_t')]
@@ -19702,6 +19832,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/f58935d1e775830f6f4a7f31
 
 ### File name(s)
 libraries/AP_Math/tests/test_math_double.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -19715,6 +19846,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/519b1a6913eea55d3075
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -19821,6 +19953,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/3235747ef843831e32afed9b5b
 
 ### File name(s)
 libraries/AP_InertialSensor/AP_InertialSensor_MPU6000.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -19892,6 +20025,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/ece01da10e5e79a933c6
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('rx', '2', '413', 'uint8_t'), ('tx', '2', '412', 'uint8_t'), ('reg', '128', '410', 'uint8_t')]
@@ -20119,6 +20253,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/e88251f7e1835df00030
 
 ### File name(s)
 libraries/AP_CANManager/AP_CANTester_KDECAN.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -20132,6 +20267,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/603b302ffddb0bc6e298
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ### Number of warnings:
 1
@@ -20140,6 +20276,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/603b302ffddb0bc6e298
 
 ### File name(s)
 libraries/AP_Notify/MMLPlayer.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -20153,6 +20290,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/3df3d002ff87f8e34654
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('ret', '0', '95', 'size_t')]
@@ -20418,6 +20556,9 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/278883c521fb9df465c864e6
 
 ### File name(s)
 ArduCopter/ArduCopter.pde
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[FALSE]
 
 ### Compare results
 
@@ -20913,9 +21054,10 @@ CHANGED:(300, '300', '1888', 'update_altitude')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/c1b759d5d80a02647b0de9eb05bf3c4bcd6430d6/ArduCopter/ArduCopter.pde
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/9e0b0b9fcddab34dde239321fb4417920bdfd046/ArduCopter/ArduCopter.pde
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Change made to the barometer rate, potential FCR antipattern, not HCFT.
+[ANALYSE]
 
 ####Values removed
 Values: [('simple_counter', '0', '1649', 'update_simple_mode'), (2000, '2000', '2194', 'update_nav_wp'), ('pitch_scale_d', '4500.0', '1639', 'update_roll_pitch_mode'), ('roll_scale_d', '4500.0', '1635', 'update_roll_pitch_mode'), ('simple_counter', '0', '1663', 'update_simple_mode'), (2000, '2000', '2193', 'update_nav_wp')]
@@ -21184,9 +21326,10 @@ CHANGED:(0, '1', '1959', 'update_altitude')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/1c0b28c9561b37d7cd5af5dae6858dde30e05bda/ArduCopter/ArduCopter.pde
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/86eff20d5d2171ac98c025cf28cb1df7d0ba10df/ArduCopter/ArduCopter.pde
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Increased accuracy, but not change made to the variable.
+[ANALYSE]
 
 ####Values added
 Values: [(150, '150', '1946', 'update_altitude'), (300, '300', '1927', 'update_altitude')]
@@ -21696,6 +21839,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/d95e454609a9c9c79fac5836
 
 ### File name(s)
 ArduCopterMega/ArduCopterMega.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -21709,6 +21853,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/cb6419875983b04658bf
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values added
 Values: [('control_pitch', '0', '1145', 'update_roll_pitch_mode')]
@@ -21756,6 +21901,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/0bea96c3d024a728acee
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('slow_loopCounter', '0', '891', 'slow_loop'), ('control_in', '1', '1233', 'update_current_flight_mode'), ('throttle_slew', '0', '1572', 'auto_throttle'), ('slow_loopCounter', '0', '924', 'slow_loop'), ('control_in', '1', '1272', 'update_current_flight_mode')]
@@ -22197,6 +22343,9 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/50a48388793b1f9ece88
 
 ### File name(s)
 libraries/AC_Fence/AC_Fence.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -22225,9 +22374,10 @@ CHANGED:('_boundary_num_points', '1', '466', 'Vector2f')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/2822c635ec05744996b893bbb51787ed2598ebf8/libraries/AC_Fence/AC_Fence.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/4dbac3de602c811d353dc3fee43396cd25e6ddce/libraries/AC_Fence/AC_Fence.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+From commit message: correct get_boundary_points to account for closing point.
+[ANALYSE]
 
 ####Values added
 Values: [('_boundary_num_points', '1', '453', 'Vector2f')]
@@ -22317,9 +22467,10 @@ CHANGED:('_alt_max_backup', '0', '160', 'uint8_t')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/0c0521a555f111a4b21b3b5746ab6053c62dfb33/libraries/AC_Fence/AC_Fence.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/e855cfec028f49ec93cc2bbd3ded87f26151feeb/libraries/AC_Fence/AC_Fence.cpp
 ####True or False Positive:
-[todo]
+False
 ####Note:
-[todo]
+Changed notation style.
+[ANALYSE]
 
 ####Values added
 Values: [('_manual_recovery_start_ms', '0', '130', 'uint8_t')]
@@ -22442,6 +22593,9 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/2b4aaf23681dea475718608b87
 
 ### File name(s)
 libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
+[FILE FOR ANALYSIS]
+[RANDOM SELECTED]
+[TRUE]
 
 ### Compare results
 
@@ -22490,9 +22644,10 @@ CHANGED:('ToRad', '0.4', '102', 'SITL_State')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/f5d20b40856b9f1840945fd819a068b1bf42bfc1/libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/119ffb0fc074fbf8a3f78b865b77d7ae00d82ecf/libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Reduced Gyro noise.
+[ANALYSE]
 
 ####Values changed
 NEW:2013
@@ -22501,9 +22656,10 @@ CHANGED:('airspeed_offset', '503', '34', 'uint16_t')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/119ffb0fc074fbf8a3f78b865b77d7ae00d82ecf/libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/589b8cdb58d9c3101f666d38f979a139f1fdacbe/libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Adjusted airspeed offset.
+[ANALYSE]
 
 ####Values changed
 NEW:503
@@ -22512,9 +22668,10 @@ CHANGED:('airspeed_offset', '2820', '34', 'uint16_t')
 Version 1(new): https://github.com/ArduPilot/ardupilot/blob/589b8cdb58d9c3101f666d38f979a139f1fdacbe/libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
 Version 2(old): https://github.com/ArduPilot/ardupilot/blob/0ffc7dab6b957f547a9f028eeaddd25ba076f2fa/libraries/AP_HAL_AVR_SITL/sitl_ins.cpp
 ####True or False Positive:
-[todo]
+True
 ####Note:
-[todo]
+Adjusted Airspeed offset.
+[ANALYSE]
 
 ### Number of warnings:
 7
@@ -22799,6 +22956,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/ff17c78c67c83638e176cf4e
 
 ### File name(s)
 ArduCopter/control_loiter.cpp
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -22812,6 +22970,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/01ae84dda627a290d940
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:('target_climb_rate', '0', '35', 'Copter')
@@ -23247,6 +23406,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/278883c521fb9df465c864e6
 
 ### File name(s)
 ArduCopter/control_autotune.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -23269,6 +23429,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/9bfb0e1f40eb1689bab9
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('z', '100.0', '453', 'autotune_attitude_control'), ('x', '100.0', '370', 'autotune_attitude_control'), ('rate_max', '0.0', '361', 'autotune_attitude_control'), ('rotation_rate', '0.0', '360', 'autotune_attitude_control'), ('autotune_test_min', '0.0', '359', 'autotune_attitude_control'), ('autotune_test_max', '0.0', '358', 'autotune_attitude_control'), (1.0, '1.0', '333', 'autotune_attitude_control'), ('lean_angle', '0', '332', 'autotune_attitude_control'), ('rotation_rate', '0.0', '331', 'autotune_attitude_control'), ('autotune_step_start_time', '3.0', '1059', 'autotune_twitching_test_p'), ('autotune_step_start_time', '3.0', '1085', 'autotune_twitching_test_d'), ('autotune_test_max', '0', '317', 'autotune_attitude_control')]
@@ -23919,6 +24080,7 @@ Removed in: https://github.com/ArduPilot/ardupilot/blob/278883c521fb9df465c864e6
 
 ### File name(s)
 ArduCopter/motors.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -24031,6 +24193,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/b3bd4bd3c99a47ac59ce
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values changed
 NEW:('arming_counter', '0', '26', 'arm_motors')
@@ -24051,6 +24214,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/27fc6eea105d7d4452c2
 ### File name(s)
 ArduCopterMega/motors.pde
 ArduCopterMega/radio.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -24183,6 +24347,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/2b697698436ceabb9317
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('pwm_out', '0.866', '100', 'set_servos_4'), ('pwm_out', '2', '126', 'set_servos_4'), ('pwm_out', '0.866', '125', 'set_servos_4')]
@@ -24697,6 +24862,7 @@ Added in: https://github.com/ArduPilot/ardupilot/blob/6a2966c31b587b01db91603a1f
 ### File name(s)
 ArduPlane/Attitude.cpp
 ArduPlane/Attitude.pde
+[FILE FOR ANALYSIS]
 
 ### Compare results
 
@@ -25141,6 +25307,7 @@ Version 2(old): https://github.com/ArduPilot/ardupilot/blob/9c1ac2d9e6856bc8e561
 [todo]
 ####Note:
 [todo]
+[ANALYSE]
 
 ####Values removed
 Values: [('STANDARD_SPEED', '100.0', '229', 'calc_nav_roll')]
