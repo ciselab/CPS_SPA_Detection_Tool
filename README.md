@@ -34,4 +34,6 @@ Running the script with a selection of project can be done by removing/commentin
 
 ## Manual Validation
 To generate the .md files for manual validation of this tool, run `results_analyses_to_md_csv.py`.
-Currently, only a selection of files are being analysed.
+Currently, only a selection of files are being analysed (see `list_analyse_files` in the `main` function).
+
+After the .md files have been generated, `analysis_cleanup.py` needs to be run.
