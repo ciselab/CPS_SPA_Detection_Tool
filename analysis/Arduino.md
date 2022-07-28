@@ -1110,7 +1110,7 @@ CHANGED:('val', '0', '52', '__analogWrite')
 Version 1(new): https://github.com/esp8266/Arduino/blob/f2d83ba43df9f1c2ef1ff8ad5748ade6e3353de6/cores/esp8266/core_esp8266_wiring_pwm.cpp
 Version 2(old): https://github.com/esp8266/Arduino/blob/f5fd5912fe09d7eec8a909326287379570579ea6/cores/esp8266/core_esp8266_wiring_pwm.cpp
 ####True or False Positive:
-Falses
+False
 ####Note:
 Findable on line 56. Moved to a different line and name function has been changed.
 
