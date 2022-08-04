@@ -3,6 +3,7 @@
 ## Random selection
 [ardupilot]	32	57	14	19	15	55	17	25	58	20	51	9	31	40	7	50	28	43	36	49	34	56	38	47	45	10	48	27	4	13	12	11	59	24	29	53	35	37	2	16	3	8	61	42	18	62	39	41	54	21	22	60	52	30	46	44	5	6	26	33	23
 First 10 of this list were selected for manual verification. Generate by using random_list_results.py.
+This means with the first number, the 32th instance of the [FILE FOR ANALYSIS] instances.
 
 ## Result number #1
 
