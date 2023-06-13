@@ -1,36 +1,33 @@
-# CPS SPA Detection Tool
+# AP-Spotter: CPS SPA Detection Tool
 
 ## Setup
 For portability and replicability of this tool, we use docker.
-For easier docker setup, we provide two scripts for building docker image and running the docker container.
 
 __! Note:__ For Windows, first install (and have it running) **_Docker for Windows_**. Then use **_Git Bash_** to run the following scripts.
+
+## Project List
+The list of project to be run with AP-Spotter is available in `dict_repo_list.py`.
+In this file, the location of each project is noted. This method makes it easy to have multiple projects in different locations.
+Each project can be in different locations, a default value is set (which is adjustable in this file), in case all the projects are in the same location.
+
+For each project, the tool runs against a pre-stated selection of directories. This way specific directories, that might not of interest of the project, can be excluded from the run.
 
 ### Docker image setup
 Execute the following script for building the docker image:
 
-`. docker_scripts/build-cps-spa-detection-tool.sh`
+`./docker_scripts/build-cps-spa-detection-tool.sh`
 
 ### Docker image container
-The script `docker_scripts/run-cps-spa-detection-tool-container.sh` is created for this task. 
-We need to pass the directory of the local repositories as the input argument:
+To create the Docker image container, run the script `docker_scripts/run-cps-spa-detection-tool-container.sh`, with the project name and pattern. 
 
-`. docker_scripts/run-cps-spa-detection-tool-container.sh [local_repositories]`
+`./docker_scripts/run-cps-spa-detection-tool-container.sh project_name pattern`
 
-For example `. docker_scripts/run-cps-spa-detection-tool-container.sh ~/projects/`
+For example, for running against the Arduino_IRremote project in search for the harc-coded fine-tuning antipatter, run:
 
-__! Note:__ This input argument should be an absolute path.
+`./docker_scripts/run-cps-spa-detection-tool-container.sh Arduino_IRremote hcft`
 
-## Run
-Then next step is to execute Docker: `docker exec -it cps-spa-detection-tool-container /bin/bash`,
-the script can also be run immediately by doing instead `docker exec -it cps-spa-detection-tool-container /bin/bash "python dt/main.py"`.
-
-### Run after executing
-In order to run the script, run `main.py` (when using an IDE; make sure the working directory in the IDE is set to `CPS_SPA_Detection_Tool/dt`).
-From the terminal (using Docker), this can be done by `python dt/main.py`.
-
-## Notes
-Running the script with a selection of project can be done by removing/commenting the projects from the dictionary in `dict_repo_list.py` called `projects`.
+The container will stop and clean-up after finishing the run.
+In the meantime, to check status, run the command `docker container ls`.
 
 ## Manual Validation
 To generate the .md files for manual validation of this tool, run `results_analyses_to_md_csv.py`.

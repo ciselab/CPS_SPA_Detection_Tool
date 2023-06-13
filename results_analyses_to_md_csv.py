@@ -55,11 +55,13 @@ def analysing(file: str, file_name: str, project_name: str) -> None:
     global counter_warnings_in_file
     counter_warnings_in_file = 1
     name = f"collected_{file_name}"
-    path_file = os.path.join(pathlib.Path.home(), "Documents", "Server_results", name)
+    #path_file = os.path.join(pathlib.Path.home(), "Documents", "Server_results", name)
+    path_file = os.path.join(pathlib.Path.home(), "GitHub", "CPS_SPA_Detection_Tool", "results", name)
     remove_file_if_exists(path_file)
     writer = CsvWriter(path_file)
 
-    path_file_md = os.path.join(pathlib.Path.home(), "Documents", "Server_results", project_name + ".md")
+    #path_file_md = os.path.join(pathlib.Path.home(), "Documents", "Server_results", project_name + ".md")
+    path_file_md = os.path.join(pathlib.Path.home(), "GitHub", "CPS_SPA_Detection_Tool", "results", project_name + ".md")
     start_write_md_file(path_file_md, project_name)
 
     fieldnames = ['filename_1', 'encoding_1', 'hash_1', 'results_1', 'filename_2', 'hash_2', 'results_2']
@@ -154,7 +156,8 @@ def main() -> None:
         total_warnings = 0
         project_name = file[1]
         link_project = projects[project_name]["remote"]
-        file_path = os.path.join(pathlib.Path.home(), "Documents", "Server_results", "tool", file[0])
+        #file_path = os.path.join(pathlib.Path.home(), "Documents", "Server_results", "tool", file[0])
+        file_path = os.path.join(pathlib.Path.home(), "GitHub", "CPS_SPA_Detection_Tool", "results", "tool", file[0])
         analysing(file_path, file[0], project_name)
     print("END")
 
