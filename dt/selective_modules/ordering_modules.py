@@ -7,9 +7,14 @@ import subprocess
 import json
 # from collections import Counter
 import dt.main as dt_main
+from typing import List, Dict
 
 file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/analysis/results.csv"
 base_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules"
+
+file_extensions: Dict[str, List[str]] = {
+            'cpp': ['.c', '.cpp', '.h', '.hpp', '.cxx', '.cc', '.hh', '.h++'],
+        }
 
 
 def checkout_commit(dict_sel_commits: dict):
@@ -18,7 +23,8 @@ def checkout_commit(dict_sel_commits: dict):
     for each_hash in dict_sel_commits:
         print(f"{each_hash=}")
         switching_branch(each_hash, local)
-        removing_files(local)
+        list_files_keep = dict_sel_commits[each_hash]['commit_files']
+        removing_files(local, list_files_keep)
         if 'mwn' in dict_sel_commits[each_hash]['antipatterns']:
             dt_main.main("PX4-Autopilot", "mwn", each_hash, sel_modules)
         if 'hcft' in dict_sel_commits[each_hash]['antipatterns']:
@@ -104,7 +110,7 @@ def read_json_commit_files():
         dir_file = file_names
         res.extend(dir_file)
 
-    list_files = []
+    # list_files = []
     dict_sha_files = {}
 
     for file_from_dir in res:
@@ -114,10 +120,16 @@ def read_json_commit_files():
             data_file = data['files']
             sha_file = data['sha']
             commit_files = []
+            found_cpp_type_file = False
             for i in data_file:
-                list_files.append(i['filename'])
-                commit_files.append(i['filename'])
-            dict_sha_files[sha_file] = {'commit_files': commit_files, 'antipatterns': []}
+                filename = i['filename']
+                _, filename_ext = os.path.splitext(filename)
+                if filename_ext.lower() in file_extensions["cpp"]:
+                    found_cpp_type_file = True
+                # list_files.append(i['filename'])
+                commit_files.append(filename)
+            if found_cpp_type_file:
+                dict_sha_files[sha_file] = {'commit_files': commit_files, 'antipatterns': []}
     # print(Counter(list_files).most_common())
     return dict_sha_files
 
@@ -246,19 +258,21 @@ def gather_files(each_hash):
 
 def switching_branch(each_hash, dir_project):
     script_workflow = path.join(base_path, "switching_branch.sh")
-    # subprocess.run([script_workflow, each_hash, dir_project])
-    # sb_process = subprocess.Popen([script_workflow, each_hash, dir_project])
-    # sb_process.wait()
     sb_process = subprocess.check_call([script_workflow, each_hash, dir_project])
     print(f"{sb_process=}")
 
 
-def removing_files(dir_project):
+def prep_keep_list(list_files_keep):
+    prepped_keep_list = ""
+    for each_file in list_files_keep:
+        prepped_keep_list = r"./"f"{each_file}"f"\|"
+    return prepped_keep_list
+
+
+def removing_files(dir_project, list_files_keep):
+    keep_list = prep_keep_list(list_files_keep)
     script_workflow = path.join(base_path, "remove_files.sh")
-    # subprocess.run([script_workflow, dir_project])
-    # rf_process = subprocess.Popen([script_workflow, dir_project])
-    # rf_process.wait()
-    rf_process = subprocess.check_call([script_workflow, dir_project])
+    rf_process = subprocess.check_call([script_workflow, dir_project, keep_list])
     print(f"{rf_process=}")
 
 
@@ -440,7 +454,7 @@ def main():
     print(f"Total number of unique commits to analyse (of part 2): {len(res_list_total_aps)}")
 
 
-    # nr.6) commit hash with files list
+    # nr.6) commit hash with files list, and at least 1 C++ type file in commit.
     res_hash_files = read_json_commit_files()
     print(f"{res_hash_files=}")
 
@@ -448,6 +462,7 @@ def main():
     # part 1: list_hash_mwn, list_hash_hcft
     # part 2: res_list_hcft, res_list_mwn
     res_hash_files_aps = added_aps_to_res(res_hash_files, list_hash_mwn, list_hash_hcft, res_list_hcft, res_list_mwn)
+    print(f"Number of commits for analyses (both APs): {len(res_hash_files_aps)=}")
     print(f"{res_hash_files_aps=}")
 
     # nr.6) running
