@@ -64,16 +64,23 @@ class Project:
         #                  '.java', '.go', '.py', '.rb', '.rs',
         #                  '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
 
-        for top_level, recursive in dt.dict_repo_list.projects_modules[self.name]:
-            directory_path = os.path.join(self.base_directory(), top_level)
-            for root, dirs, files in os.walk(directory_path, topdown=True):
-                if not recursive:
-                    dirs.clear()
-                for filename in files:
-                    file_path = os.path.join(root, filename)
-                    _, filename_ext = os.path.splitext(filename)
-                    if filename_ext.lower() in file_extensions[self.language]:
-                        file_set.add(file_path)
+        # for top_level, recursive in dt.dict_repo_list.projects_modules[self.name]:
+        #     directory_path = os.path.join(self.base_directory(), top_level)
+        #     for root, dirs, files in os.walk(directory_path, topdown=True):
+        #         if not recursive:
+        #             dirs.clear()
+        #         for filename in files:
+        #             file_path = os.path.join(root, filename)
+        #             _, filename_ext = os.path.splitext(filename)
+        #             if filename_ext.lower() in file_extensions[self.language]:
+        #                 file_set.add(file_path)
+
+        for root, dirs, files in os.walk(self.base_directory(), topdown=True):
+            for filename in files:
+                file_path = os.path.join(root, filename)
+                _, filename_ext = os.path.splitext(filename)
+                if filename_ext.lower() in file_extensions[self.language]:
+                    file_set.add(file_path)
 
         return file_set
 

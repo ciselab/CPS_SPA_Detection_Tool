@@ -1,0 +1,38 @@
+rcy	hcf, mwn, fcr	810dbbd25b5a1e3a27918d1cd51f3c1059335cc4 AFBR mode switching, rate switching, and test
+rcy	mwn				6d5f12d2a2ab97f17070179cf3ccc94c3cbb4845 microRTPS: client: add TX rate limiter
+rcy	mwn				e3bc5571556d043ad5c8c4fcabd1f9b371599397 rc.usb: set RC_CHANNELS_RAW rate to 5Hz
+rcy	mwn				28a31708f98eefa4ceb04617f2da3dd7892c99fa Merged estimator fixes and mavlink rate config bits
+rcy	mwn				5fe376c7b9bed861768680089bff3c62a030e2b6 Correctness fixes from Tridge.; increased the minimum poll rate to 50Hz, don't set the input RC timestamp unless we get data.
+rcy	mwn				3bb145f584298de3ac636be38be25d4b1235a8be Enabled and tested ring buffer, logging at full 250 Hz sensor rate
+rcy	mwn	acd18adc18ecae9d3363b13be425d062d2a71186 Tests: Speed up boot The previous boot configuration took at minimum one second to boot. This is in particular significant in tests when the system is often started and stopped
+rcy	mwn	fc30f2906fd8b8dc5fe52c38a887e9e4e56b2e0a mpu9250:Use a cpu speed independant _reset_wait generations.
+rcy	mwn	aeea27d16a6e7d92f7caf1c6a272a5f4bfa9a721 Increased interface slightly to better match 200 Hz, adjusted led flash speed
+rcy	mwn			a5a457d7440c41544c86ff628aa40ad6b19611be sensors: relax default data_validator timeout 20->40ms
+rcy	mwn			e33d2141ec1eb86bbcf61300b6887d1ce94b510c px4io: Changing the timeout time description (NFC)
+rcy	mwn			847b3b5b64538e6d3c27fdcde50adee6f7510637 Tools/HIL/nsh_param_set.py bump timeout slightly
+rcy	mwn			ac2b38603c2cd361741cdeabb49ad3d9cbc6c535 microRTPS: client: add missing "-p" option for the UART poll timeout and use microsecs for the send/rcv thread sleeps
+rcy	mwn			b79553862e220a20db129298f85511697f343306 mavsdk_tests: remove timeout for mission upload
+rcy	mwn			a3d1c94aa4b648c2d2cde70646263cbb0a524d39 logger: reduce poll timeout to 20ms
+rcy	mwn			7a8002fdabacffbd2db9388e2df2d99f63b61871 Commander: increased hardcoded timeout time for avoidance to start.
+rcy	mwn			9d1fa8cee2238199694e6b5a38d2a34ea3d4626d esc_calibration: adjust timeout when waiting for user to connect battery to 20 seconds
+rcy	mwn			f5e0c72ea0b3487b2385f5f7c269b54e14400b31 FixedwingLandDetector: timeout fixes
+rcy	mwn			a402b3beeb51f56d6bde5f6f92a65a1e7a28b020 change frsky_telemetry default port to USART8 for pixracer add a 50msec timeout to poll calls in sPort_telemetry to prevent hangs
+rcy	mwn			66bc96f4b3dd50ac35693ca8401767f825c163dd S.BUS: Adjust timeout interval
+rcy	mwn			d97ead81aa249ba82f518e6f7c59bd50e5f0d5d3 set talt timeout to 10sec
+rcy	mwn			11c6ee2b5a9115b0b0e6727bd6f2df574ad447f3 make terrain estimate invalid after range sensor timeout
+rcy	mwn			635bfb6a7b4df37add20af8f5582b23ed992e03d CAN driver RX queue reduced to 21 frames per interface; poll() timeout set to 3 ms
+rcy	mwn			293bd026d0197f87896b3941651340cfcc10a4ca EKF: Set mag timeout
+rcy	mwn			46f7404078c7e6cc1ef0f51ce3ea40a1a7ebd3e3 Q estimator: Set mag timeout
+rcy	mwn			425d4316d1bb18b930aa324e50754673c26927f6 Data validator: Increase timeout interval
+rcy	mwn			cd67609da5755dae6cd81e60bb611e498ff2d180 PreflightCheck: Reduce GPS timeout to 2 sec
+rcy	mwn			a098ca4ec68b8737243d8e7aab5bdb2db4d842a1 Move autosave into the 1-second timeout check.
+rcy	mwn			ee6da71efaad4ef9935803494201a47ace6d8e2a Commander: Timeout position estimates if we receive none for 1 full second
+rcy	mwn			676cb91a1d973313e15597280121c52cc2d84e43 Hotfix for PX4IO comms: Raise timeout to 10 ms.
+rcy	mwn			88cf841f00b499792780195de63018b3bd49f683 Bump RC timeout for all cases to half a second
+rcy	mwn			b1d39e65a61ec17d2da30ad37068758ab23d3ba3 commander: position timeout increased to 30ms
+rcy	mwn			57769ec4371df6ceabacf11aa130c4e8f4eb0240 Reducing timeout to 0.5 seconds
+rcy	mwn			1f800edc7676a6ea13127746ce38787a1e98b935 Still threshold increased to 0.1m/s^2, and orientation error threshold to 5m/s^2. Timeout increased to 30s.
+rcy	mwn			e7df439ea1f99f26969b6b741a239c722599f194 Hotfix: Extend GPS lost timeout by a small delta to prevent timeout aliasing, GPS app does not report any more losses
+rcy	mwn			f14c90c2220fffc51bc6e6e89bac6f9e726ff505 Some timeout needed to be raised for now to make ubx with baudrate 9600 working
+rcy	mwn,fcr		be85f895a0fbb90aa3b0628c8173574375ac1c07 Use a much shorter timeout for normal communication, and stretch it only when we are waiting for erase.
+rcy	mwn	644d237ce6de6ad55bd12d69d41bd635f5f93ec8 posix-configs scripts: remove unneeded 'sleep 1'

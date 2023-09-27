@@ -9,7 +9,8 @@ from collections import namedtuple
 
 """ If the location of the local repositories are on a different location, change this here. """
 # location_github = os.path.join(pathlib.Path.home(), "Documents", "GitHub")
-location_github = os.path.join(os.path.expanduser("~"), "projects")     # For Docker usage
+# location_github = os.path.join(os.path.expanduser("~"), "projects")     # For Docker usage
+location_github = os.path.join(os.path.expanduser("~"), "GitHub", "pxprojects")     # For usage with PX4-Autopilot only
 
 """
 It is possible to manually set the location to a different path.
