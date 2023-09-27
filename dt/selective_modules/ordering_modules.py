@@ -47,8 +47,8 @@ def gathering_pxresults_list_aps():
 
 def gathering_pxresults():
     fieldnames = ['project', 'commit', 'hash', 'message', 'antipattern', 'keyword']
-    list_hash = []
-    set_hash = set()
+    set_hash_hcft = set()
+    set_hash_mwn = set()
     with open(file, newline='') as f:
         reader = csv.DictReader(f, delimiter=',', quotechar='"', fieldnames=fieldnames)
         for row in reader:
@@ -57,16 +57,19 @@ def gathering_pxresults():
                 antipattern = row['antipattern']
                 split_antipattern = antipattern.splitlines()
                 for each in split_antipattern:
-                    if "New:Hard-coded-timing" in each or "New:Hard-coded-fine-tuning" in each:
+                    # if "New:Hard-coded-timing" in each or "New:Hard-coded-fine-tuning" in each:
+                    #     commit_hash = row['hash']
+                    #     hash_code = re.findall(r"\[([0-9a-z]+)", commit_hash)
+                    #     set_hash.add(hash_code[0])
+                    if "New:Hard-coded-timing" in each:
                         commit_hash = row['hash']
-                        # hash_link = re.findall(r"\[[a-zA-Z0-9]+]\(([a-zA-Z0-9/.\-:=?]+)\)", commit_hash)
                         hash_code = re.findall(r"\[([0-9a-z]+)", commit_hash)
-                        # print(f"{hash_code}")
-                        # list_hash.append(hash_code[0])
-                        set_hash.add(hash_code[0])
-    ## List returns 299, which is the same results as from study I part 1.
-    # return list_hash
-    return set_hash
+                        set_hash_mwn.add(hash_code[0])
+                    if "New:Hard-coded-fine-tuning" in each:
+                        commit_hash = row['hash']
+                        hash_code = re.findall(r"\[([0-9a-z]+)", commit_hash)
+                        set_hash_hcft.add(hash_code[0])
+    return set_hash_mwn, set_hash_hcft
 
 
 def read_json():
@@ -111,7 +114,7 @@ def read_json_commit_files():
             for i in data_file:
                 list_files.append(i['filename'])
                 commit_files.append(i['filename'])
-            dict_sha_files[sha_file] = commit_files
+            dict_sha_files[sha_file] = {'commit_files': commit_files, 'antipatterns': []}
     # print(Counter(list_files).most_common())
     return dict_sha_files
 
@@ -198,14 +201,26 @@ def gather_hash_from_files():
     filename_base = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_part2_aps/"
     filename_one = "hcft_adjusted.txt"
     filename_two = "mwn_adjusted.txt"
+    list_hcft = set()
+    list_mwn = set()
+    list_aps = [list_hcft, list_mwn]
+    list_total_aps = set()
     filename_list = [os.path.join(filename_base, filename_one), os.path.join(filename_base, filename_two)]
-    for file_res in filename_list:
+    for number, file_res in enumerate(filename_list):
         with open(file_res) as f:
             lines = f.readlines()
+            # total_commits_count = 0
             for line in lines:
                 hash_commit_pt = line.strip()
+                list_aps[number].add(hash_commit_pt)
+                list_total_aps.add(hash_commit_pt)
                 # print(hash_commit_pt)
-                gather_files(hash_commit_pt)
+                # gather_files(hash_commit_pt)
+            # total_commits_count += total_commits_count+count
+    # print(f"Total number of commits to analyse (of part 2): {total_commits_count}")
+    for each_hash in list_total_aps:
+        gather_files(each_hash)
+    return list_total_aps, list_hcft, list_mwn
 
 
 def gather_files(each_hash):
@@ -376,8 +391,14 @@ def final_compare_lists():
 
 def main():
     # Gathering all hashes
-    list_hash = gathering_pxresults()
-    print(f"Commits to analyse: {len(list_hash)}")
+    list_hash_mwn, list_hash_hcft = gathering_pxresults()
+    list_hash = set()
+    for each_mwn in list_hash_mwn:
+        list_hash.add(each_mwn)
+    for each_hcft in list_hash_hcft:
+        list_hash.add(each_hcft)
+    print(f"Commits to analyse, mwn: {len(list_hash_mwn)}, hcft: {len(list_hash_hcft)}")
+    print(f"Unique commits to analyse in total: {len(list_hash)}")
 
     # Gather hashes, from study 1 part 1
     for each in list_hash:
@@ -398,7 +419,13 @@ def main():
 
     # [OPTIONAL] gather files from file of hashes, study 1 part 2
     # includes gather_files()
-    gather_hash_from_files()
+    res_list_total_aps, res_list_hcft, res_list_mwn = gather_hash_from_files()
+    print(f"Number of unique commits to analyse (of part 2): hcft={len(res_list_hcft)} mwn={len(res_list_mwn)}")
+    print(f"Total number of unique commits to analyse (of part 2): {len(res_list_total_aps)}")
+
+    # APs into commits
+    # part 1: list_hash_mwn, list_hash_hcft
+    # part 2: res_list_hcft, res_list_mwn
 
     # nr.6) commit hash with files list
     res_hash_files = read_json_commit_files()
