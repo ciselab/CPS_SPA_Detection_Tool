@@ -5,44 +5,47 @@ import re
 from os import path, walk
 import subprocess
 import json
-from collections import Counter
+# from collections import Counter
 import dt.main as dt_main
 
 file = "../../analysis/results.csv"
 base_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules"
 
 
-def checkout_commit(commit_hash_files):
+def checkout_commit(dict_sel_commits: dict):
     local = "/home/imara/GitHub/pxprojects/PX4-Autopilot/"
     sel_modules = False     # Do not want to go through a pre-selection set of modules, this is handled differently.
-    for each_hash in commit_hash_files:
+    for each_hash in dict_sel_commits:
         print(f"{each_hash=}")
         switching_branch(each_hash, local)
         removing_files(local)
-        dt_main.main("PX4-Autopilot", "mwn", each_hash, sel_modules)
-    print("END")
+        if 'mwn' in dict_sel_commits[each_hash]['antipatterns']:
+            dt_main.main("PX4-Autopilot", "mwn", each_hash, sel_modules)
+        if 'hcft' in dict_sel_commits[each_hash]['antipatterns']:
+            dt_main.main("PX4-Autopilot", "hcft", each_hash, sel_modules)
+    print("Finished Detection Tool.")
 
 
-def gathering_pxresults_list_aps():
-    fieldnames = ['project', 'commit', 'hash', 'message', 'antipattern', 'keyword']
-    # list_hash = []
-    list_ap = set()
-    with open(file, newline='') as f:
-        reader = csv.DictReader(f, delimiter=',', quotechar='"', fieldnames=fieldnames)
-        for row in reader:
-            project = row['project'].strip()
-            if project == "PX4-Autopilot":
-                antipattern = row['antipattern']
-                split_aps = antipattern.splitlines()
-                for each in split_aps:
-                    list_ap.add(each)
-                # if "New:Hard-coded-timing" in antipattern or "New:Hard-coded-fine-tuning" in antipattern:
-                #     commit_hash = row['hash']
-                #     # hash_link = re.findall(r"\[[a-zA-Z0-9]+]\(([a-zA-Z0-9/.\-:=?]+)\)", commit_hash)
-                #     hash_code = re.findall(r"\[([0-9a-z]+)", commit_hash)
-                #     # print(f"{hash_code}")
-                #     list_hash.append(hash_code[0])
-    return list_ap
+# def gathering_pxresults_list_aps():
+#     fieldnames = ['project', 'commit', 'hash', 'message', 'antipattern', 'keyword']
+#     # list_hash = []
+#     list_ap = set()
+#     with open(file, newline='') as f:
+#         reader = csv.DictReader(f, delimiter=',', quotechar='"', fieldnames=fieldnames)
+#         for row in reader:
+#             project = row['project'].strip()
+#             if project == "PX4-Autopilot":
+#                 antipattern = row['antipattern']
+#                 split_aps = antipattern.splitlines()
+#                 for each in split_aps:
+#                     list_ap.add(each)
+#                 # if "New:Hard-coded-timing" in antipattern or "New:Hard-coded-fine-tuning" in antipattern:
+#                 #     commit_hash = row['hash']
+#                 #     # hash_link = re.findall(r"\[[a-zA-Z0-9]+]\(([a-zA-Z0-9/.\-:=?]+)\)", commit_hash)
+#                 #     hash_code = re.findall(r"\[([0-9a-z]+)", commit_hash)
+#                 #     # print(f"{hash_code}")
+#                 #     list_hash.append(hash_code[0])
+#     return list_ap
 
 
 def gathering_pxresults():
@@ -72,25 +75,25 @@ def gathering_pxresults():
     return set_hash_mwn, set_hash_hcft
 
 
-def read_json():
-    # json_file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/results_px4.json"
-    dir_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_commit_results"
-    res = []
-    for (dir_path, dir_names, file_names) in walk(dir_path):
-        dir_file = file_names
-        res.extend(dir_file)
-    print(f"{res}")
-
-    list_files = []
-
-    for file_from_dir in res:
-        file_path = os.path.join(dir_path, file_from_dir)
-        with open(file_path) as f:
-            data = json.loads(f.read())
-            data_file = data['files']
-            for i in data_file:
-                list_files.append(i['filename'])
-    print(Counter(list_files).most_common())
+# def read_json():
+#     # json_file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/results_px4.json"
+#     dir_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_commit_results"
+#     res = []
+#     for (dir_path, dir_names, file_names) in walk(dir_path):
+#         dir_file = file_names
+#         res.extend(dir_file)
+#     print(f"{res}")
+#
+#     list_files = []
+#
+#     for file_from_dir in res:
+#         file_path = os.path.join(dir_path, file_from_dir)
+#         with open(file_path) as f:
+#             data = json.loads(f.read())
+#             data_file = data['files']
+#             for i in data_file:
+#                 list_files.append(i['filename'])
+#     print(Counter(list_files).most_common())
 
 
 def read_json_commit_files():
@@ -119,59 +122,72 @@ def read_json_commit_files():
     return dict_sha_files
 
 
-def read_json_dates():
-    # json_file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/results_px4.json"
-    dir_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_commit_results"
-    res = []
-    for (dir_path, dir_names, file_names) in walk(dir_path):
-        dir_file = file_names
-        res.extend(dir_file)
-    print(f"{res}")
-
-    list_files = []
-    dict_files = {}
-
-    for file_from_dir in res:
-        file_path = os.path.join(dir_path, file_from_dir)
-        with open(file_path) as f:
-            data = json.loads(f.read())
-            data_file = data['commit']['author']['date']
-            list_files.append(data_file)
-            dict_files[data_file] = data['sha']
-            # print(data_file)
-            # for i in data_file:
-            #     print(i)
-            #     list_files.append(i['date'])
-    # print(Counter(list_files).most_common())
-    list_files.sort()
-    # print(list_files)
-    # print(dict_files)
-    for date in list_files:
-        print(f"{date} : {dict_files[date]}")
+def added_aps_to_res(dict_commits, a_hash_mwn, a_hash_hcft, b_hash_hcft, b_hash_mwn):
+    for key in dict_commits:
+        if key in a_hash_mwn or key in b_hash_mwn:
+            current_list_antipatterns = dict_commits[key]['antipatterns']
+            current_list_antipatterns.append('mwn')
+            dict_commits[key]['antipatterns'] = current_list_antipatterns
+        if key in a_hash_hcft or key in b_hash_hcft:
+            current_list_antipatterns = dict_commits[key]['antipatterns']
+            current_list_antipatterns.append('hcft')
+            dict_commits[key]['antipatterns'] = current_list_antipatterns
+    return dict_commits
 
 
-def single_read_json(filename='src/modules/mavlink/mavlink_main.cpp'):
-    # json_file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/results_px4.json"
-    dir_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_commit_results"
-    res = []
-    for (dir_path, dir_names, file_names) in walk(dir_path):
-        dir_file = file_names
-        res.extend(dir_file)
-    print(f"{res}")
+# def read_json_dates():
+#     # json_file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/results_px4.json"
+#     dir_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_commit_results"
+#     res = []
+#     for (dir_path, dir_names, file_names) in walk(dir_path):
+#         dir_file = file_names
+#         res.extend(dir_file)
+#     print(f"{res}")
+#
+#     list_files = []
+#     dict_files = {}
+#
+#     for file_from_dir in res:
+#         file_path = os.path.join(dir_path, file_from_dir)
+#         with open(file_path) as f:
+#             data = json.loads(f.read())
+#             data_file = data['commit']['author']['date']
+#             list_files.append(data_file)
+#             dict_files[data_file] = data['sha']
+#             # print(data_file)
+#             # for i in data_file:
+#             #     print(i)
+#             #     list_files.append(i['date'])
+#     # print(Counter(list_files).most_common())
+#     list_files.sort()
+#     # print(list_files)
+#     # print(dict_files)
+#     for date in list_files:
+#         print(f"{date} : {dict_files[date]}")
 
-    # list_files = []
 
-    for file_from_dir in res:
-        file_path = os.path.join(dir_path, file_from_dir)
-        with open(file_path) as f:
-            data = json.loads(f.read())
-            data_file = data['files']
-            sha_current = data['sha']
-            for i in data_file:
-                if filename in i['filename']:
-                    print(sha_current)
-    #             list_files.append(i['filename'])
-    # print(Counter(list_files).most_common())
+# def single_read_json(filename='src/modules/mavlink/mavlink_main.cpp'):
+#     # json_file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/results_px4.json"
+#     dir_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules/px_commit_results"
+#     res = []
+#     for (dir_path, dir_names, file_names) in walk(dir_path):
+#         dir_file = file_names
+#         res.extend(dir_file)
+#     print(f"{res}")
+#
+#     # list_files = []
+#
+#     for file_from_dir in res:
+#         file_path = os.path.join(dir_path, file_from_dir)
+#         with open(file_path) as f:
+#             data = json.loads(f.read())
+#             data_file = data['files']
+#             sha_current = data['sha']
+#             for i in data_file:
+#                 if filename in i['filename']:
+#                     print(sha_current)
+#     #             list_files.append(i['filename'])
+#     # print(Counter(list_files).most_common())
 
 
 def single_read_sha_json(sha_search):
@@ -418,23 +434,30 @@ def main():
     # print(results)
 
     # [OPTIONAL] gather files from file of hashes, study 1 part 2
-    # includes gather_files()
+    # includes the gather_files() function
     res_list_total_aps, res_list_hcft, res_list_mwn = gather_hash_from_files()
     print(f"Number of unique commits to analyse (of part 2): hcft={len(res_list_hcft)} mwn={len(res_list_mwn)}")
     print(f"Total number of unique commits to analyse (of part 2): {len(res_list_total_aps)}")
 
-    # APs into commits
-    # part 1: list_hash_mwn, list_hash_hcft
-    # part 2: res_list_hcft, res_list_mwn
 
     # nr.6) commit hash with files list
     res_hash_files = read_json_commit_files()
     print(f"{res_hash_files=}")
-    checkout_commit(res_hash_files)
+
+    # APs into commits
+    # part 1: list_hash_mwn, list_hash_hcft
+    # part 2: res_list_hcft, res_list_mwn
+    res_hash_files_aps = added_aps_to_res(res_hash_files, list_hash_mwn, list_hash_hcft, res_list_hcft, res_list_mwn)
+    print(f"{res_hash_files_aps=}")
+
+    # nr.6) running
+    checkout_commit(res_hash_files_aps)
 
     # [NEEDS ADJUSTMENTS] Compare lists
     # compare_lists()
     # final_compare_lists()
+
+    print("END")
 
 
 if __name__ == "__main__":
