@@ -30,6 +30,7 @@ class Project:
     url_project: str = ""
     sha_project: str = ""
     language: str = "cpp"
+    sel_modules: bool = True
 
     def output_filename(self):
         return os.path.join(
@@ -64,23 +65,24 @@ class Project:
         #                  '.java', '.go', '.py', '.rb', '.rs',
         #                  '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
 
-        # for top_level, recursive in dt.dict_repo_list.projects_modules[self.name]:
-        #     directory_path = os.path.join(self.base_directory(), top_level)
-        #     for root, dirs, files in os.walk(directory_path, topdown=True):
-        #         if not recursive:
-        #             dirs.clear()
-        #         for filename in files:
-        #             file_path = os.path.join(root, filename)
-        #             _, filename_ext = os.path.splitext(filename)
-        #             if filename_ext.lower() in file_extensions[self.language]:
-        #                 file_set.add(file_path)
-
-        for root, dirs, files in os.walk(self.base_directory(), topdown=True):
-            for filename in files:
-                file_path = os.path.join(root, filename)
-                _, filename_ext = os.path.splitext(filename)
-                if filename_ext.lower() in file_extensions[self.language]:
-                    file_set.add(file_path)
+        if self.sel_modules:
+            for top_level, recursive in dt.dict_repo_list.projects_modules[self.name]:
+                directory_path = os.path.join(self.base_directory(), top_level)
+                for root, dirs, files in os.walk(directory_path, topdown=True):
+                    if not recursive:
+                        dirs.clear()
+                    for filename in files:
+                        file_path = os.path.join(root, filename)
+                        _, filename_ext = os.path.splitext(filename)
+                        if filename_ext.lower() in file_extensions[self.language]:
+                            file_set.add(file_path)
+        else:
+            for root, dirs, files in os.walk(self.base_directory(), topdown=True):
+                for filename in files:
+                    file_path = os.path.join(root, filename)
+                    _, filename_ext = os.path.splitext(filename)
+                    if filename_ext.lower() in file_extensions[self.language]:
+                        file_set.add(file_path)
 
         return file_set
 
@@ -265,7 +267,7 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 
 # Main Entry Point
-def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER):
+def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER, sel_modules: bool = True):
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -278,7 +280,8 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
     current_project = Project(name=project_name,
                               pattern_name=pattern_name,
                               url_project=dt.dict_repo_list.projects[project_name]["local"],
-                              sha_project=dt.dict_repo_list.projects[project_name]["sha"])
+                              sha_project=dt.dict_repo_list.projects[project_name]["sha"],
+                              sel_modules=sel_modules)
 
     remove_file_if_exists(os.path.join(
         current_project.result_path(),

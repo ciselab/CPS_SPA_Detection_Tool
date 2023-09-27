@@ -11,7 +11,7 @@ import os
 import sys
 
 
-def main(project_name, pattern_name, extra) -> None:
+def main(project_name, pattern_name, extra, sel_modules: bool = True) -> None:
     print("---CURRENT TIME---")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -42,7 +42,7 @@ def main(project_name, pattern_name, extra) -> None:
         dict_repo_list.build_repo_dict_sha()
 
         print(f"[{pattern_cls.header_name()}] START")
-        search.main(project_name, pattern_cls.name())
+        search.main(project_name, pattern_cls.name(), sel_modules)
         print(f"[{pattern_cls.header_name()}] DONE")
 
     print("---FINISHED---")

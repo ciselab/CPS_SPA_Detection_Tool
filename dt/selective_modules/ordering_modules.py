@@ -14,11 +14,12 @@ base_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules"
 
 def checkout_commit(commit_hash_files):
     local = "/home/imara/GitHub/pxprojects/PX4-Autopilot/"
+    sel_modules = False     # Do not want to go through a pre-selection set of modules, this is handled differently.
     for each_hash in commit_hash_files:
         print(f"{each_hash=}")
         switching_branch(each_hash, local)
         removing_files(local)
-        dt_main.main("PX4-Autopilot", "mwn", each_hash)
+        dt_main.main("PX4-Autopilot", "mwn", each_hash, sel_modules)
     print("END")
 
 
