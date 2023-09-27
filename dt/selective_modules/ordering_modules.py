@@ -8,7 +8,7 @@ import json
 # from collections import Counter
 import dt.main as dt_main
 
-file = "../../analysis/results.csv"
+file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/analysis/results.csv"
 base_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules"
 
 
