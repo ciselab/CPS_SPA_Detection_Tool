@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import csv
+import os.path
 import re
 from os import path, walk
 import subprocess
@@ -8,6 +9,8 @@ import dt.main as dt_main
 from typing import List, Dict
 import dt.selective_modules.results_part_one.analysis_results as ro
 from dt.dict_repo_list import projects as dpr
+from dt.dict_repo_list import location_github as github_projects
+from dt.dict_repo_list import DOCKER_USAGE
 import shutil
 from datetime import datetime
 from concurrent.futures import ProcessPoolExecutor
@@ -15,13 +18,16 @@ from multiprocessing import get_context
 
 file = path.abspath(ro.get_results_file_path())
 base_path = path.dirname(path.realpath(__file__))
+this_project_dir = path.split(os.path.split(base_path)[0])[0]
 
 file_extensions: Dict[str, List[str]] = {
             'cpp': ['.c', '.cpp', '.h', '.hpp', '.cxx', '.cc', '.hh', '.h++'],
         }
 
-MAX_WORKERS = 27        # For Docker usage.
-# MAX_WORKERS = 2       # For home usage.
+if DOCKER_USAGE:
+    MAX_WORKERS = 27        # For Docker usage.
+else:
+    MAX_WORKERS = 2       # For home usage.
 
 
 def cp_mv_project(each_hash, local):
@@ -35,8 +41,10 @@ def cp_mv_project(each_hash, local):
 
 
 def checkout_commit(dict_sel_commits: dict):
-    # local = path.join(path.expanduser("~"), "GitHub", "pxprojects", "PX4-Autopilot")
-    local = path.join(path.expanduser("~"), "projects", "pxprojects", "PX4-Autopilot")
+    if DOCKER_USAGE:
+        local = path.join(path.expanduser("~"), "projects", "pxprojects", "PX4-Autopilot")
+    else:
+        local = path.join(path.expanduser("~"), "GitHub", "pxprojects", "PX4-Autopilot")
     sel_modules = False     # Do not want to go through a pre-selection set of modules, this is handled differently.
     context = get_context('spawn')
     print("START POOL")
@@ -165,7 +173,7 @@ def gather_hash_from_files():
 
 def gather_files(each_hash):
     script_workflow = path.join(base_path, "gather_files.sh")
-    subprocess.run([script_workflow, each_hash])
+    subprocess.run([script_workflow, each_hash, github_projects, this_project_dir])
 
 
 def switching_branch(each_hash, dir_project):
