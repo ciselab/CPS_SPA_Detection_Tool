@@ -187,121 +187,6 @@ def removing_files(dir_project, list_files_keep, each_hash):
     print(f"{rf_process=}")
 
 
-# def compare_lists():
-#     dir_path = path.join(base_path, "px_commit_results")
-#     res = []
-#     for (dir_path, dir_names, file_names) in walk(dir_path):
-#         dir_file = file_names
-#         res.extend(dir_file)
-#
-#     dict_sha = {}
-#     for file_from_dir in res:
-#         file_path = path.join(dir_path, file_from_dir)
-#         with open(file_path) as f:
-#             data = json.loads(f.read())
-#             list_files = []
-#             data_file = data['files']
-#             for i in data_file:
-#                 data_filename = i['filename']
-#                 list_files.append(data_filename)
-#             dict_sha[data['sha']] = list_files
-#     print(dict_sha)
-#     print(f"{len(dict_sha)=}")
-#
-#     file_results_hcft_mwn = path.join(base_path, "results_px4_server", "PX4-Autopilot", "results_hcft_mwn_px4.csv")
-#
-#     remove_keys = set()
-#     with open(file_results_hcft_mwn) as fr:
-#         lines = fr.readlines()
-#         for line in lines:
-#             for key in dict_sha:
-#                 for each in dict_sha[key]:
-#                     if each == line.strip():
-#                         remove_keys.add(key)
-#     print(remove_keys)
-#
-#     for each_key in remove_keys:
-#         del dict_sha[each_key]
-#     print(dict_sha)
-#     print(f"{len(dict_sha)=}")
-#
-#     list_dates = []
-#     for each_sha_result in dict_sha:
-#         result_date = single_read_sha_json(each_sha_result)
-#         list_dates.append(result_date)
-#
-#     list_dates.sort()
-#     print(list_dates)
-
-
-# def check_line_file_commit(lines_lf, dict_sha, commit):
-#     for each_file in dict_sha[commit]:
-#         each_file_adjusted = "./"+each_file
-#         if each_file_adjusted in lines_lf:
-#             return commit, dict_sha[commit]
-#     return None
-
-
-# def final_compare_lists():
-#     dir_path = path.join(base_path, "px_commit_results")
-#     res = []
-#     for (dir_path, dir_names, file_names) in walk(dir_path):
-#         dir_file = file_names
-#         res.extend(dir_file)
-#
-#     dict_sha = {}
-#     for file_from_dir in res:
-#         file_path = path.join(dir_path, file_from_dir)
-#         with open(file_path) as f:
-#             data = json.loads(f.read())
-#             list_files = []
-#             data_file = data['files']
-#             for i in data_file:
-#                 data_filename = i['filename']
-#                 list_files.append(data_filename)
-#             dict_sha[data['sha']] = list_files
-#
-#     dict_considered_commits = {}
-#     dir_path_list_files = path.join(base_path, "results_px4_server", "PX4-Autopilot", "files_in_project.txt")
-#     with open(dir_path_list_files) as lf:
-#         lines_lf = lf.readlines()
-#         list_llf = []
-#         for llf in lines_lf:
-#             list_llf.append(llf.strip())
-#         for each_commit_all in dict_sha:
-#             comparison_res = check_line_file_commit(list_llf, dict_sha, each_commit_all)
-#             if comparison_res is not None:
-#                 comparison_res_hash, comparison_res_files = comparison_res
-#                 dict_considered_commits[comparison_res_hash] = comparison_res_files
-#     print(f"{dict_considered_commits=}")
-#
-#     file_results_hcft_mwn = path.join(base_path, "results_px4_server", "PX4-Autopilot", "results_hcft_mwn_px4.csv")
-#
-#     remove_keys = set()
-#     with open(file_results_hcft_mwn) as fr:
-#         lines = fr.readlines()
-#         for line in lines:
-#             for key in dict_considered_commits:
-#                 for each in dict_considered_commits[key]:
-#                     if each == line.strip():
-#                         remove_keys.add(key)
-#     print(remove_keys)
-#
-#     print(f"{len(dict_considered_commits)=}")
-#     for each_key in remove_keys:
-#         del dict_considered_commits[each_key]
-#     print(dict_considered_commits)
-#     print(f"{len(dict_considered_commits)=}")
-#
-#     list_dates = []
-#     for each_sha_result in dict_considered_commits:
-#         result_date = single_read_sha_json(each_sha_result)
-#         list_dates.append(result_date)
-#
-#     list_dates.sort()
-#     print(list_dates)
-
-
 def main():
     print("START")
     start_time = datetime.now()
@@ -341,10 +226,6 @@ def main():
 
     # nr.6) running
     checkout_commit(res_hash_files_aps)
-
-    # [NEEDS ADJUSTMENTS] Compare lists
-    # compare_lists()
-    # final_compare_lists()
 
     end_time = datetime.now()
     diff_time = end_time - start_time
