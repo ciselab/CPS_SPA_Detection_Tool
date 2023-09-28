@@ -11,7 +11,7 @@ import os
 import sys
 
 
-def main(project_name, pattern_name, extra, sel_modules: bool = True) -> None:
+def main(project_name, pattern_name, current_base_hash, sel_modules: bool = True) -> None:
     print("---CURRENT TIME---")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -22,15 +22,15 @@ def main(project_name, pattern_name, extra, sel_modules: bool = True) -> None:
         project_name = sys.argv[1]
     if not pattern_name:
         pattern_name = sys.argv[2]
-    if not extra:
-        extra = "_"
+    if not current_base_hash:
+        current_base_hash = "_"
 
     pattern_cls = patterns.pattern_lookup.get(pattern_name, None)
     if pattern_cls is None:
         print("Error: Pattern is non-existing.")
         return
 
-    with TemporaryDirectory(prefix=f"{project_name}_{pattern_name}{extra}") as td:
+    with TemporaryDirectory(prefix=f"{project_name}_{pattern_name}{current_base_hash}") as td:
         print("Start creating tmp dir.")
         project_path = os.path.join(dict_repo_list.location_github, project_name)
         if not os.path.exists(project_path):
@@ -42,7 +42,7 @@ def main(project_name, pattern_name, extra, sel_modules: bool = True) -> None:
         dict_repo_list.build_repo_dict_sha()
 
         print(f"[{pattern_cls.header_name()}] START")
-        search.main(project_name, pattern_cls.name(), sel_modules)
+        search.main(project_name, pattern_cls.name(), sel_modules, current_base_hash)
         print(f"[{pattern_cls.header_name()}] DONE")
 
     print("---FINISHED---")

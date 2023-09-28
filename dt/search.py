@@ -31,6 +31,7 @@ class Project:
     sha_project: str = ""
     language: str = "cpp"
     sel_modules: bool = True
+    current_base_hash: str = ""
 
     def output_filename(self):
         return os.path.join(
@@ -48,10 +49,14 @@ class Project:
         return f"{self.pattern_name}_{self.name}_initial.csv"
 
     def pattern_filename(self, final=False):
-        if final:
-            return f"{self.pattern_name}_pattern_data_final.csv"
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}_"
         else:
-            return f"{self.pattern_name}_pattern_data_initial.csv"
+            pre_set = ""
+        if final:
+            return f"{pre_set}{self.pattern_name}_pattern_data_final.csv"
+        else:
+            return f"{pre_set}{self.pattern_name}_pattern_data_initial.csv"
 
     def files(self) -> set:
         file_set = set()
@@ -267,7 +272,8 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 
 # Main Entry Point
-def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER, sel_modules: bool = True):
+def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER, sel_modules: bool = True,
+         current_base_hash: str = ""):
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -281,7 +287,8 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
                               pattern_name=pattern_name,
                               url_project=dt.dict_repo_list.projects[project_name]["local"],
                               sha_project=dt.dict_repo_list.projects[project_name]["sha"],
-                              sel_modules=sel_modules)
+                              sel_modules=sel_modules,
+                              current_base_hash=current_base_hash)
 
     remove_file_if_exists(os.path.join(
         current_project.result_path(),

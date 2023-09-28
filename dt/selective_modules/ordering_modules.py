@@ -8,9 +8,10 @@ import json
 # from collections import Counter
 import dt.main as dt_main
 from typing import List, Dict
+import dt.selective_modules.results_part_one.analysis_results as ro
 
-file = "/home/imara/GitHub/CPS_SPA_Detection_Tool/analysis/results.csv"
-base_path = "/home/imara/GitHub/CPS_SPA_Detection_Tool/dt/selective_modules"
+file = path.abspath(ro.get_results_file_path())
+base_path = path.dirname(path.realpath(__file__))
 
 file_extensions: Dict[str, List[str]] = {
             'cpp': ['.c', '.cpp', '.h', '.hpp', '.cxx', '.cc', '.hh', '.h++'],
