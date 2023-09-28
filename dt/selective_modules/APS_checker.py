@@ -35,7 +35,8 @@ def cp_mv_project(each_hash, local):
 
 
 def checkout_commit(dict_sel_commits: dict):
-    local = path.join(path.expanduser("~"), "GitHub", "pxprojects", "PX4-Autopilot")
+    # local = path.join(path.expanduser("~"), "GitHub", "pxprojects", "PX4-Autopilot")
+    local = path.join(path.expanduser("~"), "projects", "pxprojects", "PX4-Autopilot")
     sel_modules = False     # Do not want to go through a pre-selection set of modules, this is handled differently.
     context = get_context('spawn')
     print("START POOL")
