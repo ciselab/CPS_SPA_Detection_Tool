@@ -26,6 +26,7 @@ RUN     pip install --user -r requirements.txt
 COPY    /dt /home/user/cps-spa-detection-tool/dt
 COPY    /tests /home/user/cps-spa-detection-tool/tests
 COPY    /analysis /home/user/cps-spa-detection-tool/analysis
+COPY    /dt/selective_modules/px_commit_results /dt/selective_modules/px_commit_results
 RUN     pip install --user --no-use-pep517 --editable /home/user/cps-spa-detection-tool
 
 #ENTRYPOINT ["python3", "dt/main.py"]
