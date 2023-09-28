@@ -11,8 +11,15 @@ if [[ "$hash_code" != '' ]] && [[ "$github_projects" != '' ]] && [[ "$this_proje
   gh_project="PX4-Autopilot"
   project_dir="${base_project}/PX4-Autopilot"
 
-  save_file="${this_project_dir}/dt/selective_modules/px_commit_results/results_${hash_code}_px4.json"
+  save_file_location="${this_project_dir}/dt/selective_modules/px_commit_results/"
+  if [[ ! -d "$save_file_location" ]]; then
+    echo "[gather_files] Save file directory does not yet exist..creating..location: ${save_file_location}"
+    mkdir -p "$save_file_location" &
+    wait
+  fi
+
+  save_file="${save_file_location}results_${hash_code}_px4.json"
   (cd "$project_dir" || exit; gh api "/repos/${gh_repository}/${gh_project}/commits/${hash_code}" > "$save_file")
 else
-  echo "Empty hash_code input, stopping."
+  echo "Empty (hash_code, github_projects, or this_project_dir) input stopping."
 fi
