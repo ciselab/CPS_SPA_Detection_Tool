@@ -29,4 +29,4 @@ COPY    /analysis /home/user/cps-spa-detection-tool/analysis
 RUN     pip install --user --no-use-pep517 --editable /home/user/cps-spa-detection-tool
 
 #ENTRYPOINT ["python3", "dt/main.py"]
-CMD ["python3", "dt/selective_modules/ordering_modules.py"]
+CMD ["python3", "dt/selective_modules/APS_checker.py"]
