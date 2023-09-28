@@ -7,6 +7,11 @@ import json
 import dt.main as dt_main
 from typing import List, Dict
 import dt.selective_modules.results_part_one.analysis_results as ro
+from dt.dict_repo_list import projects as dpr
+import shutil
+from datetime import datetime
+from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import get_context
 
 file = path.abspath(ro.get_results_file_path())
 base_path = path.dirname(path.realpath(__file__))
@@ -15,20 +20,45 @@ file_extensions: Dict[str, List[str]] = {
             'cpp': ['.c', '.cpp', '.h', '.hpp', '.cxx', '.cc', '.hh', '.h++'],
         }
 
+MAX_WORKERS = 27        # For Docker usage.
+# MAX_WORKERS = 2       # For home usage.
+
+
+def cp_mv_project(each_hash, local):
+    split_path_project = path.split(local)
+    new_tail = f"{split_path_project[1]}_{each_hash}"
+    new_path = path.join(split_path_project[0], new_tail)
+    print(f"{new_path=}")
+    if not path.exists(new_path):
+        shutil.copytree(local, new_path)
+    return new_path
+
 
 def checkout_commit(dict_sel_commits: dict):
     local = path.join(path.expanduser("~"), "GitHub", "pxprojects", "PX4-Autopilot")
     sel_modules = False     # Do not want to go through a pre-selection set of modules, this is handled differently.
-    for each_hash in dict_sel_commits:
-        print(f"{each_hash=}")
-        switching_branch(each_hash, local)
-        list_files_keep = dict_sel_commits[each_hash]['commit_files']
-        removing_files(local, list_files_keep)
-        if 'mwn' in dict_sel_commits[each_hash]['antipatterns']:
-            dt_main.main("PX4-Autopilot", "mwn", each_hash, sel_modules)
-        if 'hcft' in dict_sel_commits[each_hash]['antipatterns']:
-            dt_main.main("PX4-Autopilot", "hcft", each_hash, sel_modules)
+    context = get_context('spawn')
+    print("START POOL")
+    with ProcessPoolExecutor(max_workers=MAX_WORKERS, mp_context=context) as executor:
+        future_to_file = {executor.submit(
+            start_dt, each_hash, local, dict_sel_commits, sel_modules): each_hash for each_hash in dict_sel_commits}
     print("Finished Detection Tool.")
+
+
+def start_dt(each_hash, local, dict_sel_commits, sel_modules):
+    new_local = cp_mv_project(each_hash, local)
+    switching_branch(each_hash, new_local)
+    list_files_keep = dict_sel_commits[each_hash]['commit_files']
+    removing_files(new_local, list_files_keep, each_hash)
+    dpr["PX4-Autopilot"]['local'] = new_local
+    dpr["PX4-Autopilot"]['sha'] = each_hash
+    print(f"New local: {new_local}, same as:")
+    print(dpr["PX4-Autopilot"]['local'])
+    history_project = False
+    if 'mwn' in dict_sel_commits[each_hash]['antipatterns']:
+        dt_main.main("PX4-Autopilot", "mwn", each_hash, sel_modules, history_project)
+    if 'hcft' in dict_sel_commits[each_hash]['antipatterns']:
+        dt_main.main("PX4-Autopilot", "hcft", each_hash, sel_modules, history_project)
 
 
 def gathering_pxresults():
@@ -150,10 +180,10 @@ def prep_keep_list(list_files_keep):
     return prepped_keep_list
 
 
-def removing_files(dir_project, list_files_keep):
+def removing_files(dir_project, list_files_keep, each_hash):
     keep_list = prep_keep_list(list_files_keep)
     script_workflow = path.join(base_path, "remove_files.sh")
-    rf_process = subprocess.check_call([script_workflow, dir_project, keep_list])
+    rf_process = subprocess.check_call([script_workflow, dir_project, keep_list, each_hash])
     print(f"{rf_process=}")
 
 
@@ -273,6 +303,11 @@ def removing_files(dir_project, list_files_keep):
 
 
 def main():
+    print("START")
+    start_time = datetime.now()
+    current_time = start_time.strftime("%H:%M:%S")
+    print(f"Start time: {current_time}")
+
     # Gathering all hashes
     list_hash_mwn, list_hash_hcft = gathering_pxresults()
     list_hash = set()
@@ -311,7 +346,12 @@ def main():
     # compare_lists()
     # final_compare_lists()
 
+    end_time = datetime.now()
+    diff_time = end_time - start_time
     print("END")
+    current_time = end_time.strftime("%H:%M:%S")
+    print(f"End time: {current_time}")
+    print(f"Duration of the script: {diff_time=}")
 
 
 if __name__ == "__main__":

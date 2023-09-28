@@ -34,19 +34,32 @@ class Project:
     current_base_hash: str = ""
 
     def output_filename(self):
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}_"
+        else:
+            pre_set = ""
         return os.path.join(
             project_results_path(self.name),
-            f"{self.pattern_name}_{self.name}_final.csv")
+            f"{pre_set}{self.pattern_name}_{self.name}_final.csv")
 
     def base_directory(self):
         return dt.dict_repo_list.projects[self.name]["local"]
 
     @EnsurePathExistence
     def result_path(self):
-        return os.path.join(results_base_path(), self.name)
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}"
+            res_name = f"{self.name}_{pre_set}"
+        else:
+            res_name = f"{self.name}"
+        return os.path.join(results_base_path(), res_name)
 
     def intermediate_filename(self):
-        return f"{self.pattern_name}_{self.name}_initial.csv"
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}_"
+        else:
+            pre_set = ""
+        return f"{pre_set}{self.pattern_name}_{self.name}_initial.csv"
 
     def pattern_filename(self, final=False):
         if self.current_base_hash:
@@ -262,9 +275,13 @@ def parse_git_log(log_file: os.path) -> Dict[str, str]:
 
 
 def get_file_history(rel_path: os.path) -> Dict[str, str]:
+    if Project.current_base_hash:
+        pre_set = f"{Project.current_base_hash}_"
+    else:
+        pre_set = ""
     current_working_dir = os.getcwd()
     os.chdir(current_project.base_directory())
-    log_file = os.path.join(logs_base_path(), f"history_{os.path.basename(rel_path)}.log")
+    log_file = os.path.join(logs_base_path(), f"history_{pre_set}{os.path.basename(rel_path)}.log")
     os.system(f"git log --raw --follow {rel_path} > {log_file}")
     filename_history = parse_git_log(log_file)
     os.chdir(current_working_dir)
@@ -273,7 +290,7 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 # Main Entry Point
 def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER, sel_modules: bool = True,
-         current_base_hash: str = ""):
+         current_base_hash: str = "", history_project: bool = True):
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -303,7 +320,8 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
     # Process current revision
     initial_search()
     # for interesting files, process history
-    history_search()
+    if history_project:
+        history_search()
     # Print end time and duration
     project_end_time = datetime.now()
     project_end_time_fmt = datetime.now().strftime("%H:%M:%S")

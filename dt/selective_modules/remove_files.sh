@@ -3,18 +3,19 @@ set -e
 
 dir_project=$1
 keep_list=$2
+current_hash=$3
 
-if [[ "$dir_project" != '' ]] && [[ "$keep_list" != '' ]]; then
+if [[ "$dir_project" != '' ]] && [[ "$keep_list" != '' ]] && [[ "$current_hash" != '' ]]; then
 
-  dir_results=${HOME}/"results_px/"
+  dir_results="${HOME}/results_px/${current_hash}/"
 
   if [[ ! -d "$dir_results" ]]; then
     echo "Results directory does not yet exist..creating.."
-    mkdir "$dir_results" &
+    mkdir -p "$dir_results" &
     wait
   fi
 
-  result_loc=${HOME}/"results_px/results_reverse.txt"
+  result_loc="${dir_results}results_reverse.txt"
   if [[ -f "$result_loc" ]]; then
     echo "Results files already exist..removing.."
     rm -v "$result_loc" &
