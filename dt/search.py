@@ -30,27 +30,46 @@ class Project:
     url_project: str = ""
     sha_project: str = ""
     language: str = "cpp"
+    sel_modules: bool = True
+    current_base_hash: str = ""
 
     def output_filename(self):
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}_"
+        else:
+            pre_set = ""
         return os.path.join(
             project_results_path(self.name),
-            f"{self.pattern_name}_{self.name}_final.csv")
+            f"{pre_set}{self.pattern_name}_{self.name}_final.csv")
 
     def base_directory(self):
         return dt.dict_repo_list.projects[self.name]["local"]
 
     @EnsurePathExistence
     def result_path(self):
-        return os.path.join(results_base_path(), self.name)
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}"
+            res_name = f"{self.name}_{pre_set}"
+        else:
+            res_name = f"{self.name}"
+        return os.path.join(results_base_path(), res_name)
 
     def intermediate_filename(self):
-        return f"{self.pattern_name}_{self.name}_initial.csv"
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}_"
+        else:
+            pre_set = ""
+        return f"{pre_set}{self.pattern_name}_{self.name}_initial.csv"
 
     def pattern_filename(self, final=False):
-        if final:
-            return f"{self.pattern_name}_pattern_data_final.csv"
+        if self.current_base_hash:
+            pre_set = f"{self.current_base_hash}_"
         else:
-            return f"{self.pattern_name}_pattern_data_initial.csv"
+            pre_set = ""
+        if final:
+            return f"{pre_set}{self.pattern_name}_pattern_data_final.csv"
+        else:
+            return f"{pre_set}{self.pattern_name}_pattern_data_initial.csv"
 
     def files(self) -> set:
         file_set = set()
@@ -64,11 +83,19 @@ class Project:
         #                  '.java', '.go', '.py', '.rb', '.rs',
         #                  '.scala', '.sc', '.swift', '.js', '.ts', '.tsx', '.sh']
 
-        for top_level, recursive in dt.dict_repo_list.projects_modules[self.name]:
-            directory_path = os.path.join(self.base_directory(), top_level)
-            for root, dirs, files in os.walk(directory_path, topdown=True):
-                if not recursive:
-                    dirs.clear()
+        if self.sel_modules:
+            for top_level, recursive in dt.dict_repo_list.projects_modules[self.name]:
+                directory_path = os.path.join(self.base_directory(), top_level)
+                for root, dirs, files in os.walk(directory_path, topdown=True):
+                    if not recursive:
+                        dirs.clear()
+                    for filename in files:
+                        file_path = os.path.join(root, filename)
+                        _, filename_ext = os.path.splitext(filename)
+                        if filename_ext.lower() in file_extensions[self.language]:
+                            file_set.add(file_path)
+        else:
+            for root, dirs, files in os.walk(self.base_directory(), topdown=True):
                 for filename in files:
                     file_path = os.path.join(root, filename)
                     _, filename_ext = os.path.splitext(filename)
@@ -248,9 +275,13 @@ def parse_git_log(log_file: os.path) -> Dict[str, str]:
 
 
 def get_file_history(rel_path: os.path) -> Dict[str, str]:
+    if Project.current_base_hash:
+        pre_set = f"{Project.current_base_hash}_"
+    else:
+        pre_set = ""
     current_working_dir = os.getcwd()
     os.chdir(current_project.base_directory())
-    log_file = os.path.join(logs_base_path(), f"history_{os.path.basename(rel_path)}.log")
+    log_file = os.path.join(logs_base_path(), f"history_{pre_set}{os.path.basename(rel_path)}.log")
     os.system(f"git log --raw --follow {rel_path} > {log_file}")
     filename_history = parse_git_log(log_file)
     os.chdir(current_working_dir)
@@ -258,7 +289,8 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 
 # Main Entry Point
-def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER):
+def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER, sel_modules: bool = True,
+         current_base_hash: str = "", history_project: bool = True):
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -271,7 +303,9 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
     current_project = Project(name=project_name,
                               pattern_name=pattern_name,
                               url_project=dt.dict_repo_list.projects[project_name]["local"],
-                              sha_project=dt.dict_repo_list.projects[project_name]["sha"])
+                              sha_project=dt.dict_repo_list.projects[project_name]["sha"],
+                              sel_modules=sel_modules,
+                              current_base_hash=current_base_hash)
 
     remove_file_if_exists(os.path.join(
         current_project.result_path(),
@@ -286,7 +320,8 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
     # Process current revision
     initial_search()
     # for interesting files, process history
-    history_search()
+    if history_project:
+        history_search()
     # Print end time and duration
     project_end_time = datetime.now()
     project_end_time_fmt = datetime.now().strftime("%H:%M:%S")

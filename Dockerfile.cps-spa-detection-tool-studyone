@@ -1,0 +1,33 @@
+FROM    python:3.9.1
+
+ARG     LOCAL_UID=1000
+ARG     LOCAL_GID=1000
+
+# Add a local user, switch to it and make a new WORKDIR
+RUN     groupadd -g ${LOCAL_GID} -o user
+RUN     useradd -m -g ${LOCAL_GID} -u ${LOCAL_UID} user
+
+# Switch to the created user
+USER    user
+RUN     mkdir /home/user/cps-spa-detection-tool
+WORKDIR /home/user/cps-spa-detection-tool
+ENV     PATH="/home/user/.local/bin:$PATH"
+
+# Install and upgrade python setup utilities
+RUN     python3 -m pip install --user --upgrade pip setuptools wheel
+
+# Install the python requirements needed at runtime
+COPY    setup.py /home/user/cps-spa-detection-tool
+COPY    setup.cfg /home/user/cps-spa-detection-tool
+COPY    requirements.txt /home/user/cps-spa-detection-tool
+RUN     pip install --user -r requirements.txt
+
+# Copy the module and install
+COPY    /dt /home/user/cps-spa-detection-tool/dt
+COPY    /tests /home/user/cps-spa-detection-tool/tests
+COPY    /analysis /home/user/cps-spa-detection-tool/analysis
+COPY    /dt/selective_modules/px_commit_results /dt/selective_modules/px_commit_results
+RUN     pip install --user --no-use-pep517 --editable /home/user/cps-spa-detection-tool
+
+#ENTRYPOINT ["python3", "dt/main.py"]
+CMD ["python3", "dt/selective_modules/APS_checker.py"]

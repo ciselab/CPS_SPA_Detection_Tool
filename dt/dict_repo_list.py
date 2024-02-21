@@ -7,9 +7,17 @@ import os
 from git import Repo
 from collections import namedtuple
 
+DOCKER_USAGE = True
+
 """ If the location of the local repositories are on a different location, change this here. """
 # location_github = os.path.join(pathlib.Path.home(), "Documents", "GitHub")
-location_github = os.path.join(os.path.expanduser("~"), "projects")     # For Docker usage
+# location_github = os.path.join(os.path.expanduser("~"), "projects")     # For Docker usage
+if DOCKER_USAGE:
+    # Docker: For usage with PX4-Autopilot only
+    location_github = os.path.join(os.path.expanduser("~"), "projects", "pxprojects")
+else:
+    # For usage with PX4-Autopilot only
+    location_github = os.path.join(os.path.expanduser("~"), "GitHub", "pxprojects")
 
 """
 It is possible to manually set the location to a different path.
