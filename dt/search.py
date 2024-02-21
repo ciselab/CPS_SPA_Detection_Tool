@@ -13,8 +13,9 @@ import pydriller
 from deepdiff import DeepDiff
 
 import dt.ast_cpp_antlr as ast_cpp_antlr
+import dt.ast_python as ast_python
 import dt.dict_repo_list
-from dt import patterns
+# from dt import patterns
 from dt.utils.csv import CsvWriter, CsvReader
 from dt.utils.files import remove_file_if_exists, get_file_encoding, remove_log_files
 from dt.utils.paths import results_base_path, project_results_path
@@ -76,6 +77,7 @@ class Project:
         # noinspection SpellCheckingInspection
         file_extensions: Dict[str, List[str]] = {
             'cpp': ['.c', '.cpp', '.h', '.hpp', '.cxx', '.cc', '.hh', '.h++'],
+            'python': ['.py'],
         }
         # search_in_ext = ['.c', '.cpp', '.h', '.hpp', '.cxx', '.hxx', '.cc', '.hh', '.h++',
         #                  '.ipp', '.inl', '.txx', '.tpp', '.tpl',
@@ -142,7 +144,10 @@ def write_pattern_data(pattern_occurrences, file_name: str = "pattern_data.csv")
 
 def process_file(filename: os.path, encoding: str) -> Tuple[int, List]:
     abs_path = os.path.join(current_project.base_directory(), filename)
-    return ast_cpp_antlr.parse_file(abs_path, encoding, current_project.pattern_name)
+    if current_project.language == "python":
+        return ast_python.parse_file(abs_path, encoding, current_project.pattern_name)
+    else:
+        return ast_cpp_antlr.parse_file(abs_path, encoding, current_project.pattern_name)   # C++
 
 
 # HISTORY PROCESSING
@@ -290,7 +295,7 @@ def get_file_history(rel_path: os.path) -> Dict[str, str]:
 
 # Main Entry Point
 def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAITING_NUMBER, sel_modules: bool = True,
-         current_base_hash: str = "", history_project: bool = True):
+         current_base_hash: str = "", history_project: bool = True, programming_language: str = "cpp"):
     start_time = datetime.now()
     start_time_fmt = start_time.strftime("%H:%M:%S")
     print(f"[Process] Start time: {start_time_fmt}")
@@ -305,7 +310,9 @@ def main(project_name: str = "Test_CPS_SPA_DT", pattern_name: str = MAGICAL_WAIT
                               url_project=dt.dict_repo_list.projects[project_name]["local"],
                               sha_project=dt.dict_repo_list.projects[project_name]["sha"],
                               sel_modules=sel_modules,
-                              current_base_hash=current_base_hash)
+                              language=programming_language,
+                              current_base_hash=current_base_hash
+                              )
 
     remove_file_if_exists(os.path.join(
         current_project.result_path(),
