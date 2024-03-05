@@ -24,9 +24,9 @@ To create the Docker image container, run the script `docker_scripts/run-cps-spa
 
 `./docker_scripts/run-cps-spa-detection-tool-container.sh project_name pattern programming_language`
 
-project_name: name of the project as stated in `dt/dict_repo_list.py`.
-project_name: `hcft` for the Hard Coded Fine Tuning antipattern, `mwn` for the Magical Waiting Number antipattern.
-programming_language: [optional] Default value is set for C++ projects (for manual setting, use `cpp`), for Python projects use `python`.
+- project_name: name of the project as stated in `dt/dict_repo_list.py`.
+- project_name: `hcft` for the Hard Coded Fine Tuning antipattern, `mwn` for the Magical Waiting Number antipattern.
+- programming_language: [optional] Default value is set for C++ projects (for manual setting, use `cpp`), for Python projects use `python`.
 
 The container will stop and clean-up after finishing the run.
 In the meantime, to check status, run the command `docker container ls`.
