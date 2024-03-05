@@ -14,10 +14,14 @@ DOCKER_USAGE = True
 # location_github = os.path.join(os.path.expanduser("~"), "projects")     # For Docker usage
 if DOCKER_USAGE:
     # Docker: For usage with PX4-Autopilot only
-    location_github = os.path.join(os.path.expanduser("~"), "projects", "pxprojects")
+    # location_github = os.path.join(os.path.expanduser("~"), "projects", "pxprojects")
+    # Docker: For other projects
+    location_github = os.path.join(os.path.expanduser("~"), "projects", "cps_projects")
 else:
     # For usage with PX4-Autopilot only
-    location_github = os.path.join(os.path.expanduser("~"), "GitHub", "pxprojects")
+    # location_github = os.path.join(os.path.expanduser("~"), "GitHub", "pxprojects")
+    # For other projects
+    location_github = os.path.join(os.path.expanduser("~"), "GitHub", "cps_projects")
 
 """
 It is possible to manually set the location to a different path.
@@ -34,6 +38,8 @@ local path = location_github + project_name
 Where location_github is given in the top of this file.
 
 Large projects: apollo, ardupilot, openpilot, PX4-Autopilot
+
+Python projects: turtlebot3, BeamNGpy, DronePilot, pypilot
 """
 # noinspection SpellCheckingInspection
 projects = {
@@ -55,6 +61,10 @@ projects = {
     "stofzuigerrobot": {"local": None, "remote": "https://github.com/alvitawa/stofzuigerrobot", "sha": None},
     "turtlebot": {"local": None, "remote": "https://github.com/turtlebot/turtlebot", "sha": None},
     "Test_CPS_SPA_DT": {"local": None, "remote": "https://github.com/IvDinten/Test_CPS_SPA_DT/tree/main", "sha": None},
+    "turtlebot3": {"local": None, "remote": "https://github.com/ROBOTIS-GIT/turtlebot3", "sha": None},
+    "BeamNGpy": {"local": None, "remote": "https://github.com/BeamNG/BeamNGpy", "sha": None},
+    "DronePilot": {"local": None, "remote": "https://github.com/alduxvm/DronePilot", "sha": None},
+    "pypilot": {"local": None, "remote": "https://github.com/pypilot/pypilot", "sha": None},
 }
 
 # non_cpp_projects = {

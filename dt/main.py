@@ -11,7 +11,8 @@ import os
 import sys
 
 
-def main(project_name, pattern_name, current_base_hash, sel_modules: bool = True, history_project: bool = True) -> None:
+def main(project_name, pattern_name, current_base_hash, sel_modules: bool = True, history_project: bool = True,
+         program_lang: str = "cpp") -> None:
     print("---CURRENT TIME---")
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -23,7 +24,7 @@ def main(project_name, pattern_name, current_base_hash, sel_modules: bool = True
     if not pattern_name:
         pattern_name = sys.argv[2]
     if not current_base_hash:
-        tmp_current_base_hash = "_"
+        tmp_current_base_hash = ""
     else:
         tmp_current_base_hash = f"_{current_base_hash}"
 
@@ -50,7 +51,7 @@ def main(project_name, pattern_name, current_base_hash, sel_modules: bool = True
             dict_repo_list.build_repo_dict_sha()
 
         print(f"[{pattern_cls.header_name()}] START")
-        search.main(project_name, pattern_cls.name(), sel_modules, current_base_hash, history_project)
+        search.main(project_name, pattern_cls.name(), sel_modules, current_base_hash, history_project, program_lang)
         print(f"[{pattern_cls.header_name()}] DONE")
 
     print("---FINISHED---")
